@@ -1,0 +1,59 @@
+% ============================================================================
+% apograph-math.sty — Shared math environments and macros
+% Part of the Apograph template collection
+% https://github.com/eliainnocenti/apograph
+% ============================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{apograph-math}[2026/06/12 v0.1.0 Apograph math utilities]
+
+% --- Core math packages ---
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{amsthm}
+\RequirePackage{mathtools}      % extends amsmath: \coloneqq, \DeclarePairedDelimiter, etc.
+\RequirePackage{bm}             % bold math symbols via \bm{}
+
+% --- Theorem-like environments ---
+% Usage: \begin{theorem} ... \end{theorem}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% --- Common operators ---
+% Add your custom operators here. Examples:
+% \DeclareMathOperator{\argmin}{arg\,min}
+% \DeclareMathOperator{\argmax}{arg\,max}
+% \DeclareMathOperator{\tr}{tr}
+% \DeclareMathOperator{\diag}{diag}
+% \DeclareMathOperator{\rank}{rank}
+% \DeclareMathOperator{\sign}{sign}
+
+% --- Paired delimiters (auto-sizing) ---
+% Usage: \norm{x}, \norm*{x} (starred = manual \left\right)
+% \DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+% \DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+% \DeclarePairedDelimiter{\inner}{\langle}{\rangle}
+% \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+% \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+% --- Common abbreviations ---
+% Uncomment and customize as needed:
+% \newcommand{\R}{\mathbb{R}}
+% \newcommand{\N}{\mathbb{N}}
+% \newcommand{\Z}{\mathbb{Z}}
+% \newcommand{\Q}{\mathbb{Q}}
+% \newcommand{\C}{\mathbb{C}}
+% \newcommand{\E}{\mathbb{E}}     % expected value
+% \newcommand{\Prob}{\mathbb{P}}  % probability
+% \newcommand{\ind}{\mathbb{1}}   % indicator function
+
+\endinput

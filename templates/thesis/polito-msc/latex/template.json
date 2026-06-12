@@ -1,0 +1,21 @@
+{
+  "id": "thesis-polito-msc-latex",
+  "name": "PoliTo Master's Thesis",
+  "description": "Master's thesis template for Politecnico di Torino, following official formatting guidelines.",
+  "purpose": "thesis",
+  "institution": {
+    "id": "polito",
+    "name": "Politecnico di Torino"
+  },
+  "language": "latex",
+  "compiler": "pdflatex",
+  "version": "0.1.0",
+  "main_file": "main.tex",
+  "shared_deps": [
+    "shared/latex/apograph-math.sty",
+    "shared/latex/apograph-typography.sty",
+    "shared/latex/apograph-colors.sty",
+    "shared/latex/apograph-polito.sty"
+  ],
+  "tags": ["thesis", "master", "polito", "politecnico", "torino", "latex"]
+}

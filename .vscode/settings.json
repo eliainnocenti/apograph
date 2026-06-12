@@ -1,0 +1,134 @@
+{
+  // =========================================================================
+  // Apograph — VSCode settings (repo-level)
+  //
+  // These settings configure LaTeX Workshop for development within the
+  // mono-repo. The TEXINPUTS variable ensures \usepackage{apograph-math}
+  // resolves correctly from any template directory depth.
+  // =========================================================================
+  "latex-workshop.latex.outDir": "%DIR%/out",
+  "latex-workshop.latex.clean.subfolder.enabled": true,
+  // --- LaTeX Workshop: Build tools ---
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk",
+      "command": "latexmk",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-pdf",
+        "-outdir=%OUTDIR%",
+        "%DOC%"
+      ],
+      "env": {
+        // Resolve shared/ packages from any template nesting depth.
+        // The double trailing slash (//) tells TeX to search subdirectories.
+        "TEXINPUTS": "%DIR%:%DIR%/../../../../shared/latex//:%DIR%/../../../../../shared/latex//:"
+      }
+    },
+    {
+      "name": "latexmk-lualatex",
+      "command": "latexmk",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-lualatex",
+        "-outdir=%OUTDIR%",
+        "%DOC%"
+      ],
+      "env": {
+        "TEXINPUTS": "%DIR%:%DIR%/../../../../shared/latex//:%DIR%/../../../../../shared/latex//:"
+      }
+    },
+    {
+      "name": "latexmk-xelatex",
+      "command": "latexmk",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-xelatex",
+        "-outdir=%OUTDIR%",
+        "%DOC%"
+      ],
+      "env": {
+        "TEXINPUTS": "%DIR%:%DIR%/../../../../shared/latex//:%DIR%/../../../../../shared/latex//:"
+      }
+    }
+  ],
+  // --- LaTeX Workshop: Build recipes ---
+  // The default recipe uses pdflatex. Override per-file with magic comments:
+  //   % !TeX program = lualatex
+  //   % !TeX program = xelatex
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk (pdfLaTeX)",
+      "tools": [
+        "latexmk"
+      ]
+    },
+    {
+      "name": "latexmk (LuaLaTeX)",
+      "tools": [
+        "latexmk-lualatex"
+      ]
+    },
+    {
+      "name": "latexmk (XeLaTeX)",
+      "tools": [
+        "latexmk-xelatex"
+      ]
+    }
+  ],
+  // --- LaTeX Workshop: Viewer & UX ---
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.autoClean.run": "onSucceeded",
+  "latex-workshop.latex.clean.fileTypes": [
+    "*.aux",
+    "*.bbl",
+    "*.blg",
+    "*.idx",
+    "*.ind",
+    "*.lof",
+    "*.lot",
+    "*.out",
+    "*.toc",
+    "*.acn",
+    "*.acr",
+    "*.alg",
+    "*.glg",
+    "*.glo",
+    "*.gls",
+    "*.fls",
+    "*.log",
+    "*.fdb_latexmk",
+    "*.nav",
+    "*.snm",
+    "*.vrb",
+    "*.run.xml",
+    "*.bcf"
+  ],
+  // --- Typst (Tinymist) ---
+  "tinymist.formatterMode": "typstyle",
+  // --- Spell checking ---
+  "ltex.language": "en-US",
+  "cSpell.words": [
+    "apograph",
+    "polito",
+    "unifi",
+    "beamer",
+    "latexmk",
+    "pdflatex",
+    "lualatex",
+    "xelatex",
+    "typst",
+    "microtype",
+    "hyperref",
+    "biblatex",
+    "booktabs"
+  ],
+  "makefile.configureOnOpen": false
+}

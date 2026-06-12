@@ -1,0 +1,20 @@
+{
+  "id": "presentation-beamer-polito-latex",
+  "name": "PoliTo Beamer Presentation",
+  "description": "Beamer presentation template with Politecnico di Torino branding, colors, and logo.",
+  "purpose": "presentation",
+  "institution": {
+    "id": "polito",
+    "name": "Politecnico di Torino"
+  },
+  "language": "latex",
+  "compiler": "pdflatex",
+  "version": "0.1.0",
+  "main_file": "main.tex",
+  "shared_deps": [
+    "shared/latex/apograph-math.sty",
+    "shared/latex/apograph-colors.sty",
+    "shared/latex/apograph-polito.sty"
+  ],
+  "tags": ["presentation", "beamer", "slides", "polito", "politecnico", "torino", "latex"]
+}

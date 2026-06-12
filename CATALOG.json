@@ -1,0 +1,190 @@
+{
+  "version": "1.0.0",
+  "repository": {
+    "name": "apograph",
+    "url": "https://github.com/eliainnocenti/apograph",
+    "description": "A curated collection of LaTeX and Typst templates for academic and professional use.",
+    "maintainer": "Elia Innocenti",
+    "license": "MIT"
+  },
+  "templates": [
+    {
+      "id": "thesis-polito-msc-latex",
+      "name": "PoliTo Master's Thesis",
+      "description": "Master's thesis template for Politecnico di Torino, following official formatting guidelines.",
+      "purpose": "thesis",
+      "institution": {
+        "id": "polito",
+        "name": "Politecnico di Torino"
+      },
+      "language": "latex",
+      "compiler": "pdflatex",
+      "version": "0.1.0",
+      "source_dir": "templates/thesis/polito-msc/latex",
+      "main_file": "main.tex",
+      "shared_deps": [
+        "shared/latex/apograph-math.sty",
+        "shared/latex/apograph-typography.sty",
+        "shared/latex/apograph-colors.sty",
+        "shared/latex/apograph-polito.sty"
+      ],
+      "tags": ["thesis", "master", "polito", "politecnico", "torino", "latex"],
+      "assets": [
+        {
+          "id": "polito-logo",
+          "description": "Politecnico di Torino official logo",
+          "official_url": null,
+          "local_path": "figures/polito-logo.pdf",
+          "manual_download_url": null
+        }
+      ],
+      "release_zip_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/thesis-polito-msc-latex.zip",
+      "preview_pdf_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/thesis-polito-msc-latex-preview.pdf",
+      "created": "2026-06-12",
+      "updated": "2026-06-12"
+    },
+    {
+      "id": "thesis-unifi-bsc-latex",
+      "name": "UniFi Bachelor's Thesis",
+      "description": "Bachelor's thesis template for Università di Firenze.",
+      "purpose": "thesis",
+      "institution": {
+        "id": "unifi",
+        "name": "Università di Firenze"
+      },
+      "language": "latex",
+      "compiler": "pdflatex",
+      "version": "0.1.0",
+      "source_dir": "templates/thesis/unifi-bsc/latex",
+      "main_file": "main.tex",
+      "shared_deps": [
+        "shared/latex/apograph-math.sty",
+        "shared/latex/apograph-typography.sty",
+        "shared/latex/apograph-colors.sty",
+        "shared/latex/apograph-unifi.sty"
+      ],
+      "tags": ["thesis", "bachelor", "unifi", "firenze", "florence", "latex"],
+      "assets": [
+        {
+          "id": "unifi-logo",
+          "description": "Università di Firenze official logo",
+          "official_url": null,
+          "local_path": "figures/unifi-logo.pdf",
+          "manual_download_url": null
+        }
+      ],
+      "release_zip_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/thesis-unifi-bsc-latex.zip",
+      "preview_pdf_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/thesis-unifi-bsc-latex-preview.pdf",
+      "created": "2026-06-12",
+      "updated": "2026-06-12"
+    },
+    {
+      "id": "presentation-beamer-academic-latex",
+      "name": "Academic Beamer Presentation",
+      "description": "Versatile Beamer theme for academic talks, seminars, and conference presentations.",
+      "purpose": "presentation",
+      "institution": {
+        "id": "generic",
+        "name": "Generic / Unaffiliated"
+      },
+      "language": "latex",
+      "compiler": "pdflatex",
+      "version": "0.1.0",
+      "source_dir": "templates/presentation/beamer-academic/latex",
+      "main_file": "main.tex",
+      "shared_deps": [
+        "shared/latex/apograph-math.sty",
+        "shared/latex/apograph-colors.sty"
+      ],
+      "tags": ["presentation", "beamer", "slides", "academic", "talk", "conference", "latex"],
+      "release_zip_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/presentation-beamer-academic-latex.zip",
+      "preview_pdf_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/presentation-beamer-academic-latex-preview.pdf",
+      "created": "2026-06-12",
+      "updated": "2026-06-12"
+    },
+    {
+      "id": "presentation-beamer-polito-latex",
+      "name": "PoliTo Beamer Presentation",
+      "description": "Beamer presentation template with Politecnico di Torino branding, colors, and logo.",
+      "purpose": "presentation",
+      "institution": {
+        "id": "polito",
+        "name": "Politecnico di Torino"
+      },
+      "language": "latex",
+      "compiler": "pdflatex",
+      "version": "0.1.0",
+      "source_dir": "templates/presentation/beamer-polito/latex",
+      "main_file": "main.tex",
+      "shared_deps": [
+        "shared/latex/apograph-math.sty",
+        "shared/latex/apograph-colors.sty",
+        "shared/latex/apograph-polito.sty"
+      ],
+      "tags": ["presentation", "beamer", "slides", "polito", "politecnico", "torino", "latex"],
+      "assets": [
+        {
+          "id": "polito-logo",
+          "description": "Politecnico di Torino official logo",
+          "official_url": null,
+          "local_path": "figures/polito-logo.pdf",
+          "manual_download_url": null
+        }
+      ],
+      "release_zip_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/presentation-beamer-polito-latex.zip",
+      "preview_pdf_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/presentation-beamer-polito-latex-preview.pdf",
+      "created": "2026-06-12",
+      "updated": "2026-06-12"
+    },
+    {
+      "id": "report-academic-latex",
+      "name": "Academic Report",
+      "description": "General-purpose academic report template suitable for course assignments, lab reports, and research summaries.",
+      "purpose": "report",
+      "institution": {
+        "id": "generic",
+        "name": "Generic / Unaffiliated"
+      },
+      "language": "latex",
+      "compiler": "pdflatex",
+      "version": "0.1.0",
+      "source_dir": "templates/report/academic/latex",
+      "main_file": "main.tex",
+      "shared_deps": [
+        "shared/latex/apograph-math.sty",
+        "shared/latex/apograph-typography.sty",
+        "shared/latex/apograph-colors.sty"
+      ],
+      "tags": ["report", "academic", "assignment", "lab", "latex"],
+      "release_zip_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/report-academic-latex.zip",
+      "preview_pdf_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/report-academic-latex-preview.pdf",
+      "created": "2026-06-12",
+      "updated": "2026-06-12"
+    },
+    {
+      "id": "report-course-project-latex",
+      "name": "Course Project Report",
+      "description": "Combined report and slides template for course projects. Includes a main report document and a companion Beamer slide deck.",
+      "purpose": "report",
+      "institution": {
+        "id": "generic",
+        "name": "Generic / Unaffiliated"
+      },
+      "language": "latex",
+      "compiler": "pdflatex",
+      "version": "0.1.0",
+      "source_dir": "templates/report/course-project/latex",
+      "main_file": "main.tex",
+      "shared_deps": [
+        "shared/latex/apograph-math.sty",
+        "shared/latex/apograph-typography.sty",
+        "shared/latex/apograph-colors.sty"
+      ],
+      "tags": ["report", "course", "project", "slides", "beamer", "latex"],
+      "release_zip_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/report-course-project-latex.zip",
+      "preview_pdf_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/report-course-project-latex-preview.pdf",
+      "created": "2026-06-12",
+      "updated": "2026-06-12"
+    }
+  ]
+}

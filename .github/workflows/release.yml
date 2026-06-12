@@ -1,0 +1,88 @@
+# =============================================================================
+# release.yml — Build and publish template ZIPs on tag push.
+#
+# Triggered when you push a tag like v0.1.0.
+# Runs pack.py --all, generates preview PDFs, and attaches everything to
+# a GitHub Release.
+#
+# Usage:
+#   git tag v0.1.0
+#   git push origin v0.1.0
+# =============================================================================
+
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write  # needed to create releases and upload assets
+
+jobs:
+  release:
+    name: Build and release
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # ------------------------------------------------------------------
+      # Pack all templates into self-contained ZIPs
+      # ------------------------------------------------------------------
+      - name: Pack all templates
+        run: python3 scripts/pack.py --all --vscode --out build/
+
+      # ------------------------------------------------------------------
+      # Compile all templates and generate preview PDFs
+      # ------------------------------------------------------------------
+      - name: Generate preview PDFs
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: "LICENSE"
+          pre_compile: |
+            apk add --no-cache python3
+            export TEXINPUTS=".:${GITHUB_WORKSPACE}/shared/latex//:"
+            python3 scripts/preview.py || true
+            exit 0
+
+      # ------------------------------------------------------------------
+      # Collect preview PDFs
+      # ------------------------------------------------------------------
+      - name: Collect preview PDFs
+        run: |
+          mkdir -p build/previews
+          find templates -name "preview.pdf" | while read pdf; do
+            # Extract template path info for naming
+            # e.g., templates/thesis/polito-msc/preview.pdf → thesis-polito-msc-preview.pdf
+            dir=$(dirname "$pdf")
+            name=$(echo "$dir" | sed 's|templates/||' | tr '/' '-')
+            cp "$pdf" "build/previews/${name}-preview.pdf" 2>/dev/null || true
+          done
+
+      # ------------------------------------------------------------------
+      # Create GitHub Release
+      # ------------------------------------------------------------------
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            build/*.zip
+            build/previews/*.pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ------------------------------------------------------------------
+      # Summary
+      # ------------------------------------------------------------------
+      - name: Release summary
+        run: |
+          echo "## Release ${{ github.ref_name }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "### ZIPs" >> "$GITHUB_STEP_SUMMARY"
+          ls -la build/*.zip | awk '{print "- " $NF " (" $5 " bytes)"}' >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Preview PDFs" >> "$GITHUB_STEP_SUMMARY"
+          ls -la build/previews/*.pdf 2>/dev/null | awk '{print "- " $NF}' >> "$GITHUB_STEP_SUMMARY" || echo "No preview PDFs generated" >> "$GITHUB_STEP_SUMMARY"

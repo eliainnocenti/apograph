@@ -1,0 +1,20 @@
+{
+  // =========================================================================
+  // Apograph — Recommended VSCode Extensions
+  //
+  // When you open this repo in VSCode, you'll be prompted to install these.
+  // =========================================================================
+  "recommendations": [
+    // LaTeX: compilation, preview, SyncTeX, intellisense, linting
+    "james-yu.latex-workshop",
+
+    // Typst: language server, preview, formatting (official Typst LSP)
+    "myriad-dreamin.tinymist",
+
+    // Grammar & style: LanguageTool-based checker for LaTeX/Typst
+    "valentjn.vscode-ltex",
+
+    // Spelling: fast spell checker across all file types
+    "streetsidesoftware.code-spell-checker"
+  ]
+}

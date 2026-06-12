@@ -1,0 +1,35 @@
+% ============================================================================
+% apograph-colors.sty — Shared color palettes
+% Part of the Apograph template collection
+% https://github.com/eliainnocenti/apograph
+% ============================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{apograph-colors}[2026/06/12 v0.1.0 Apograph color palettes]
+
+\RequirePackage{xcolor}
+
+% --- Generic academic palette ---
+% A neutral, professional palette for templates without institution branding.
+\definecolor{apo-primary}{HTML}{2C3E50}       % dark blue-grey (headings, emphasis)
+\definecolor{apo-secondary}{HTML}{3498DB}     % bright blue (links, accents)
+\definecolor{apo-accent}{HTML}{E74C3C}        % red (alerts, important notes)
+\definecolor{apo-success}{HTML}{27AE60}       % green (positive highlights)
+\definecolor{apo-muted}{HTML}{7F8C8D}         % grey (captions, secondary text)
+\definecolor{apo-light}{HTML}{ECF0F1}         % very light grey (backgrounds)
+\definecolor{apo-dark}{HTML}{1A252F}          % near-black (body text alternative)
+
+% --- Code listing colors ---
+% For use with listings or minted packages.
+\definecolor{apo-code-bg}{HTML}{F8F9FA}       % code background
+\definecolor{apo-code-keyword}{HTML}{D73A49}  % keywords
+\definecolor{apo-code-string}{HTML}{032F62}   % strings
+\definecolor{apo-code-comment}{HTML}{6A737D}  % comments
+\definecolor{apo-code-number}{HTML}{005CC5}   % numbers
+
+% --- Institution-specific colors ---
+% These are defined in their own packages (apograph-polito.sty, apograph-unifi.sty)
+% but we provide generic aliases here that institutions can override.
+\providecolor{apo-inst-primary}{HTML}{2C3E50}
+\providecolor{apo-inst-secondary}{HTML}{3498DB}
+
+\endinput

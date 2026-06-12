@@ -1,0 +1,7 @@
+This is a placeholder for: Università di Firenze official logo
+Expected file: unifi-logo.pdf
+
+The template will compile without this file (using a placeholder box).
+To use the real logo, either:
+  1. Run: make fetch-assets
+  2. Download manually and save as: unifi-logo.pdf
