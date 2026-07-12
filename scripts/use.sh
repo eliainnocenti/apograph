@@ -153,15 +153,12 @@ for cmd in curl unzip; do
     fi
 done
 
-# Check if output directory already exists
-if [[ -d "$OUT_DIR" ]]; then
-    warn "Directory '${OUT_DIR}' already exists"
-    read -rp "Overwrite? [y/N] " confirm
-    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-        info "Aborted."
-        exit 0
-    fi
-    rm -rf "$OUT_DIR"
+# Never remove a user-selected directory. An existing empty directory is safe;
+# a non-empty destination requires the user to choose another path or clean it.
+if [[ -d "$OUT_DIR" ]] && [[ -n "$(find "$OUT_DIR" -mindepth 1 -maxdepth 1 -print -quit)" ]]; then
+    error "Output directory '${OUT_DIR}' is not empty"
+    error "Choose another --out path or empty it yourself after reviewing its contents."
+    exit 1
 fi
 
 # Create a temporary directory for download
@@ -183,68 +180,13 @@ info "Extracting..."
 unzip -q "${TMP_DIR}/${TEMPLATE_ID}.zip" -d "${TMP_DIR}/extracted"
 
 # Move to output directory
-mkdir -p "$(dirname "$OUT_DIR")"
-mv "${TMP_DIR}/extracted" "$OUT_DIR"
+mkdir -p "$OUT_DIR"
+cp -R "${TMP_DIR}/extracted/." "$OUT_DIR/"
 ok "Extracted to ${OUT_DIR}"
 
-# ---------------------------------------------------------------------------
-# Fetch institutional assets (logos, etc.)
-# ---------------------------------------------------------------------------
-
-# Attempt to download assets if the template has a template.json with asset info.
-# This requires Python 3 — if not available, skip gracefully.
-if command -v python3 &> /dev/null && [[ -f "${OUT_DIR}/template.json" ]]; then
-    # Download assets.py to a temp location and run it
-    ASSETS_SCRIPT_URL="${BASE_URL}/raw/main/scripts/assets.py"
-    ASSETS_SCRIPT="${TMP_DIR}/assets.py"
-
-    info "Checking for institutional assets (logos, etc.)..."
-    if curl -fsSL -o "$ASSETS_SCRIPT" "$ASSETS_SCRIPT_URL" 2>/dev/null; then
-        # Run the asset fetcher on the template directory
-        # Parse template.json to find asset URLs and download them
-        python3 -c "
-import json, sys, os
-sys.path.insert(0, '${TMP_DIR}')
-
-try:
-    with open('${OUT_DIR}/template.json') as f:
-        meta = json.load(f)
-
-    assets = meta.get('assets', [])
-    if not assets:
-        sys.exit(0)
-
-    import urllib.request, urllib.error
-
-    for asset in assets:
-        url = asset.get('official_url')
-        local_path = os.path.join('${OUT_DIR}', asset.get('local_path', ''))
-        desc = asset.get('description', 'asset')
-
-        if not url:
-            print(f'  ⚠ No URL for {desc} — placeholder will be used')
-            continue
-
-        try:
-            print(f'  📥 Downloading {desc}...')
-            os.makedirs(os.path.dirname(local_path), exist_ok=True)
-            req = urllib.request.Request(url, headers={
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)'
-            })
-            with urllib.request.urlopen(req, timeout=15) as resp:
-                with open(local_path, 'wb') as out:
-                    out.write(resp.read())
-            print(f'  ✓ Saved: {os.path.basename(local_path)}')
-        except Exception as e:
-            print(f'  ⚠ Could not download {desc}: {e}')
-            print(f'    Template will compile with a placeholder box.')
-except Exception:
-    pass  # silently skip if anything fails
-" 2>/dev/null || true
-    fi
-else
-    info "Python3 not found — skipping asset download (template will use placeholders)"
-fi
+# Institution marks classified as user-provided are intentionally not fetched.
+# Their exact destination paths and compiling fallbacks are documented in the
+# artifact README and template.json.
 
 # ---------------------------------------------------------------------------
 # Success message

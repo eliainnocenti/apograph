@@ -1,297 +1,83 @@
 #!/usr/bin/env python3
+"""Compile catalog entry points for local development previews.
+
+Release previews are produced by ``pack.py`` from the isolated packed artifact.
+This command remains a source-tree convenience and uses the same compiler API.
 """
-preview.py — Compile all apograph templates and generate preview PDFs.
 
-Reads CATALOG.json, compiles each template using the appropriate compiler
-(latexmk for LaTeX, typst for Typst), and copies the resulting PDFs
-as preview files.
-
-Usage:
-    python scripts/preview.py              # compile all templates
-    python scripts/preview.py <template-id> # compile a specific template
-    python scripts/preview.py --list       # list all templates
-
-Requires:
-    - Python 3.8+
-    - latexmk (for LaTeX templates) — included with MacTeX / TeX Live
-    - typst (for Typst templates) — install from https://typst.app
-"""
+from __future__ import annotations
 
 import argparse
-import json
-import os
-import subprocess
+import shutil
 import sys
 from pathlib import Path
 
-from catalog import PUBLIC_STATUSES, require_valid_catalog, select_entrypoint
+from apograph.compile import CompilationError, compile_entrypoints
+from catalog import PUBLIC_STATUSES, load_catalog, require_valid_catalog, select_entrypoint
 
-
-# ---------------------------------------------------------------------------
-# Constants
-# ---------------------------------------------------------------------------
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-CATALOG_PATH = REPO_ROOT / "CATALOG.json"
-
-# Map compiler names to latexmk flags
-LATEXMK_FLAGS = {
-    "pdflatex": ["-pdf"],
-    "lualatex": ["-lualatex"],
-    "xelatex": ["-xelatex"],
-}
 
 
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-
-def load_catalog() -> dict:
-    """Load and return the CATALOG.json contents."""
-    if not CATALOG_PATH.exists():
-        print(f"Error: CATALOG.json not found at {CATALOG_PATH}", file=sys.stderr)
-        sys.exit(1)
-    with open(CATALOG_PATH, "r", encoding="utf-8") as f:
-        catalog = json.load(f)
-    require_valid_catalog(catalog)
-    return catalog
-
-
-def compile_latex(template_entry: dict) -> bool:
-    """
-    Compile a LaTeX template using latexmk.
-
-    Returns True on success, False on failure.
-    """
-    template_id = template_entry["id"]
-    source_dir = REPO_ROOT / template_entry["source_dir"]
-    main_file = select_entrypoint(template_entry, preview=True).get("path", "main.tex")
-    compiler = template_entry.get("compiler", "pdflatex")
-
-    main_path = source_dir / main_file
-    if not main_path.exists():
-        print(f"  ⚠ Main file not found: {main_path}")
-        return False
-
-    # Build the latexmk command
-    flags = LATEXMK_FLAGS.get(compiler, ["-pdf"])
-    cmd = [
-        "latexmk",
-        *flags,
-        "-synctex=1",
-        "-interaction=nonstopmode",
-        "-file-line-error",
-        f"-outdir={source_dir / 'out'}",
-        str(main_path),
-    ]
-
-    # Set TEXINPUTS to include shared/latex/ directory
-    env = os.environ.copy()
-    shared_latex = REPO_ROOT / "shared" / "latex"
-    texinputs = f"{source_dir}:{shared_latex}//:"
-    if "TEXINPUTS" in env:
-        texinputs += env["TEXINPUTS"]
-    env["TEXINPUTS"] = texinputs
-
-    print(f"  Compiling with {compiler}...")
+def compile_template(template: dict) -> bool:
+    source_dir = REPO_ROOT / template["source_dir"]
+    preview_entry = select_entrypoint(template, preview=True)
     try:
-        # Ensure the output directory exists
-        (source_dir / "out").mkdir(exist_ok=True)
-        result = subprocess.run(
-            cmd,
-            cwd=source_dir,
-            env=env,
-            capture_output=True,
-            text=True,
-            timeout=120,  # 2-minute timeout per template
+        results = compile_entrypoints(
+            template,
+            source_dir,
+            source_dir / "out",
+            entrypoints=[preview_entry],
+            source_shared_dir=REPO_ROOT / "shared" / "latex"
+            if template.get("format") == "latex"
+            else None,
+            synctex=True,
         )
-
-        if result.returncode != 0:
-            print(f"  ✗ Compilation failed for {template_id}")
-            # Print last 20 lines of output for debugging
-            log_lines = result.stdout.strip().split("\n")
-            for line in log_lines[-20:]:
-                print(f"    {line}")
-            return False
-
-        # Find the output PDF
-        pdf_name = Path(main_file).stem + ".pdf"
-        pdf_path = source_dir / "out" / pdf_name
-
-        if pdf_path.exists():
-            # Copy as preview.pdf one level up (next to the language dir)
-            preview_dir = source_dir.parent
-            preview_path = preview_dir / "preview.pdf"
-            import shutil
-            shutil.copy2(pdf_path, preview_path)
-            print(f"  ✓ Preview: {preview_path.relative_to(REPO_ROOT)}")
-            return True
-        else:
-            print(f"  ⚠ PDF not found after compilation: {pdf_path}")
-            return False
-
-    except FileNotFoundError:
-        print(f"  ✗ '{compiler}' not found. Install TeX Live / MacTeX.")
-        return False
-    except subprocess.TimeoutExpired:
-        print(f"  ✗ Compilation timed out (>120s)")
+    except CompilationError as exc:
+        print(f"  Compilation failed: {exc}", file=sys.stderr)
+        if exc.output:
+            for line in exc.output.splitlines()[-40:]:
+                print(f"    {line}", file=sys.stderr)
         return False
 
-
-def compile_typst(template_entry: dict) -> bool:
-    """
-    Compile a Typst template.
-
-    Returns True on success, False on failure.
-    """
-    template_id = template_entry["id"]
-    source_dir = REPO_ROOT / template_entry["source_dir"]
-    main_file = select_entrypoint(template_entry, preview=True).get("path", "main.typ")
-
-    main_path = source_dir / main_file
-    if not main_path.exists():
-        print(f"  ⚠ Main file not found: {main_path}")
-        return False
-
-    pdf_name = Path(main_file).stem + ".pdf"
-    pdf_path = source_dir / pdf_name
-
-    cmd = ["typst", "compile", str(main_path), str(pdf_path)]
-
-    print(f"  Compiling with typst...")
-    try:
-        result = subprocess.run(
-            cmd,
-            cwd=source_dir,
-            capture_output=True,
-            text=True,
-            timeout=60,
-        )
-
-        if result.returncode != 0:
-            print(f"  ✗ Compilation failed for {template_id}")
-            print(f"    {result.stderr.strip()}")
-            return False
-
-        if pdf_path.exists():
-            preview_dir = source_dir.parent
-            preview_path = preview_dir / "preview.pdf"
-            import shutil
-            shutil.copy2(pdf_path, preview_path)
-            print(f"  ✓ Preview: {preview_path.relative_to(REPO_ROOT)}")
-            return True
-        else:
-            print(f"  ⚠ PDF not found after compilation: {pdf_path}")
-            return False
-
-    except FileNotFoundError:
-        print("  ✗ 'typst' not found. Install from https://typst.app")
-        return False
-    except subprocess.TimeoutExpired:
-        print(f"  ✗ Compilation timed out (>60s)")
-        return False
+    preview_path = source_dir.parent / "preview.pdf"
+    shutil.copyfile(results[0].pdf_path, preview_path)
+    print(f"  Preview: {preview_path.relative_to(REPO_ROOT)}")
+    return True
 
 
-def compile_template(template_entry: dict) -> bool:
-    """Compile a template using the appropriate compiler."""
-    language = template_entry.get("format", template_entry.get("language", "latex"))
-
-    if language == "latex":
-        return compile_latex(template_entry)
-    elif language == "typst":
-        return compile_typst(template_entry)
-    else:
-        print(f"  ⚠ Unknown language: {language}")
-        return False
-
-
-# ---------------------------------------------------------------------------
-# CLI
-# ---------------------------------------------------------------------------
-
-def main():
-    parser = argparse.ArgumentParser(
-        description="Compile apograph templates and generate preview PDFs.",
-        epilog="Examples:\n"
-               "  python scripts/preview.py\n"
-               "  python scripts/preview.py thesis-polito-msc-latex\n"
-               "  python scripts/preview.py --list\n",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-    )
-    parser.add_argument(
-        "template_id",
-        nargs="?",
-        help="Template ID to compile (default: all)",
-    )
-    parser.add_argument(
-        "--list",
-        action="store_true",
-        help="List all available templates",
-    )
-
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Compile local source previews.")
+    parser.add_argument("template_id", nargs="?", help="exact template ID; defaults to all public entries")
+    parser.add_argument("--list", action="store_true", help="list catalog entries")
     args = parser.parse_args()
-    catalog = load_catalog()
-    templates = catalog.get("templates", [])
 
+    catalog = load_catalog()
+    require_valid_catalog(catalog)
+    templates = catalog.get("templates", [])
     if args.list:
-        print(f"Available templates ({len(templates)}):\n")
-        for t in templates:
-            print(f"  {t['id']:45s}  {t['status']:10s}  {t['name']}")
-        return
+        for template in templates:
+            print(f"{template['id']:45s} {template['status']:10s} {template['name']}")
+        return 0
 
     if args.template_id:
-        # Compile a specific template
-        entry = None
-        for t in templates:
-            if t["id"] == args.template_id:
-                entry = t
-                break
-
-        if entry is None:
-            available = [t["id"] for t in templates]
-            print(f"Error: template '{args.template_id}' not found.", file=sys.stderr)
-            print(f"Available: {', '.join(available)}", file=sys.stderr)
-            sys.exit(1)
-
-        print(f"Compiling: {entry['id']}")
-        success = compile_template(entry)
-        sys.exit(0 if success else 1)
-
+        selected = [template for template in templates if template["id"] == args.template_id]
+        if not selected:
+            print(f"Unknown template ID: {args.template_id}", file=sys.stderr)
+            return 1
     else:
-        # Compile all templates
-        templates = [t for t in templates if t.get("status") in PUBLIC_STATUSES]
-        if not templates:
-            print("No beta/stable templates are currently eligible for default compilation.")
-            print("Compile a draft explicitly by template ID when developing it.")
-            return
+        selected = [template for template in templates if template["status"] in PUBLIC_STATUSES]
+        if not selected:
+            print("No beta/stable templates are eligible for default preview compilation.")
+            return 0
 
-        print(f"Compiling all {len(templates)} public templates...\n")
-        results = {"pass": [], "fail": [], "skip": []}
-
-        for entry in templates:
-            print(f"[{entry['id']}]")
-            success = compile_template(entry)
-            if success:
-                results["pass"].append(entry["id"])
-            else:
-                results["fail"].append(entry["id"])
-            print()
-
-        # Summary
-        total = len(templates)
-        passed = len(results["pass"])
-        failed = len(results["fail"])
-
-        print("=" * 60)
-        print(f"Results: {passed}/{total} passed, {failed}/{total} failed")
-
-        if results["fail"]:
-            print(f"\nFailed templates:")
-            for tid in results["fail"]:
-                print(f"  ✗ {tid}")
-
-        sys.exit(1 if failed > 0 else 0)
+    failures = []
+    for template in selected:
+        print(f"Compiling {template['id']}")
+        if not compile_template(template):
+            failures.append(template["id"])
+    return 1 if failures else 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

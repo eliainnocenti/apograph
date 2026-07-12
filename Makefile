@@ -21,7 +21,7 @@ help: ## Show this help message
 	@echo "    make pack ID=thesis-polito-msc-latex"
 	@echo "    make pack-all"
 	@echo "    make preview"
-	@echo "    make pack ID=thesis-polito-msc-latex VSCODE=1"
+	@echo "    make pack ID=presentation-beamer-polito-latex FORCE=1"
 	@echo ""
 
 # ---------------------------------------------------------------------------
@@ -40,7 +40,7 @@ docs-check: ## Check that generated README content is current
 test: ## Run the Python test suite
 	@python3 -m unittest discover -s tests -v
 
-check: validate docs-check test ## Run Phase 1 validation and tests
+check: validate docs-check test ## Run catalog, documentation, artifact, and compile tests
 
 # ---------------------------------------------------------------------------
 # Packing (bundle templates into self-contained ZIPs)
@@ -50,10 +50,23 @@ pack: ## Pack a single template into a ZIP (requires ID=<template-id>)
 ifndef ID
 	$(error ID is required. Usage: make pack ID=thesis-polito-msc-latex)
 endif
-	@python3 scripts/pack.py $(ID) $(if $(VSCODE),--vscode,) $(if $(OUT),--out $(OUT),)
+	@python3 scripts/pack.py $(ID) \
+		$(if $(OUT),--out $(OUT),) \
+		$(if $(MODE),--mode $(MODE),) \
+		$(if $(FORCE),--force,) \
+		$(if $(SKIP_COMPILE),--skip-compile,) \
+		$(if $(NO_VSCODE),--no-vscode,) \
+		$(if $(FETCH_ASSETS),--fetch-assets,) \
+		$(if $(SOURCE_COMMIT),--source-commit $(SOURCE_COMMIT),)
 
 pack-all: ## Pack all templates into ZIPs
-	@python3 scripts/pack.py --all $(if $(VSCODE),--vscode,) $(if $(OUT),--out $(OUT),)
+	@python3 scripts/pack.py --all \
+		$(if $(OUT),--out $(OUT),) \
+		$(if $(MODE),--mode $(MODE),) \
+		$(if $(FORCE),--force,) \
+		$(if $(NO_VSCODE),--no-vscode,) \
+		$(if $(FETCH_ASSETS),--fetch-assets,) \
+		$(if $(SOURCE_COMMIT),--source-commit $(SOURCE_COMMIT),)
 
 # ---------------------------------------------------------------------------
 # Preview (compile templates and generate preview PDFs)

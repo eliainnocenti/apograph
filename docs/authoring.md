@@ -54,10 +54,12 @@ captions, chapter style, and Beamer policy normally belong to the template.
 python3 scripts/catalog.py validate
 python3 scripts/catalog.py generate-readme --check
 python3 -m unittest discover -s tests -v
+python3 scripts/pack.py <template-id>
 ```
 
-Compile each implemented entry point directly during development. Promotion to
-beta/stable later requires isolated packed-artifact compilation.
+The pack command compiles every artifact-included entry point without
+monorepo-only search paths. `--skip-compile` is a developer diagnostic only and
+is rejected in release mode.
 
 ## 7. Promote through review
 

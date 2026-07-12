@@ -37,8 +37,10 @@ template-owned `theme/assets/` directories and develop the PoliTo Beamer theme.
 
 - `.gitignore`: ignores institution branding files in `theme/assets/` while
   retaining `.gitkeep` and placeholder instructions.
-- `CATALOG.json`: moves logo destinations into `theme/assets/` and declares the
-  three assets currently used by the PoliTo Beamer theme.
+- `CATALOG.json`: moves logo destinations into `theme/assets/` and initially
+  declared three assets used by the PoliTo Beamer theme. Phase 2 additionally
+  declared the alternative and negative backgrounds discovered by isolated
+  artifact compilation.
 - `scripts/assets.py`: updates the default asset location and removes stale
   placeholder markers when the real asset exists.
 - `scripts/use.sh`: whitespace-only end-of-file cleanup.

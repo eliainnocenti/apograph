@@ -73,6 +73,14 @@ class CatalogValidationTests(unittest.TestCase):
         self.assertTrue(any("fetched assets require source_url" in error for error in errors), errors)
         self.assertTrue(any("fetched assets require sha256" in error for error in errors), errors)
 
+    def test_user_provided_asset_rejects_automated_download_url(self):
+        candidate = copy.deepcopy(self.catalog)
+        candidate["templates"][0]["assets"][0]["source_url"] = "https://example.edu/logo.pdf"
+
+        errors = self.errors_for(candidate)
+
+        self.assertTrue(any("may not use source_url" in error for error in errors), errors)
+
     def test_invalid_nested_types_report_errors_instead_of_crashing(self):
         candidate = copy.deepcopy(self.catalog)
         candidate["templates"][0]["compatibility"] = []

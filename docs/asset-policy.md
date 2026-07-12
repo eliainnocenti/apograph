@@ -14,7 +14,8 @@ The catalog records its source, checksum where appropriate, and license status.
 
 The build downloads the file from a stable authorized URL and verifies its
 SHA-256 checksum. Public availability by itself is not evidence of redistribution
-permission. A fetched asset still needs license and trademark evidence.
+permission. A fetched asset still needs license and trademark evidence and is
+never fetched unless the builder is explicitly invoked with `--fetch-assets`.
 
 ### `user-provided`
 
@@ -44,11 +45,22 @@ ships an instructional marker.
 - Source, license, attribution, and trademark status are separate facts.
 - `official` is an institution relationship, not an asset filename or visual
   similarity claim.
+- `source_url` is a machine-consumed fetched-asset endpoint, not a general link
+  field. Do not put a logo hotlink there for a `user-provided` asset.
+
+## Acquisition links
+
+User-provided institution marks use textual acquisition instructions. An
+official brand-policy or asset landing page may later be recorded as evidence
+when a maintainer has verified it, but it must remain distinct from
+`source_url`, must not imply permission, and must not be treated as a stable
+automated download. Artifacts always give the exact destination path and work
+with the file absent.
 
 ## Current institution assets
 
-The local PoliTo PNG files are ignored and classified as user-provided pending
-evidence. Their preservation hashes are recorded in
+The local PoliTo logo and three used background PNG files are ignored and
+classified as user-provided pending evidence. Their preservation hashes are recorded in
 `docs/WORKTREE_INVENTORY.md`. The PoliTo and UniFi PDF logo placeholders likewise
 represent unresolved user-provided assets, not downloadable dependencies.
 

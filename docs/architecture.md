@@ -35,9 +35,10 @@ CATALOG.json + template source + shared modules + declared assets
              GitHub Release / README / Pages / Overleaf
 ```
 
-Phase 1 implements the catalog and governance contracts. The current `pack.py`
-and `preview.py` remain transitional development tools. Phase 2 replaces their
-implicit assumptions with an isolated artifact pipeline.
+Phase 1 implements the catalog and governance contracts. Phase 2 implements the
+isolated artifact pipeline: `pack.py` delegates to tested internal construction
+and compilation modules, and `preview.py` reuses the same compiler API for local
+source iteration.
 
 ## Source layout
 
@@ -76,12 +77,9 @@ vendor the exact required shared modules.
 
 ## Current known gaps
 
-- The packer can include ignored local images and excludes PDFs too broadly.
-- Source compilation uses `TEXINPUTS`; packed artifacts are not yet compiled in
-  isolation.
 - The PoliTo theme is a showcase rather than a minimal starter.
 - Its license chain and asset redistribution evidence are incomplete.
 - The five other template entries are placeholders.
 - CI and release workflows do not yet implement the target gates.
 
-These are Phase 2–4 concerns and are intentionally not hidden by Phase 1.
+These are Phase 3–4 concerns and are intentionally not hidden by Phase 2.

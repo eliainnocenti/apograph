@@ -2,8 +2,9 @@
 # release.yml — Build and publish template ZIPs on tag push.
 #
 # Triggered when you push a tag like v0.1.0.
-# Runs pack.py --all, generates preview PDFs, and attaches everything to
-# a GitHub Release.
+# Runs the canonical artifact builder and attaches its verified outputs to a
+# GitHub Release. Phase 4 will replace this transitional runner with the full
+# supported-toolchain matrix.
 #
 # Usage:
 #   git tag v0.1.0
@@ -34,37 +35,13 @@ jobs:
           python3 scripts/catalog.py generate-readme --check
 
       # ------------------------------------------------------------------
-      # Pack all templates into self-contained ZIPs
+      # Build all public templates. pack.py performs isolated compilation and
+      # derives previews from the packed source; failures are publication blockers.
       # ------------------------------------------------------------------
-      - name: Pack all templates
-        run: python3 scripts/pack.py --all --vscode --out build/
-
-      # ------------------------------------------------------------------
-      # Compile all templates and generate preview PDFs
-      # ------------------------------------------------------------------
-      - name: Generate preview PDFs
-        uses: xu-cheng/latex-action@v3
-        with:
-          root_file: "LICENSE"
-          pre_compile: |
-            apk add --no-cache python3
-            export TEXINPUTS=".:${GITHUB_WORKSPACE}/shared/latex//:"
-            python3 scripts/preview.py || true
-            exit 0
-
-      # ------------------------------------------------------------------
-      # Collect preview PDFs
-      # ------------------------------------------------------------------
-      - name: Collect preview PDFs
-        run: |
-          mkdir -p build/previews
-          find templates -name "preview.pdf" | while read pdf; do
-            # Extract template path info for naming
-            # e.g., templates/thesis/polito-msc/preview.pdf → thesis-polito-msc-preview.pdf
-            dir=$(dirname "$pdf")
-            name=$(echo "$dir" | sed 's|templates/||' | tr '/' '-')
-            cp "$pdf" "build/previews/${name}-preview.pdf" 2>/dev/null || true
-          done
+      - name: Build verified release artifacts
+        run: >-
+          python3 scripts/pack.py --all --mode release
+          --source-commit "$GITHUB_SHA" --out build/
 
       # ------------------------------------------------------------------
       # Create GitHub Release
@@ -75,7 +52,9 @@ jobs:
           generate_release_notes: true
           files: |
             build/*.zip
-            build/previews/*.pdf
+            build/*.zip.sha256
+            build/*.build.json
+            build/*.preview.pdf
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -90,4 +69,4 @@ jobs:
           ls -la build/*.zip | awk '{print "- " $NF " (" $5 " bytes)"}' >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "### Preview PDFs" >> "$GITHUB_STEP_SUMMARY"
-          ls -la build/previews/*.pdf 2>/dev/null | awk '{print "- " $NF}' >> "$GITHUB_STEP_SUMMARY" || echo "No preview PDFs generated" >> "$GITHUB_STEP_SUMMARY"
+          find build -maxdepth 1 -name "*.preview.pdf" -print | awk '{print "- " $0}' >> "$GITHUB_STEP_SUMMARY"

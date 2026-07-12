@@ -330,6 +330,7 @@ def _validate_template(template: Any, index: int, ids: set[str], errors: list[st
 
     assets = template.get("assets")
     asset_ids: set[str] = set()
+    asset_paths: set[str] = set()
     if not isinstance(assets, list):
         errors.append(f"{context}.assets: expected an array")
     else:
@@ -344,6 +345,11 @@ def _validate_template(template: Any, index: int, ids: set[str], errors: list[st
                 asset_ids.add(asset_id)
             _nonempty_string(asset.get("description"), f"{asset_context}.description", errors)
             local_path = _safe_relative_path(asset.get("local_path"), f"{asset_context}.local_path", errors)
+            if local_path is not None:
+                local_path_string = local_path.as_posix()
+                if local_path_string in asset_paths:
+                    errors.append(f"{asset_context}.local_path: duplicate asset path '{local_path_string}'")
+                asset_paths.add(local_path_string)
             mode = asset.get("mode")
             _enum(mode, ASSET_MODES, f"{asset_context}.mode", errors)
             if not isinstance(asset.get("required"), bool):
@@ -367,6 +373,23 @@ def _validate_template(template: Any, index: int, ids: set[str], errors: list[st
                     errors.append(f"{asset_context}: fetched assets require sha256")
             if mode == "user-provided" and asset.get("required") is False and not fallback:
                 errors.append(f"{asset_context}: optional user-provided assets require a fallback")
+            if mode == "user-provided" and asset.get("source_url") is not None:
+                errors.append(
+                    f"{asset_context}: user-provided assets may not use source_url; "
+                    "document human acquisition separately"
+                )
+
+            if status in PUBLIC_STATUSES and mode in {"bundled", "fetched"}:
+                asset_license = asset.get("license")
+                if (
+                    not isinstance(asset_license, dict)
+                    or asset_license.get("status") != "verified"
+                    or not asset_license.get("expression")
+                ):
+                    errors.append(
+                        f"{asset_context}: redistributed assets in beta/stable templates "
+                        "require a verified license expression"
+                    )
 
     tags = template.get("tags")
     if not isinstance(tags, list) or not tags:

@@ -18,9 +18,11 @@ initial governance process; Phase 4 will automate it.
 
 1. Update the changelog and `release_version`.
 2. Run catalog validation and all tests.
-3. Build artifacts in a clean release-equivalent checkout.
-4. Compile every packed entry point without monorepo-only environment variables.
-5. Generate previews, artifact manifests, and SHA-256 checksums.
+3. Build artifacts in a clean release-equivalent checkout with
+   `python3 scripts/pack.py --all --mode release --source-commit <sha>`.
+4. Let that command compile every packed entry point without monorepo-only
+   environment variables.
+5. Retain its previews, generated manifests, build reports, and SHA-256 sidecars.
 6. Inspect the candidate file list and notices.
 7. Test direct ZIP download and Overleaf import for each LaTeX artifact.
 8. Create the protected `v<release_version>` tag.

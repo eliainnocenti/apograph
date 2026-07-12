@@ -300,7 +300,11 @@
   \begingroup
   \setbeamertemplate{background}{%
   \hspace*{0.6\paperwidth}%
-  \includegraphics[height=\paperheight]{#1}%
+  \IfFileExists{#1.png}{%
+    \includegraphics[height=\paperheight]{#1}%
+  }{%
+    \tikz \node[draw=maincolor!50, fill=sintefgrey, minimum width=0.4\paperwidth, minimum height=\paperheight, align=center, font=\tiny\sffamily\color{maincolor}] {Side Image\\Placeholder};
+  }%
   }
   \setbeamertemplate{frametitle}{% Same as normal, but with right skip
     \vspace*{-3.5ex}

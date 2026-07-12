@@ -60,15 +60,16 @@ templates/<purpose>/<variant>/<format>/
 
 `CATALOG.json` is the only authored metadata source. Institution, format,
 compiler, status, licensing, provenance, and assets are catalog facets.
-Per-template `template.json` manifests will be generated only inside release
+Per-template `template.json` manifests are generated only inside release
 artifacts.
 
 Shared source modules live under `shared/`. During development, maintainers edit
-them once. Future release artifacts will vendor the exact required modules so a
+them once. Release artifacts vendor the exact required modules at ZIP root so a
 downloaded template has no runtime dependency on this repository.
 
 See [the architecture documentation](docs/architecture.md) and the
-[implementation plan](docs/IMPLEMENTATION_PLAN.md) for the complete contracts
+[artifact contract](docs/artifacts.md), then the
+[implementation plan](docs/IMPLEMENTATION_PLAN.md), for the complete contracts
 and delivery sequence.
 
 ## Maintainer quick start
@@ -87,22 +88,22 @@ python3 scripts/catalog.py list
 python3 scripts/catalog.py generate-readme --check
 ```
 
-Run the catalog tests:
+Run all catalog, artifact, and isolated-compile tests:
 
 ```bash
 python3 -m unittest discover -s tests -v
 ```
 
-The existing preview and pack scripts remain development utilities during the
-artifact-pipeline migration:
+Build and compile the PoliTo draft artifact in an isolated temporary directory:
 
 ```bash
-python3 scripts/preview.py presentation-beamer-polito-latex
-python3 scripts/pack.py presentation-beamer-polito-latex --no-assets
+python3 scripts/pack.py presentation-beamer-polito-latex
 ```
 
-Their successful output is not yet a publication guarantee. Phase 2 will make
-isolated packed-artifact compilation the release contract.
+This creates a deterministic ZIP, checksum, build report, and packed-source
+preview under `build/`. Draft mode is for maintainer testing only; it does not
+make the template publicly available. `python3 scripts/preview.py <id>` remains
+a faster source-tree convenience and is not the release gate.
 
 ## Contributing
 

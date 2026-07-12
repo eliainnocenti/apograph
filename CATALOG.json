@@ -322,6 +322,36 @@
             "status": "review-required",
             "notes": "The local file is ignored. Source and redistribution permission require human evidence."
           }
+        },
+        {
+          "id": "background-alternative",
+          "description": "PoliTo side-picture background image",
+          "local_path": "theme/assets/background_alternative.png",
+          "mode": "user-provided",
+          "required": false,
+          "source_url": null,
+          "sha256": null,
+          "fallback": "theme-side-image-placeholder",
+          "license": {
+            "expression": null,
+            "status": "review-required",
+            "notes": "The local file is ignored. Source and redistribution permission require human evidence."
+          }
+        },
+        {
+          "id": "background-negative",
+          "description": "PoliTo chapter-divider background image",
+          "local_path": "theme/assets/background_negative.png",
+          "mode": "user-provided",
+          "required": false,
+          "source_url": null,
+          "sha256": null,
+          "fallback": "theme-split-background-placeholder",
+          "license": {
+            "expression": null,
+            "status": "review-required",
+            "notes": "The local file is ignored. Source and redistribution permission require human evidence."
+          }
         }
       ],
       "tags": ["presentation", "beamer", "slides", "polito", "politecnico", "torino", "latex"],

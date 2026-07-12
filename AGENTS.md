@@ -47,9 +47,9 @@ python3 -m py_compile scripts/*.py
 git diff --check
 ```
 
-For LaTeX changes, additionally compile every affected entry point. During the
-current migration, direct draft compilation may be requested by exact template
-ID. Phase 2 will add isolated artifact compilation as a mandatory check.
+For LaTeX changes, additionally compile every affected entry point. Direct
+draft compilation may be requested by exact template ID; Phase 2 artifact tests
+compile the packed PoliTo showcase in isolation as a mandatory check.
 
 ## Scope and generated output
 

@@ -6,11 +6,12 @@ Last updated: 2026-07-12
 Execution progress:
 
 - Phase 0 completed on 2026-07-12 with a filesystem checkpoint; the preferred
-  Git branch/commit checkpoint remains pending because Git metadata modification
-  was not approved during execution.
+  Git branch/commit checkpoint was recorded with the Phase 1 foundation.
 - Phase 1 completed on 2026-07-12; catalog, validation, generated listing, and
   initial governance contracts are implemented and verified.
-- Phase 2 is the next implementation phase.
+- Phase 2 completed on 2026-07-12; deterministic artifacts, root-vendored shared
+  modules, isolated compilation, asset fallbacks, and Gate A tests are implemented.
+- Phase 3 is the next implementation phase.
 
 ## 1. Product definition
 
@@ -250,7 +251,8 @@ The artifact's `template.json` additionally records:
 - build timestamp;
 - included shared dependencies and their versions/checksums;
 - asset modes and checksums;
-- artifact checksum;
+- per-file checksums and the name of the external ZIP checksum sidecar (the ZIP
+  cannot contain its own checksum without a circular definition);
 - supported compiler and entry points.
 
 Release and preview URLs must be generated from the repository, release, and
@@ -813,6 +815,8 @@ Exit criteria:
 - Every existing file has a known template/status/provenance category.
 
 ### Phase 2 — artifact and test foundation
+
+**Execution:** completed on 2026-07-12.
 
 **Objective:** make a packed artifact the tested product.
 
