@@ -58,6 +58,7 @@ class CatalogValidationTests(unittest.TestCase):
         template["status"] = "beta"
         template["entrypoints"][0]["role"] = "showcase"
         template["license"]["status"] = "review-required"
+        template["compatibility"]["overleaf"] = "untested"
 
         errors = self.errors_for(candidate)
 
@@ -95,13 +96,15 @@ class CatalogValidationTests(unittest.TestCase):
         self.assertTrue(any("shared_deps[0]" in error for error in errors), errors)
         self.assertTrue(any("tags[0]" in error for error in errors), errors)
 
-    def test_public_listing_excludes_drafts(self):
+    def test_public_listing_separates_beta_from_drafts(self):
         rendered = catalog_module.render_public_listing(self.catalog)
 
-        self.assertIn("No template is currently eligible", rendered)
+        self.assertIn("PoliTo Beamer Presentation", rendered)
+        self.assertIn("| beta | `presentation-beamer-polito-latex` |", rendered)
         self.assertIn("Draft inventory", rendered)
-        self.assertIn("presentation-beamer-polito-latex", rendered)
-        self.assertEqual(catalog_module.public_templates(self.catalog), [])
+        public_ids = [item["id"] for item in catalog_module.public_templates(self.catalog)]
+        self.assertEqual(public_ids, ["presentation-beamer-polito-latex"])
+        self.assertNotIn("thesis-polito-msc-latex", public_ids)
 
     def test_readme_generation_is_idempotent(self):
         current = catalog_module.README_PATH.read_text(encoding="utf-8")

@@ -28,10 +28,12 @@ Semantic Versioning while it uses a single global release timeline.
   modification record, and non-endorsement statements.
 - Class-compatibility fixtures for shared LaTeX modules across article, report,
   book, and Beamer.
+- Exact-ZIP Overleaf verification for both PoliTo entry points using pdfLaTeX
+  and TeX Live 2025.
 
 ### Changed
 
-- All current template entries are explicitly classified as drafts.
+- Placeholder entries remain drafts; PoliTo Beamer is the first beta entry.
 - The catalog is the only authored metadata source.
 - The README no longer presents placeholder directories as released templates.
 - `pack.py` now tests the packed artifact itself, preserves legitimate PDFs,
@@ -44,7 +46,7 @@ Semantic Versioning while it uses a single global release timeline.
 - The PoliTo theme exposes namespaced commands and opt-in section/subtitle
   behavior while retaining compiling user-provided-asset fallbacks.
 - The PoliTo artifact records successful isolated starter/showcase compilation
-  with TeX Live 2026; Overleaf compatibility remains a separate manual gate.
+  with TeX Live 2026 and zero-diagnostic Overleaf TeX Live 2025 compilation.
 - Starter content now lives only under `content/`; preview-only source is
   isolated under `showcase/` so users see one document-authoring surface.
 

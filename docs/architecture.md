@@ -77,10 +77,10 @@ vendor the exact required shared modules.
 
 ## Current known gaps
 
-- The PoliTo starter/showcase structure and component notices are implemented,
-  and maintainer license review is recorded, but Overleaf import evidence is
-  still required for beta.
+- The PoliTo Beamer beta passes licensing, isolated artifact compilation,
+  preview, documentation, and Overleaf TeX Live 2025 import gates.
 - The five other template entries are placeholders.
 - CI and release workflows do not yet implement the target gates.
 
-These are Phase 3–4 concerns and are intentionally not hidden by Phase 2.
+The remaining gaps are Phase 4 concerns and are intentionally not hidden by the
+first beta promotion.

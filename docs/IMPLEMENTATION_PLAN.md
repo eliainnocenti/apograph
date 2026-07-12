@@ -11,10 +11,10 @@ Execution progress:
   initial governance contracts are implemented and verified.
 - Phase 2 completed on 2026-07-12; deterministic artifacts, root-vendored shared
   modules, isolated compilation, asset fallbacks, and Gate A tests are implemented.
-- Phase 3 started on 2026-07-12. The starter/showcase/config/theme split,
-  component notices, shared-class fixtures, and clean TeX Live 2026 artifact
-  compilation are implemented. Maintainer license review passed on 2026-07-12;
-  beta promotion remains gated only on recorded Overleaf compatibility.
+- Phase 3 completed on 2026-07-12. The starter/showcase/config/theme split,
+  component notices, shared-class fixtures, clean TeX Live 2026 artifact
+  compilation, maintainer license review, and exact-ZIP Overleaf TeX Live 2025
+  verification are recorded; PoliTo Beamer is the first beta entry.
 
 ## 1. Product definition
 
@@ -841,7 +841,7 @@ Exit criteria:
 
 ### Phase 3 — shared modules and PoliTo Beamer beta
 
-**Execution:** in progress since 2026-07-12.
+**Execution:** completed on 2026-07-12.
 
 **Objective:** ship one genuinely usable beta through the new pipeline.
 

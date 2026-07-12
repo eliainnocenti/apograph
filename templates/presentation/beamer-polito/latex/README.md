@@ -29,6 +29,9 @@ Upload the complete Apograph release ZIP as a new project and select `main.tex`
 as the main document. The artifact already contains every source dependency at
 project root. No `TEXINPUTS`, repository checkout, or asset download is needed.
 
+The packed starter and showcase were verified with Overleaf pdfLaTeX and TeX
+Live 2025 on 2026-07-12, without optional institution assets.
+
 ## Project structure
 
 ```text

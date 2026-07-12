@@ -8,11 +8,11 @@
 
 ## Project status
 
-Apograph is in pre-release development. Its source tree contains draft template
-ideas and a functional unofficial PoliTo Beamer starter/showcase, but no entry
-is currently eligible for public distribution. A template appears as publicly
-available only after its licensing, provenance, documentation,
-isolated-artifact compilation, and compatibility gates pass.
+Apograph is in pre-release development. The unofficial PoliTo Beamer
+starter/showcase is the first beta entry; the remaining template ideas are
+drafts. A template appears in the public catalog only after its licensing,
+provenance, documentation, isolated-artifact compilation, and compatibility
+gates pass. Canonical release downloads will be published in Phase 5.
 
 The project deliberately distinguishes source inventory from released products:
 the presence of a directory under `templates/` does not mean that it is ready
@@ -22,9 +22,9 @@ for use.
 
 <!-- BEGIN GENERATED:PUBLIC_TEMPLATES -->
 
-No template is currently eligible for public download. The repository is in
-pre-release development; entries remain drafts until their licensing, artifact,
-documentation, and compatibility gates pass.
+| Template | Purpose | Institution | Format | Status | ID |
+|---|---|---|---|---|---|
+| PoliTo Beamer Presentation | presentation | Politecnico di Torino (unofficial) | latex | beta | `presentation-beamer-polito-latex` |
 
 <details>
 <summary>Draft inventory (not release-ready)</summary>
@@ -32,7 +32,6 @@ documentation, and compatibility gates pass.
 | Draft | Purpose | Institution | Format | ID |
 |---|---|---|---|---|
 | Academic Beamer Presentation | presentation | Generic / Unaffiliated | latex | `presentation-beamer-academic-latex` |
-| PoliTo Beamer Presentation | presentation | Politecnico di Torino | latex | `presentation-beamer-polito-latex` |
 | Academic Report | report | Generic / Unaffiliated | latex | `report-academic-latex` |
 | Course Project Report | report | Generic / Unaffiliated | latex | `report-course-project-latex` |
 | PoliTo Master's Thesis | thesis | Politecnico di Torino | latex | `thesis-polito-msc-latex` |
@@ -94,16 +93,15 @@ Run all catalog, artifact, and isolated-compile tests:
 python3 -m unittest discover -s tests -v
 ```
 
-Build and compile the PoliTo draft artifact in an isolated temporary directory:
+Build and compile the PoliTo beta artifact in an isolated temporary directory:
 
 ```bash
 python3 scripts/pack.py presentation-beamer-polito-latex
 ```
 
 This creates a deterministic ZIP, checksum, build report, and packed-source
-preview under `build/`. Draft mode is for maintainer testing only; it does not
-make the template publicly available. `python3 scripts/preview.py <id>` remains
-a faster source-tree convenience and is not the release gate.
+preview under `build/`. `python3 scripts/preview.py <id>` remains a faster
+source-tree convenience and is not the release gate.
 
 ## Contributing
 

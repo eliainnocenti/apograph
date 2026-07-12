@@ -218,7 +218,7 @@
       "purpose": "presentation",
       "variant": "beamer-polito",
       "format": "latex",
-      "status": "draft",
+      "status": "beta",
       "institution": {
         "id": "polito",
         "name": "Politecnico di Torino",
@@ -228,8 +228,8 @@
       },
       "compiler": "pdflatex",
       "compatibility": {
-        "texlive": ["2026"],
-        "overleaf": "untested"
+        "texlive": ["2025", "2026"],
+        "overleaf": "compatible"
       },
       "source_dir": "templates/presentation/beamer-polito/latex",
       "entrypoints": [
@@ -370,7 +370,7 @@
           "github": "eliainnocenti"
         }
       ],
-      "readiness_notes": "The minimal starter, separate showcase, documentation, verified component licensing, asset fallbacks, and isolated artifact path compile cleanly with TeX Live 2026. Beta remains blocked only on a recorded Overleaf upload/compile result.",
+      "readiness_notes": "Beta gates passed on 2026-07-12. The packed starter and showcase compile cleanly in isolation with TeX Live 2026 and from the exact uploaded ZIP on Overleaf pdfLaTeX with TeX Live 2025. Overleaf produced 5 starter pages and 30 showcase pages with zero reported errors, warnings, or informational diagnostics. Optional institution assets were absent and their fallbacks compiled successfully.",
       "created": "2026-06-12",
       "updated": "2026-07-12"
     },
