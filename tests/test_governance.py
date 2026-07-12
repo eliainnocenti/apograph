@@ -50,6 +50,31 @@ class GovernanceDocumentationTests(unittest.TestCase):
         )
         self.assertNotIn("python3 -c", workflow)
 
+    def test_workflows_pin_actions_and_test_the_release_artifact(self):
+        workflow_dir = catalog_module.REPO_ROOT / ".github" / "workflows"
+        compile_workflow = (workflow_dir / "compile.yml").read_text(encoding="utf-8")
+        release_workflow = (workflow_dir / "release.yml").read_text(encoding="utf-8")
+
+        action_ref = re.compile(r"^\s*-?\s*uses:\s*[^@\s]+@([0-9a-f]{40})(?:\s|$)", re.MULTILINE)
+        for name, workflow in (
+            ("compile.yml", compile_workflow),
+            ("release.yml", release_workflow),
+        ):
+            uses_lines = [line for line in workflow.splitlines() if "uses:" in line]
+            pinned_lines = action_ref.findall(workflow)
+            self.assertEqual(len(pinned_lines), len(uses_lines), name)
+            self.assertNotIn("|| true", workflow, name)
+
+        self.assertIn("xu-cheng/texlive-action@", compile_workflow)
+        self.assertIn("scripts/pack.py --all --mode release", compile_workflow)
+        self.assertIn("scripts/release.py assemble", compile_workflow)
+        self.assertIn("Upload exact tested release candidate", compile_workflow)
+
+        self.assertIn("workflow_dispatch:", release_workflow)
+        self.assertIn("scripts/release.py validate-tag", release_workflow)
+        self.assertIn("scripts/release.py assemble", release_workflow)
+        self.assertIn("Publish verified tag artifacts", release_workflow)
+
 
 if __name__ == "__main__":
     unittest.main()

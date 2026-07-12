@@ -1,7 +1,8 @@
 # Release process
 
-Apograph currently has no publishable template. This document defines the
-initial governance process; Phase 4 will automate it.
+Apograph has one beta template but no published collection release. Phase 4
+implements an unpublished candidate path and a separately gated tag-publication
+path; creating a candidate never creates a GitHub Release.
 
 ## Preconditions
 
@@ -16,24 +17,38 @@ initial governance process; Phase 4 will automate it.
 
 ## Candidate workflow
 
-1. Update the changelog and `release_version`.
-2. Run catalog validation and all tests.
-3. Build artifacts in a clean release-equivalent checkout with
-   `python3 scripts/pack.py --all --mode release --source-commit <sha>`.
-4. Let that command compile every packed entry point without monorepo-only
-   environment variables.
-5. Retain its previews, generated manifests, build reports, and SHA-256 sidecars.
-6. Inspect the candidate file list and notices.
-7. Test direct ZIP download and Overleaf import for each LaTeX artifact.
-8. Create the protected `v<release_version>` tag.
-9. Publish exactly the artifacts that passed candidate verification.
+1. Run the `Release` workflow manually on the intended commit. This executes
+   catalog validation and the complete test suite in a pinned TeX Live 2026
+   environment.
+2. Build artifacts in release mode with the checked-out full commit SHA.
+3. Let `pack.py` compile every entry point from the packed project and derive
+   previews from those same results.
+4. Let `release.py assemble` verify ZIP and preview hashes, report provenance,
+   the complete public-template set, and the shared source epoch.
+5. Download the `release-candidate-<sha>` workflow artifact. It contains the
+   ZIPs, checksum sidecars, previews, build reports, `CATALOG.json`, and
+   `release-index.json` that were tested together.
+6. Inspect the candidate file list, notices, and release index. Test direct ZIP
+   extraction and Overleaf import for each LaTeX artifact.
+7. Update `release_version` and move the matching changelog entry out of
+   `Unreleased`.
+8. Create the protected `v<release_version>` tag only after candidate approval.
+9. The tag run rebuilds and verifies the candidate, validates tag/catalog/
+   changelog agreement, and publishes exactly its own tested output directory.
 10. Verify every generated release and preview URL after publication.
+
+The current `0.1.0-dev` version is intentionally rejected by the publication
+tag gate.
 
 ## Failure behavior
 
 Missing required assets, unresolved license status, compile failures, preview
 failures, stale generated documentation, and broken links block publication.
 They must not be converted to warnings or hidden with `|| true`.
+
+Candidate metadata assembly also fails on missing or unexpected public-template
+reports, developer-mode reports, commit/version mismatches, checksum drift, or
+inconsistent source epochs.
 
 ## Rollback
 

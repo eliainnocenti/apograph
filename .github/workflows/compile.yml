@@ -1,11 +1,3 @@
-# =============================================================================
-# compile.yml — Compile all apograph templates on every push.
-#
-# Uses xu-cheng/latex-action for LaTeX compilation.
-# Sets TEXINPUTS to include shared/latex/ so \usepackage{apograph-math} works.
-# Uploads compiled PDFs as GitHub Actions artifacts.
-# =============================================================================
-
 name: Compile Templates
 
 on:
@@ -14,112 +6,118 @@ on:
   pull_request:
     branches: [main]
 
-# Cancel in-progress runs for the same branch/PR
+permissions:
+  contents: read
+
 concurrency:
   group: compile-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  # ---------------------------------------------------------------------------
-  # Discover templates from CATALOG.json
-  # ---------------------------------------------------------------------------
-  discover:
-    name: Discover templates
+  catalog:
+    name: Catalog and discovery
     runs-on: ubuntu-latest
     outputs:
-      latex_matrix: ${{ steps.set-matrix.outputs.latex_matrix }}
-      has_latex: ${{ steps.set-matrix.outputs.has_latex }}
-      typst_matrix: ${{ steps.set-matrix.outputs.typst_matrix }}
-      has_typst: ${{ steps.set-matrix.outputs.has_typst }}
+      latex_matrix: ${{ steps.matrix.outputs.latex_matrix }}
+      has_latex: ${{ steps.matrix.outputs.has_latex }}
+      typst_matrix: ${{ steps.matrix.outputs.typst_matrix }}
+      has_typst: ${{ steps.matrix.outputs.has_typst }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
-      - name: Validate catalog and repository metadata
+      - name: Validate catalog and generated documentation
         run: |
           python3 scripts/catalog.py validate
           python3 scripts/catalog.py generate-readme --check
 
-      - name: Build matrix from CATALOG.json
-        id: set-matrix
+      - name: Build matrices from validated catalog data
+        id: matrix
         run: python3 scripts/catalog.py ci-matrix >> "$GITHUB_OUTPUT"
 
-  # ---------------------------------------------------------------------------
-  # Compile each LaTeX template
-  # ---------------------------------------------------------------------------
-  compile-latex:
-    name: "Compile: ${{ matrix.id }}"
-    needs: discover
+  python-tests:
+    name: Python tests
     runs-on: ubuntu-latest
-    if: ${{ needs.discover.outputs.has_latex == 'true' }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - run: |
+          python3 -m unittest discover -s tests -v
+          python3 -m py_compile scripts/*.py
+          bash -n scripts/use.sh
+
+  source-compile:
+    name: "Source compile: ${{ matrix.id }}"
+    needs: catalog
+    runs-on: ubuntu-latest
+    if: ${{ needs.catalog.outputs.has_latex == 'true' }}
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.discover.outputs.latex_matrix) }}
-
+      matrix: ${{ fromJson(needs.catalog.outputs.latex_matrix) }}
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Compile ${{ matrix.id }}
-        uses: xu-cheng/latex-action@v3
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - name: Compile source entry point
+        uses: xu-cheng/latex-action@6549dc21effb2730855a1281407ecfcececc6c1b # v4
         with:
+          texlive_version: 2026
           root_file: ${{ matrix.main_file }}
           working_directory: ${{ matrix.source_dir }}
-          # Use lualatex if specified, otherwise pdflatex (default)
           latexmk_use_lualatex: ${{ matrix.compiler == 'lualatex' }}
           latexmk_use_xelatex: ${{ matrix.compiler == 'xelatex' }}
-          # Add shared/latex/ to TEXINPUTS so \usepackage{apograph-math} works
-          pre_compile: |
-            export TEXINPUTS=".:${GITHUB_WORKSPACE}/shared/latex//:"
-          extra_system_packages: |
-            zip
+          pre_compile: export TEXINPUTS=".:${GITHUB_WORKSPACE}/shared/latex//:"
 
-      - name: Upload compiled PDF
-        if: success()
-        uses: actions/upload-artifact@v4
+  artifact-build:
+    name: Packed artifact gate
+    needs: [catalog, python-tests, source-compile]
+    runs-on: ubuntu-latest
+    if: >-
+      ${{ always() &&
+          needs.catalog.result == 'success' &&
+          needs.python-tests.result == 'success' &&
+          (needs.source-compile.result == 'success' ||
+           needs.source-compile.result == 'skipped') }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Test and build canonical artifacts in TeX Live 2026
+        uses: xu-cheng/texlive-action@22c04326a5d855880f9d39bb955138bf11c6df80 # v3
         with:
-          name: pdf-${{ matrix.id }}
-          path: |
-            ${{ matrix.source_dir }}/*.pdf
-          retention-days: 30
+          texlive_version: 2026
+          os: alpine
+          scheme: full
+          run: |
+            apk add --no-cache git python3
+            python3 -m unittest discover -s tests -v
+            python3 scripts/pack.py --all --mode release \
+              --source-commit "$GITHUB_SHA" --out build/ci
+            python3 scripts/release.py assemble --build-dir build/ci \
+              --source-commit "$GITHUB_SHA"
 
-  # ---------------------------------------------------------------------------
-  # Compile each Typst template (when you add Typst templates)
-  # ---------------------------------------------------------------------------
-  # compile-typst:
-  #   name: "Compile: ${{ matrix.id }}"
-  #   needs: discover
-  #   runs-on: ubuntu-latest
-  #   if: ${{ needs.discover.outputs.has_typst == 'true' }}
-  #   strategy:
-  #     fail-fast: false
-  #     matrix: ${{ fromJson(needs.discover.outputs.typst_matrix) }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: typst-community/setup-typst@v4
-  #     - name: Compile ${{ matrix.id }}
-  #       run: typst compile ${{ matrix.source_dir }}/${{ matrix.main_file }}
-  #     - uses: actions/upload-artifact@v4
-  #       with:
-  #         name: pdf-${{ matrix.id }}
-  #         path: ${{ matrix.source_dir }}/*.pdf
+      - name: Upload exact tested release candidate
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: release-candidate-${{ github.sha }}
+          path: build/ci/*
+          if-no-files-found: error
+          retention-days: 14
 
-  # ---------------------------------------------------------------------------
-  # Summary
-  # ---------------------------------------------------------------------------
   summary:
-    name: Compilation summary
-    needs: [compile-latex]
+    name: Pipeline summary
+    needs: [catalog, python-tests, source-compile, artifact-build]
     runs-on: ubuntu-latest
     if: always()
     steps:
-      - name: Check results
+      - name: Report required job results
         run: |
-          echo "## Compilation Results" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          if [ "${{ needs.compile-latex.result }}" == "success" ]; then
-            echo "[SUCCESS] All LaTeX templates compiled successfully" >> "$GITHUB_STEP_SUMMARY"
-          elif [ "${{ needs.compile-latex.result }}" == "skipped" ]; then
-            echo "[SUCCESS] No beta/stable LaTeX templates are currently eligible for compilation" >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "[ERROR] Some LaTeX templates failed to compile" >> "$GITHUB_STEP_SUMMARY"
-            exit 1
-          fi
+          {
+            echo "## Apograph validation"
+            echo
+            echo "- Catalog: ${{ needs.catalog.result }}"
+            echo "- Python tests: ${{ needs.python-tests.result }}"
+            echo "- Source compilation: ${{ needs.source-compile.result }}"
+            echo "- Packed artifact: ${{ needs.artifact-build.result }}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          test "${{ needs.catalog.result }}" = "success"
+          test "${{ needs.python-tests.result }}" = "success"
+          test "${{ needs.artifact-build.result }}" = "success"
+          test "${{ needs.source-compile.result }}" = "success" \
+            || test "${{ needs.source-compile.result }}" = "skipped"

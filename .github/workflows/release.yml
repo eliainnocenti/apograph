@@ -1,72 +1,80 @@
-# =============================================================================
-# release.yml — Build and publish template ZIPs on tag push.
-#
-# Triggered when you push a tag like v0.1.0.
-# Runs the canonical artifact builder and attaches its verified outputs to a
-# GitHub Release. Phase 4 will replace this transitional runner with the full
-# supported-toolchain matrix.
-#
-# Usage:
-#   git tag v0.1.0
-#   git push origin v0.1.0
-# =============================================================================
-
 name: Release
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - "v*"
 
 permissions:
-  contents: write  # needed to create releases and upload assets
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  release:
-    name: Build and release
+  candidate:
+    name: Build release candidate
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
 
       - name: Validate catalog and generated documentation
         run: |
           python3 scripts/catalog.py validate
           python3 scripts/catalog.py generate-readme --check
 
-      # ------------------------------------------------------------------
-      # Build all public templates. pack.py performs isolated compilation and
-      # derives previews from the packed source; failures are publication blockers.
-      # ------------------------------------------------------------------
-      - name: Build verified release artifacts
-        run: >-
-          python3 scripts/pack.py --all --mode release
-          --source-commit "$GITHUB_SHA" --out build/
+      - name: Validate publication tag
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        run: python3 scripts/release.py validate-tag --tag "$GITHUB_REF_NAME"
 
-      # ------------------------------------------------------------------
-      # Create GitHub Release
-      # ------------------------------------------------------------------
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
+      - name: Build and verify release outputs in TeX Live 2026
+        uses: xu-cheng/texlive-action@22c04326a5d855880f9d39bb955138bf11c6df80 # v3
+        with:
+          texlive_version: 2026
+          os: alpine
+          scheme: full
+          run: |
+            apk add --no-cache git python3
+            python3 -m unittest discover -s tests -v
+            python3 scripts/pack.py --all --mode release \
+              --source-commit "$GITHUB_SHA" --out build/release
+            tag_args=()
+            if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+              tag_args=(--tag "$GITHUB_REF_NAME")
+            fi
+            python3 scripts/release.py assemble --build-dir build/release \
+              --source-commit "$GITHUB_SHA" "${tag_args[@]}"
+
+      - name: Upload unpublished candidate
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: release-candidate-${{ github.sha }}
+          path: build/release/*
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish verified tag artifacts
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           generate_release_notes: true
-          files: |
-            build/*.zip
-            build/*.zip.sha256
-            build/*.build.json
-            build/*.preview.pdf
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          fail_on_unmatched_files: true
+          files: build/release/*
 
-      # ------------------------------------------------------------------
-      # Summary
-      # ------------------------------------------------------------------
       - name: Release summary
         run: |
-          echo "## Release ${{ github.ref_name }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "### ZIPs" >> "$GITHUB_STEP_SUMMARY"
-          ls -la build/*.zip | awk '{print "- " $NF " (" $5 " bytes)"}' >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "### Preview PDFs" >> "$GITHUB_STEP_SUMMARY"
-          find build -maxdepth 1 -name "*.preview.pdf" -print | awk '{print "- " $0}' >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "## Release candidate"
+            echo
+            echo "- Commit: \`$GITHUB_SHA\`"
+            echo "- Ref: \`$GITHUB_REF_NAME\`"
+            echo "- Published: ${{ startsWith(github.ref, 'refs/tags/v') }}"
+            echo
+            echo "### Files"
+            find build/release -maxdepth 1 -type f -print \
+              | sed 's#build/release/#- #g' | sort
+          } >> "$GITHUB_STEP_SUMMARY"

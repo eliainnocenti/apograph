@@ -19,6 +19,17 @@ an optional VS Code adapter, and each declared shared LaTeX package at ZIP root.
 The ZIP checksum is external because an archive cannot contain its own final
 checksum without making the value self-referential.
 
+An unpublished or tagged collection candidate additionally contains:
+
+- `CATALOG.json`: the exact catalog snapshot used for the build;
+- `release-index.json`: the release version, source commit, normalized source
+  epoch, catalog checksum, and per-template ZIP/preview/report mapping.
+
+`scripts/release.py assemble` refuses to create that index unless every public
+template has exactly one release-mode report and all recorded checksums,
+versions, commits, statuses, and source epochs agree. CI uploads this exact
+verified directory; a tag publication does not rebuild or select files again.
+
 ## File selection
 
 The builder excludes named generated directories, LaTeX auxiliary suffixes,
