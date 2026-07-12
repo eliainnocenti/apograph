@@ -57,6 +57,7 @@ class CatalogValidationTests(unittest.TestCase):
         )
         template["status"] = "beta"
         template["entrypoints"][0]["role"] = "showcase"
+        template["license"]["status"] = "review-required"
 
         errors = self.errors_for(candidate)
 

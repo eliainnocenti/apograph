@@ -78,7 +78,7 @@ vendor the exact required shared modules.
 ## Current known gaps
 
 - The PoliTo starter/showcase structure and component notices are implemented,
-  but maintainer license sign-off and recorded Overleaf import evidence are
+  and maintainer license review is recorded, but Overleaf import evidence is
   still required for beta.
 - The five other template entries are placeholders.
 - CI and release workflows do not yet implement the target gates.

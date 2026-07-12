@@ -249,8 +249,8 @@
       "shared_deps": [],
       "license": {
         "expression": "GPL-3.0-or-later AND CC-BY-4.0",
-        "status": "review-required",
-        "notes": "File-level evidence supports GPL-3.0-or-later for theme code and CC-BY-4.0 for adapted showcase content. Complete texts and attribution ship in the artifact. Maintainer sign-off remains required because the Overleaf project-level CC-BY-4.0 label coexists with an embedded GPL theme notice."
+        "status": "verified",
+        "notes": "File-level evidence supports GPL-3.0-or-later for theme code and CC-BY-4.0 for adapted showcase content. Complete texts and attribution ship in the artifact. Maintainer Elia Innocenti reviewed and accepted the component boundary, license texts, modification log, and non-endorsement statements on 2026-07-12."
       },
       "upstream": {
         "kind": "adapted",
@@ -370,7 +370,7 @@
           "github": "eliainnocenti"
         }
       ],
-      "readiness_notes": "The minimal starter, separate showcase, documentation, component license texts, asset fallbacks, and isolated artifact path compile cleanly with TeX Live 2026. Beta remains blocked on maintainer license sign-off and a recorded Overleaf upload/compile result.",
+      "readiness_notes": "The minimal starter, separate showcase, documentation, verified component licensing, asset fallbacks, and isolated artifact path compile cleanly with TeX Live 2026. Beta remains blocked only on a recorded Overleaf upload/compile result.",
       "created": "2026-06-12",
       "updated": "2026-07-12"
     },

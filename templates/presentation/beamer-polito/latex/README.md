@@ -18,8 +18,10 @@ Build output can be kept outside the source tree with:
 latexmk -pdf -outdir=out main.tex
 ```
 
-`showcase.tex` is a feature tour used to generate the preview. It intentionally
-loads more packages than the minimal starter.
+`showcase.tex` is a feature tour used to generate the preview. Its supporting
+slides live under `showcase/`, are not loaded by `main.tex`, and can be removed
+together with `showcase.tex` when you no longer need the component guide. The
+showcase intentionally loads more packages than the minimal starter.
 
 ## Start in Overleaf
 
@@ -34,7 +36,7 @@ main.tex                         minimal starter entry point
 config.tex                       title metadata and common customization
 content/slides.tex               starter presentation content
 showcase.tex                     richer preview and component guide
-sections/                        showcase-only sections
+showcase/slides/                 showcase-only demonstration slides
 beamerthemeapographpolito.sty    Beamer theme loaded by \usetheme
 apograph-polito-colors.sty       theme palette and compatibility aliases
 theme/assets/                    optional user-provided branding files

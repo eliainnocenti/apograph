@@ -24,6 +24,8 @@ Semantic Versioning while it uses a single global release timeline.
 - A separate minimal PoliTo Beamer starter, user configuration surface,
   feature-rich showcase entry point, source README, and attribution notice.
 - Complete GPL-3.0 and CC-BY-4.0 component license texts for the PoliTo artifact.
+- Maintainer approval of the PoliTo GPL/CC-BY component boundary, attribution,
+  modification record, and non-endorsement statements.
 - Class-compatibility fixtures for shared LaTeX modules across article, report,
   book, and Beamer.
 
@@ -43,6 +45,8 @@ Semantic Versioning while it uses a single global release timeline.
   behavior while retaining compiling user-provided-asset fallbacks.
 - The PoliTo artifact records successful isolated starter/showcase compilation
   with TeX Live 2026; Overleaf compatibility remains a separate manual gate.
+- Starter content now lives only under `content/`; preview-only source is
+  isolated under `showcase/` so users see one document-authoring surface.
 
 ### Removed
 

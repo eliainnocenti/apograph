@@ -42,10 +42,11 @@ not represented as an untouched upstream release.
 
 The artifact ships `GPL-3.0-or-later AND CC-BY-4.0` as the proposed component
 expression, complete license texts, a modification record, attribution, and a
-non-endorsement statement. The catalog remains `review-required` until the
-maintainer accepts that component boundary; the Overleaf project-level CC BY
-label and embedded GPL code notice must not be collapsed into a guessed single
-license.
+non-endorsement statement. Maintainer Elia Innocenti reviewed and accepted this
+component boundary and the shipped notices on 2026-07-12. The catalog therefore
+records the template license as `verified`; the Overleaf project-level CC BY
+label and embedded GPL code notice remain distinct components rather than being
+collapsed into a guessed single license.
 
 ### Institution assets
 
@@ -56,16 +57,12 @@ that Apograph may redistribute them.
 
 ## Human decisions still required
 
-1. Review and accept or reject the proposed GPL/CC-BY component boundary for
-   the PoliTo artifact.
-2. Confirm that the shipped `NOTICE` and complete license texts satisfy the
-   applicable attribution and modification-marking duties.
-3. Identify the exact source and copyright owner of each local PNG.
-4. Determine whether PoliTo and UniFi permit redistribution of their marks in an
+1. Identify the exact source and copyright owner of each local PNG.
+2. Determine whether PoliTo and UniFi permit redistribution of their marks in an
    unofficial open-source template.
-5. Decide whether textual institution references require a non-endorsement or
+3. Decide whether textual institution references require a non-endorsement or
    trademark notice beyond the current relationship field.
-6. Verify current institutional formatting requirements before describing any
+4. Verify current institutional formatting requirements before describing any
    thesis template as compliant.
 
 ## Evidence standard

@@ -13,8 +13,8 @@ Execution progress:
   modules, isolated compilation, asset fallbacks, and Gate A tests are implemented.
 - Phase 3 started on 2026-07-12. The starter/showcase/config/theme split,
   component notices, shared-class fixtures, and clean TeX Live 2026 artifact
-  compilation are implemented; beta promotion remains gated on license sign-off
-  and recorded Overleaf compatibility.
+  compilation are implemented. Maintainer license review passed on 2026-07-12;
+  beta promotion remains gated only on recorded Overleaf compatibility.
 
 ## 1. Product definition
 
@@ -182,6 +182,7 @@ latex/
 ├── config.tex               # common user-editable metadata and options
 ├── bibliography.bib
 ├── content/                 # chapters, sections, or slides
+├── showcase/                # optional support files used only by showcase.*
 ├── figures/                 # user content assets
 ├── theme/                   # template-specific implementation
 │   └── assets/              # declared template/brand assets only

@@ -248,6 +248,9 @@ class PoliToArtifactIntegrationTests(unittest.TestCase):
             self.assertIn("LICENSES/GPL-3.0-or-later.txt", names)
             self.assertIn("LICENSES/CC-BY-4.0.txt", names)
             self.assertIn("beamerthemeapographpolito.sty", names)
+            self.assertIn("content/slides.tex", names)
+            self.assertIn("showcase/slides/01-introduction.tex", names)
+            self.assertFalse(any(name.startswith("sections/") for name in names))
             self.assertNotIn("theme/beamerthemesintef.sty", names)
             for asset in template["assets"]:
                 if asset["mode"] == "user-provided":

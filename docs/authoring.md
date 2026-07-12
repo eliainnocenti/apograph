@@ -34,6 +34,7 @@ main.tex or main.typ     minimal starter
 config.tex               common user metadata, where useful
 content/                 user document content
 showcase.*               richer preview/demo, when useful
+showcase/                optional files used only by the showcase entry point
 theme/                   template-specific implementation
 theme/assets/            declared template assets
 README.md                usage and limitations
