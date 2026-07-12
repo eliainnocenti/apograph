@@ -1,0 +1,34 @@
+% 07-special-slides.tex - Special Slides & Backmatter
+
+\section{Special Slides}
+
+\begin{chapter}[theme/assets/background_negative]{}{Chapter Divider Slides}
+\begin{itemize}
+    \item Chapter slides split the slide layout: the right side contains a clipped image, while the left side displays section headers.
+    \item Useful to structure transitions between long sections.
+\end{itemize}
+\end{chapter}
+
+\begin{sidepic}{theme/assets/background_alternative}{Side-Picture Slides}
+\begin{itemize}
+    \item Opened with: \\
+    \texttt{\textbackslash begin\{sidepic\}\{<image>\}\{<Title>\}}
+    \item Splits the screen horizontally: left side contains text content (takes up to 60\% width), right side contains a full-height image.
+\end{itemize}
+\end{sidepic}
+
+\begin{frame}[fragile]{Ending the Presentation}
+\framesubtitle{Backmatter payoffs and acknowledgments}
+To insert a final payoff/thank-you slide:
+\begin{itemize}
+    \item Call \verb|\backmatter| at the very end of your document:
+    \begin{block}{Default Backmatter}
+    \verb|\backmatter|
+    \end{block}
+    This displays the presentation title and standard thank-you text with author contact email.
+    \item To hide the title on the final slide, pass the optional \verb|notitle| parameter:
+    \begin{block}{No-Title Backmatter}
+    \verb|\backmatter[notitle]|
+    \end{block}
+\end{itemize}
+\end{frame}

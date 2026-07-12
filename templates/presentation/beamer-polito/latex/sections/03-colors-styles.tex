@@ -1,0 +1,51 @@
+% 03-colors-styles.tex - Theme Slide Colors & footlinecolor
+
+\section{Colors \& Styles}
+
+\begin{frame}[fragile]{Theme Color Modes}
+\framesubtitle{Preamble Configuration}
+You can set the global slide background and text colors in the preamble using \verb|\themecolor{style}|:
+\begin{itemize}
+    \item \textbf{Light Theme (Default)}:
+    \begin{block}{Light Theme Code}
+    \verb|\themecolor{white}|
+    \end{block}
+    Sets a white background with dark grey text and maincolor accents.
+    \item \textbf{Dark / Negative Theme}:
+    \begin{block}{Dark Theme Code}
+    \verb|\themecolor{main}|
+    \end{block}
+    Inverts the style: white text on a maincolor (PoliTo blue) background.
+\end{itemize}
+\end{frame}
+
+\footlinecolor{sintefyellow}
+\begin{frame}[fragile]{Footline Colors}
+\framesubtitle{Customizing Slide Footers}
+You can change the footline color dynamically by placing \verb|\footlinecolor{<color>}| before a frame:
+\begin{itemize}
+    \item Setting a color adds a footer block displaying the page number and presentation payoff (author | title).
+    \item Current slide's footer is colored using \testcolor{sintefyellow}.
+    \item Restore the default transparent footline with \verb|\footlinecolor{}| before a new frame.
+\end{itemize}
+\begin{block}{Usage}
+\verb|\footlinecolor{sintefyellow}| \\
+\verb|\begin{frame}{Footline Colors}...|
+\end{block}
+\end{frame}
+
+\footlinecolor{}
+\begin{frame}[fragile]{Built-in Colors}
+\framesubtitle{Color Registry from sintefcolor.sty}
+The package defines a set of official, harmonized colors for blocks and text:
+\begin{itemize}
+    \item \textbf{Primary Colors}:
+    \testcolor{maincolor} and its sidebar companion \testcolor{sintefgrey} (or \texttt{sintefgray}).
+    \item \textbf{Greens}:
+    \testcolor{sinteflightgreen}, \testcolor{sintefgreen}, \testcolor{sintefdarkgreen}.
+    \item \textbf{Accent Colors}:
+    \testcolor{sintefyellow}, \testcolor{sintefred}, \testcolor{sinteflilla}.
+    \item \textbf{Deprecated Colors} (for backward compatibility):
+    \testcolor{sintefcyan}, \testcolor{sintefmagenta}, \testcolor{sinteflightgrey}.
+\end{itemize}
+\end{frame}

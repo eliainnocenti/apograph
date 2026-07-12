@@ -1,0 +1,51 @@
+% 02-getting-started.tex - Preamble & Metadata Setup
+
+\section{Getting Started}
+
+\begin{frame}[fragile]{Getting Started}
+\framesubtitle{Minimum PoliTo Beamer Document}
+To start working with this theme, initialize your \LaTeX\ document with:
+\begin{block}{Minimum Document Structure}
+\begin{lstlisting}[language=TeX]
+\documentclass{beamer}
+\usepackage{theme/beamerthemesintef} % PoliTo theme package
+\usetheme{sintef}
+\begin{document}
+  \begin{frame}{Hello, world!}
+  \end{frame} %
+\end{document}
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Preamble Metadata}
+\framesubtitle{Title Page Configuration}
+Define presentation details in your preamble using the following commands:
+\begin{block}{Metadata Commands}
+\begin{lstlisting}[language=TeX]
+\title{Sample Presentation Title}
+\subtitle{Optional Subtitle}
+\course{Master's Degree in Computer Science}
+\author{Author Name}
+\IDnumber{1234567}
+\email{author@studenti.polito.it}
+\date{\today}
+\end{lstlisting}
+\end{block}
+Render the title slide using \verb|\maketitle|.
+\end{frame}
+
+\begin{frame}[fragile]{Title Background Layouts}
+\framesubtitle{Full Background vs. Split View}
+You can style the title slide background using the \verb|\titlebackground| command before \verb|\maketitle|:
+\begin{itemize}
+    \item \textbf{Full-Screen Background}:
+    \begin{block}{Full Background Code}
+    \verb|\titlebackground{theme/assets/background}|
+    \end{block}
+    \item \textbf{Split Background (Right-Clipped)}:
+    \begin{block}{Starred Split Background Code}
+    \verb|\titlebackground*{theme/assets/background}|
+    \end{block}
+\end{itemize}
+\end{frame}

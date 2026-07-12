@@ -1,0 +1,56 @@
+% 05-custom-boxes.tex - Custom Boxes & Macros
+
+\section{Custom Containers}
+
+\begin{frame}[fragile]{Custom tcolorbox Containers}
+\framesubtitle{Custom styled box components}
+This package defines three specialized container environments for code, notes, and highlights:
+\begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+        \begin{toolbox}{\faBriefcase\; Toolbox Box}
+            \footnotesize
+            Created via \texttt{\textbackslash begin\{toolbox\}\{Title\}}.
+            Uses \texttt{maincolor} frame and \texttt{sintefgrey} background.
+        \end{toolbox}
+        
+        \vspace{0.2cm}
+        
+        \begin{highlightbox}{demo@purple}
+            \footnotesize
+            \textbf{\faInfoCircle\; Highlight Box}
+            
+            Created via \texttt{\textbackslash begin\{highlightbox\}\{color\}}.
+            Uses white background and a customizable frame color.
+        \end{highlightbox}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+        \begin{scenariobox}{demo@amber}{\faExclamationTriangle\; Scenario Box}
+            \footnotesize
+            Created via \texttt{\textbackslash begin\{scenariobox\}\{color\}\{Title\}}.
+            Uses custom frame color, custom title, and \texttt{sintefgrey} background.
+        \end{scenariobox}
+        
+        \vspace{0.1cm}
+        \scriptsize
+        These containers support icons (e.g. \texttt{fontawesome5}) and nested lists to summarize key items visually.
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Rating Stars Command}
+\framesubtitle{Difficulty or Importance rating macro}
+You can use the custom \verb|\stars{N}| command to display a star rating out of 5:
+\begin{itemize}
+    \item \textbf{1 Star}: \stars{1}
+    \item \textbf{3 Stars}: \stars{3}
+    \item \textbf{5 Stars}: \stars{5}
+\end{itemize}
+
+\begin{block}{Example Code}
+\begin{lstlisting}[language=TeX]
+\begin{frame}{Advanced Slide \hfill \stars{4}}
+  This slide is of advanced difficulty level.
+\end{frame} %
+\end{lstlisting}
+\end{block}
+\end{frame}

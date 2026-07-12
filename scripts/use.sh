@@ -262,4 +262,3 @@ echo ""
 echo "Tip: For Overleaf, ZIP this folder and upload via"
 echo "     New Project → Upload Project."
 echo ""
-

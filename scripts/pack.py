@@ -27,6 +27,8 @@ import tempfile
 import zipfile
 from pathlib import Path
 
+from catalog import PUBLIC_STATUSES, require_valid_catalog
+
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -47,7 +49,9 @@ def load_catalog() -> dict:
         print(f"Error: CATALOG.json not found at {CATALOG_PATH}", file=sys.stderr)
         sys.exit(1)
     with open(CATALOG_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+        catalog = json.load(f)
+    require_valid_catalog(catalog)
+    return catalog
 
 
 def find_template(catalog: dict, template_id: str) -> dict | None:
@@ -142,7 +146,7 @@ def create_vscode_config(dest_dir: Path, template_entry: dict) -> None:
     }
 
     # Add Tinymist for Typst templates
-    if template_entry.get("language") == "typst":
+    if template_entry.get("format", template_entry.get("language")) == "typst":
         extensions["recommendations"].insert(1, "myriad-dreamin.tinymist")
 
     (vscode_dir / "settings.json").write_text(
@@ -175,7 +179,7 @@ def fetch_assets_for_build(
     results = {"fetched": 0, "failed": 0}
 
     for asset in assets:
-        url = asset.get("official_url")
+        url = asset.get("source_url", asset.get("official_url"))
         local_path = build_dir / asset.get("local_path", "")
         description = asset.get("description", asset.get("id", "unknown"))
 
@@ -334,12 +338,15 @@ def main():
     catalog = load_catalog()
 
     if args.all:
-        templates = catalog.get("templates", [])
+        templates = [
+            template for template in catalog.get("templates", [])
+            if template.get("status") in PUBLIC_STATUSES
+        ]
         if not templates:
-            print("No templates found in CATALOG.json", file=sys.stderr)
+            print("No beta/stable templates are currently eligible for release packing.", file=sys.stderr)
             sys.exit(1)
 
-        print(f"Packing all {len(templates)} templates...\n")
+        print(f"Packing all {len(templates)} public templates...\n")
         zips = []
         for entry in templates:
             zip_path = pack_template(entry, args.out, args.vscode, not args.no_assets)

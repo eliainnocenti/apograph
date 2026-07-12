@@ -31,6 +31,8 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+from catalog import require_valid_catalog
+
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -73,9 +75,9 @@ def generate_placeholder_pdf(output_path: Path, label: str = "Logo") -> None:
         f"Expected file: {output_path.name}\n"
         f"\n"
         f"The template will compile without this file (using a placeholder box).\n"
-        f"To use the real logo, either:\n"
-        f"  1. Run: make fetch-assets\n"
-        f"  2. Download manually and save as: {output_path.name}\n",
+        f"To use the real asset, obtain an authorized copy and save it as:\n"
+        f"  {output_path.name}\n"
+        f"Consult template.json and docs/asset-policy.md for its asset mode.\n",
         encoding="utf-8",
     )
 
@@ -216,14 +218,27 @@ def fetch_template_assets(
 
     for asset in assets:
         asset_id = asset.get("id", "unknown")
-        url = asset.get("official_url")
-        local_path = source_dir / asset.get("local_path", f"figures/{asset_id}")
+        url = asset.get("source_url", asset.get("official_url"))
+        local_path = source_dir / asset.get("local_path", f"theme/assets/{asset_id}")
         description = asset.get("description", asset_id)
         manual_url = asset.get("manual_download_url", "")
+        mode = asset.get("mode", "fetched")
 
         # Skip if already present (unless --force)
         if is_asset_present(local_path) and not force:
             print(f"    ⊘ Already present: {local_path.name} (use --force to re-fetch)")
+            remove_placeholder(local_path)
+            results["skipped"] += 1
+            continue
+
+        if mode == "user-provided":
+            print(f"    ⊘ User-provided asset: {description}")
+            generate_placeholder(local_path, description, manual_url)
+            results["skipped"] += 1
+            continue
+
+        if mode != "fetched":
+            print(f"    ⊘ Asset mode '{mode}' is not fetched: {description}")
             results["skipped"] += 1
             continue
 
@@ -279,7 +294,8 @@ def check_template_assets(template_entry: dict) -> list[dict]:
             "local_path": str(local_path.relative_to(REPO_ROOT)),
             "present": present,
             "source": "auto-fetched" if auto else ("manual" if present else "missing"),
-            "has_url": bool(asset.get("official_url")),
+            "has_url": bool(asset.get("source_url", asset.get("official_url"))),
+            "mode": asset.get("mode", "fetched"),
         })
 
     return statuses
@@ -333,7 +349,9 @@ def load_catalog() -> dict:
         print(f"Error: CATALOG.json not found at {CATALOG_PATH}", file=sys.stderr)
         sys.exit(1)
     with open(CATALOG_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+        catalog = json.load(f)
+    require_valid_catalog(catalog)
+    return catalog
 
 
 def main():
@@ -394,8 +412,8 @@ def main():
             for s in statuses:
                 icon = "✓" if s["present"] else "✗"
                 source = f" ({s['source']})" if s["present"] else ""
-                url_note = "" if s["has_url"] else " [no URL configured]"
-                print(f"    {icon} {s['description']}: {s['local_path']}{source}{url_note}")
+                url_note = "" if s["has_url"] or s["mode"] != "fetched" else " [no URL configured]"
+                print(f"    {icon} {s['description']}: {s['local_path']}{source} [{s['mode']}]{url_note}")
             print()
 
         if not any_assets:

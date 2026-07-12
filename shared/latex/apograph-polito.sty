@@ -11,7 +11,7 @@
 
 % --- PoliTo official colors ---
 % Source: Politecnico di Torino brand guidelines
-\definecolor{polito-blue}{HTML}{003576}        % primary institutional blue
+\definecolor{polito-blue}{HTML}{003576}         % primary institutional blue
 \definecolor{polito-darkblue}{HTML}{002855}     % darker variant
 \definecolor{polito-lightblue}{HTML}{4A90D9}    % lighter accent
 \definecolor{polito-grey}{HTML}{4D4D4D}         % body text grey
@@ -21,10 +21,9 @@
 \colorlet{apo-inst-primary}{polito-blue}
 \colorlet{apo-inst-secondary}{polito-lightblue}
 
-% --- Logo ---
-% The logo file (figures/polito-logo.pdf) is fetched at runtime by
-% scripts/assets.py from the university's public servers. It is NEVER
-% committed to the repository.
+% The logo file (theme/assets/polito-logo.pdf) is user-provided until
+% redistribution and trademark terms have been verified. It is not committed
+% to the repository.
 %
 % If the file is missing, a placeholder box is rendered instead —
 % compilation never fails.
@@ -35,15 +34,15 @@
 %   \politologo[width=5cm]          → custom width
 %
 \newcommand{\politologo}[1][height=1.5cm]{%
-  \IfFileExists{figures/polito-logo.pdf}{%
-    \includegraphics[#1]{figures/polito-logo.pdf}%
+  \IfFileExists{theme/assets/polito-logo.pdf}{%
+    \includegraphics[#1]{theme/assets/polito-logo.pdf}%
   }{%
     \fcolorbox{polito-blue}{polito-lightgrey}{%
       \parbox[c][1.5cm][c]{4cm}{%
         \centering\small\sffamily\color{polito-blue}%
         {\bfseries Politecnico di Torino}\\[2pt]%
         {\scriptsize Logo placeholder}\\[1pt]%
-        {\tiny Run: make fetch-assets}%
+        {\tiny Add theme/assets/polito-logo.pdf}%
       }%
     }%
   }%

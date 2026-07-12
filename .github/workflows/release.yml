@@ -28,6 +28,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Validate catalog and generated documentation
+        run: |
+          python3 scripts/catalog.py validate
+          python3 scripts/catalog.py generate-readme --check
+
       # ------------------------------------------------------------------
       # Pack all templates into self-contained ZIPs
       # ------------------------------------------------------------------

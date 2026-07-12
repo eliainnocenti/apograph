@@ -1,190 +1,457 @@
 {
-  "version": "1.0.0",
+  "$schema": "./catalog.schema.json",
+  "schema_version": "1.0.0",
+  "release_version": "0.1.0-dev",
   "repository": {
     "name": "apograph",
     "url": "https://github.com/eliainnocenti/apograph",
     "description": "A curated collection of LaTeX and Typst templates for academic and professional use.",
     "maintainer": "Elia Innocenti",
-    "license": "MIT"
+    "tooling_license": "MIT"
   },
   "templates": [
     {
       "id": "thesis-polito-msc-latex",
       "name": "PoliTo Master's Thesis",
-      "description": "Master's thesis template for Politecnico di Torino, following official formatting guidelines.",
+      "description": "Draft master's thesis starter for Politecnico di Torino.",
       "purpose": "thesis",
+      "variant": "polito-msc",
+      "format": "latex",
+      "status": "draft",
       "institution": {
         "id": "polito",
-        "name": "Politecnico di Torino"
+        "name": "Politecnico di Torino",
+        "relationship": "unofficial",
+        "requirements_url": null,
+        "last_verified": null
       },
-      "language": "latex",
       "compiler": "pdflatex",
-      "version": "0.1.0",
+      "compatibility": {
+        "texlive": [],
+        "overleaf": "untested"
+      },
       "source_dir": "templates/thesis/polito-msc/latex",
-      "main_file": "main.tex",
+      "entrypoints": [
+        {
+          "path": "main.tex",
+          "role": "starter",
+          "include_in_artifact": true,
+          "preview": false
+        }
+      ],
       "shared_deps": [
         "shared/latex/apograph-math.sty",
         "shared/latex/apograph-typography.sty",
         "shared/latex/apograph-colors.sty",
         "shared/latex/apograph-polito.sty"
       ],
-      "tags": ["thesis", "master", "polito", "politecnico", "torino", "latex"],
+      "license": {
+        "expression": "MIT",
+        "status": "declared",
+        "notes": "The current placeholder source is original Apograph work. Institutional formatting requirements remain unverified."
+      },
+      "upstream": {
+        "kind": "original",
+        "sources": [],
+        "notes": "No external template source has been incorporated into the current draft."
+      },
       "assets": [
         {
           "id": "polito-logo",
-          "description": "Politecnico di Torino official logo",
-          "official_url": null,
-          "local_path": "figures/polito-logo.pdf",
-          "manual_download_url": null
+          "description": "Politecnico di Torino logo",
+          "local_path": "theme/assets/polito-logo.pdf",
+          "mode": "user-provided",
+          "required": false,
+          "source_url": null,
+          "sha256": null,
+          "fallback": "latex-text-placeholder",
+          "license": {
+            "expression": null,
+            "status": "review-required",
+            "notes": "Redistribution and trademark terms require human evidence."
+          }
         }
       ],
-      "release_zip_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/thesis-polito-msc-latex.zip",
-      "preview_pdf_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/thesis-polito-msc-latex-preview.pdf",
+      "tags": ["thesis", "master", "polito", "politecnico", "torino", "latex"],
+      "maintainers": [
+        {
+          "name": "Elia Innocenti",
+          "github": "eliainnocenti"
+        }
+      ],
+      "readiness_notes": "Placeholder only; institutional requirements, starter content, documentation, and compatibility are not yet verified.",
       "created": "2026-06-12",
-      "updated": "2026-06-12"
+      "updated": "2026-07-12"
     },
     {
       "id": "thesis-unifi-bsc-latex",
       "name": "UniFi Bachelor's Thesis",
-      "description": "Bachelor's thesis template for Università di Firenze.",
+      "description": "Draft bachelor's thesis starter for Università degli Studi di Firenze.",
       "purpose": "thesis",
+      "variant": "unifi-bsc",
+      "format": "latex",
+      "status": "draft",
       "institution": {
         "id": "unifi",
-        "name": "Università di Firenze"
+        "name": "Università degli Studi di Firenze",
+        "relationship": "unofficial",
+        "requirements_url": null,
+        "last_verified": null
       },
-      "language": "latex",
       "compiler": "pdflatex",
-      "version": "0.1.0",
+      "compatibility": {
+        "texlive": [],
+        "overleaf": "untested"
+      },
       "source_dir": "templates/thesis/unifi-bsc/latex",
-      "main_file": "main.tex",
+      "entrypoints": [
+        {
+          "path": "main.tex",
+          "role": "starter",
+          "include_in_artifact": true,
+          "preview": false
+        }
+      ],
       "shared_deps": [
         "shared/latex/apograph-math.sty",
         "shared/latex/apograph-typography.sty",
         "shared/latex/apograph-colors.sty",
         "shared/latex/apograph-unifi.sty"
       ],
-      "tags": ["thesis", "bachelor", "unifi", "firenze", "florence", "latex"],
+      "license": {
+        "expression": "MIT",
+        "status": "declared",
+        "notes": "The current placeholder source is original Apograph work. Institutional formatting requirements remain unverified."
+      },
+      "upstream": {
+        "kind": "original",
+        "sources": [],
+        "notes": "No external template source has been incorporated into the current draft."
+      },
       "assets": [
         {
           "id": "unifi-logo",
-          "description": "Università di Firenze official logo",
-          "official_url": null,
-          "local_path": "figures/unifi-logo.pdf",
-          "manual_download_url": null
+          "description": "Università degli Studi di Firenze logo",
+          "local_path": "theme/assets/unifi-logo.pdf",
+          "mode": "user-provided",
+          "required": false,
+          "source_url": null,
+          "sha256": null,
+          "fallback": "latex-text-placeholder",
+          "license": {
+            "expression": null,
+            "status": "review-required",
+            "notes": "Redistribution and trademark terms require human evidence."
+          }
         }
       ],
-      "release_zip_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/thesis-unifi-bsc-latex.zip",
-      "preview_pdf_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/thesis-unifi-bsc-latex-preview.pdf",
+      "tags": ["thesis", "bachelor", "unifi", "firenze", "florence", "latex"],
+      "maintainers": [
+        {
+          "name": "Elia Innocenti",
+          "github": "eliainnocenti"
+        }
+      ],
+      "readiness_notes": "Placeholder only; institutional requirements, starter content, documentation, and compatibility are not yet verified.",
       "created": "2026-06-12",
-      "updated": "2026-06-12"
+      "updated": "2026-07-12"
     },
     {
       "id": "presentation-beamer-academic-latex",
       "name": "Academic Beamer Presentation",
-      "description": "Versatile Beamer theme for academic talks, seminars, and conference presentations.",
+      "description": "Draft generic Beamer starter for academic talks, seminars, and conference presentations.",
       "purpose": "presentation",
+      "variant": "beamer-academic",
+      "format": "latex",
+      "status": "draft",
       "institution": {
         "id": "generic",
-        "name": "Generic / Unaffiliated"
+        "name": "Generic / Unaffiliated",
+        "relationship": "generic",
+        "requirements_url": null,
+        "last_verified": null
       },
-      "language": "latex",
       "compiler": "pdflatex",
-      "version": "0.1.0",
+      "compatibility": {
+        "texlive": [],
+        "overleaf": "untested"
+      },
       "source_dir": "templates/presentation/beamer-academic/latex",
-      "main_file": "main.tex",
+      "entrypoints": [
+        {
+          "path": "main.tex",
+          "role": "starter",
+          "include_in_artifact": true,
+          "preview": false
+        }
+      ],
       "shared_deps": [
         "shared/latex/apograph-math.sty",
         "shared/latex/apograph-colors.sty"
       ],
+      "license": {
+        "expression": "MIT",
+        "status": "declared",
+        "notes": "The current placeholder source is original Apograph work."
+      },
+      "upstream": {
+        "kind": "original",
+        "sources": [],
+        "notes": "No external template source has been incorporated into the current draft."
+      },
+      "assets": [],
       "tags": ["presentation", "beamer", "slides", "academic", "talk", "conference", "latex"],
-      "release_zip_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/presentation-beamer-academic-latex.zip",
-      "preview_pdf_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/presentation-beamer-academic-latex-preview.pdf",
+      "maintainers": [
+        {
+          "name": "Elia Innocenti",
+          "github": "eliainnocenti"
+        }
+      ],
+      "readiness_notes": "Placeholder only; theme, starter content, preview, documentation, and compatibility are not implemented.",
       "created": "2026-06-12",
-      "updated": "2026-06-12"
+      "updated": "2026-07-12"
     },
     {
       "id": "presentation-beamer-polito-latex",
       "name": "PoliTo Beamer Presentation",
-      "description": "Beamer presentation template with Politecnico di Torino branding, colors, and logo.",
+      "description": "In-progress unofficial Beamer presentation theme for Politecnico di Torino.",
       "purpose": "presentation",
+      "variant": "beamer-polito",
+      "format": "latex",
+      "status": "draft",
       "institution": {
         "id": "polito",
-        "name": "Politecnico di Torino"
+        "name": "Politecnico di Torino",
+        "relationship": "unofficial",
+        "requirements_url": null,
+        "last_verified": null
       },
-      "language": "latex",
       "compiler": "pdflatex",
-      "version": "0.1.0",
+      "compatibility": {
+        "texlive": [],
+        "overleaf": "untested"
+      },
       "source_dir": "templates/presentation/beamer-polito/latex",
-      "main_file": "main.tex",
+      "entrypoints": [
+        {
+          "path": "main.tex",
+          "role": "showcase",
+          "include_in_artifact": true,
+          "preview": true
+        }
+      ],
       "shared_deps": [
         "shared/latex/apograph-math.sty",
         "shared/latex/apograph-colors.sty",
         "shared/latex/apograph-polito.sty"
       ],
-      "tags": ["presentation", "beamer", "slides", "polito", "politecnico", "torino", "latex"],
+      "license": {
+        "expression": null,
+        "status": "review-required",
+        "notes": "The local theme header references CC BY 4.0 and GPL v3 or later material. The exact inbound license chain, compatibility, attribution, and resulting distribution expression require human evidence review."
+      },
+      "upstream": {
+        "kind": "adapted",
+        "sources": [
+          {
+            "title": "Politecnico di Torino Presentation",
+            "url": "https://www.overleaf.com/latex/templates/politecnico-di-torino-presentation/cnypkdbdyqky",
+            "authors": ["Mattia Ippoliti"],
+            "revision": null,
+            "license": "CC-BY-4.0"
+          },
+          {
+            "title": "SINTEF Presentation",
+            "url": "https://www.overleaf.com/latex/templates/sintef-presentation/jhbhdffczpnx",
+            "authors": ["Federico Zenith"],
+            "revision": null,
+            "license": null
+          },
+          {
+            "title": "Beamer-LaTeX-Themes",
+            "url": "https://github.com/TOB-KNPOB/Beamer-LaTeX-Themes",
+            "authors": ["Liu Qilong", "Andrea Gasparini"],
+            "revision": null,
+            "license": null
+          }
+        ],
+        "notes": "The local theme header also identifies earlier work by Håvard Berland. Source revisions and the full chain of adaptations are not yet pinned."
+      },
       "assets": [
         {
-          "id": "polito-logo",
-          "description": "Politecnico di Torino official logo",
-          "official_url": null,
-          "local_path": "figures/polito-logo.pdf",
-          "manual_download_url": null
+          "id": "logo-rgb",
+          "description": "Politecnico di Torino logo (color)",
+          "local_path": "theme/assets/logo_RGB.png",
+          "mode": "user-provided",
+          "required": false,
+          "source_url": null,
+          "sha256": null,
+          "fallback": "theme-text-placeholder",
+          "license": {
+            "expression": null,
+            "status": "review-required",
+            "notes": "The local file is ignored. Source, redistribution permission, and trademark terms require human evidence."
+          }
+        },
+        {
+          "id": "logo-rgb-negative",
+          "description": "Politecnico di Torino logo (negative)",
+          "local_path": "theme/assets/Logo_RGB_negative.png",
+          "mode": "user-provided",
+          "required": false,
+          "source_url": null,
+          "sha256": null,
+          "fallback": "theme-text-placeholder",
+          "license": {
+            "expression": null,
+            "status": "review-required",
+            "notes": "The local file is ignored. Source, redistribution permission, and trademark terms require human evidence."
+          }
+        },
+        {
+          "id": "background",
+          "description": "PoliTo title-page background image",
+          "local_path": "theme/assets/background.png",
+          "mode": "user-provided",
+          "required": false,
+          "source_url": null,
+          "sha256": null,
+          "fallback": "theme-plain-background",
+          "license": {
+            "expression": null,
+            "status": "review-required",
+            "notes": "The local file is ignored. Source and redistribution permission require human evidence."
+          }
         }
       ],
-      "release_zip_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/presentation-beamer-polito-latex.zip",
-      "preview_pdf_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/presentation-beamer-polito-latex-preview.pdf",
+      "tags": ["presentation", "beamer", "slides", "polito", "politecnico", "torino", "latex"],
+      "maintainers": [
+        {
+          "name": "Elia Innocenti",
+          "github": "eliainnocenti"
+        }
+      ],
+      "readiness_notes": "Compiles locally as a showcase, but it has no separate minimal starter and its theme license, asset rights, documentation, clean-checkout artifact, and Overleaf compatibility remain unverified.",
       "created": "2026-06-12",
-      "updated": "2026-06-12"
+      "updated": "2026-07-12"
     },
     {
       "id": "report-academic-latex",
       "name": "Academic Report",
-      "description": "General-purpose academic report template suitable for course assignments, lab reports, and research summaries.",
+      "description": "Draft generic academic report starter.",
       "purpose": "report",
+      "variant": "academic",
+      "format": "latex",
+      "status": "draft",
       "institution": {
         "id": "generic",
-        "name": "Generic / Unaffiliated"
+        "name": "Generic / Unaffiliated",
+        "relationship": "generic",
+        "requirements_url": null,
+        "last_verified": null
       },
-      "language": "latex",
       "compiler": "pdflatex",
-      "version": "0.1.0",
+      "compatibility": {
+        "texlive": [],
+        "overleaf": "untested"
+      },
       "source_dir": "templates/report/academic/latex",
-      "main_file": "main.tex",
+      "entrypoints": [
+        {
+          "path": "main.tex",
+          "role": "starter",
+          "include_in_artifact": true,
+          "preview": false
+        }
+      ],
       "shared_deps": [
         "shared/latex/apograph-math.sty",
         "shared/latex/apograph-typography.sty",
         "shared/latex/apograph-colors.sty"
       ],
+      "license": {
+        "expression": "MIT",
+        "status": "declared",
+        "notes": "The current placeholder source is original Apograph work."
+      },
+      "upstream": {
+        "kind": "original",
+        "sources": [],
+        "notes": "No external template source has been incorporated into the current draft."
+      },
+      "assets": [],
       "tags": ["report", "academic", "assignment", "lab", "latex"],
-      "release_zip_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/report-academic-latex.zip",
-      "preview_pdf_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/report-academic-latex-preview.pdf",
+      "maintainers": [
+        {
+          "name": "Elia Innocenti",
+          "github": "eliainnocenti"
+        }
+      ],
+      "readiness_notes": "Placeholder only; layout, starter content, preview, documentation, and compatibility are not implemented.",
       "created": "2026-06-12",
-      "updated": "2026-06-12"
+      "updated": "2026-07-12"
     },
     {
       "id": "report-course-project-latex",
       "name": "Course Project Report",
-      "description": "Combined report and slides template for course projects. Includes a main report document and a companion Beamer slide deck.",
+      "description": "Draft combined report and companion slide-deck starter for course projects.",
       "purpose": "report",
+      "variant": "course-project",
+      "format": "latex",
+      "status": "draft",
       "institution": {
         "id": "generic",
-        "name": "Generic / Unaffiliated"
+        "name": "Generic / Unaffiliated",
+        "relationship": "generic",
+        "requirements_url": null,
+        "last_verified": null
       },
-      "language": "latex",
       "compiler": "pdflatex",
-      "version": "0.1.0",
+      "compatibility": {
+        "texlive": [],
+        "overleaf": "untested"
+      },
       "source_dir": "templates/report/course-project/latex",
-      "main_file": "main.tex",
+      "entrypoints": [
+        {
+          "path": "main.tex",
+          "role": "starter",
+          "include_in_artifact": true,
+          "preview": false
+        },
+        {
+          "path": "slides.tex",
+          "role": "companion",
+          "include_in_artifact": true,
+          "preview": false
+        }
+      ],
       "shared_deps": [
         "shared/latex/apograph-math.sty",
         "shared/latex/apograph-typography.sty",
         "shared/latex/apograph-colors.sty"
       ],
+      "license": {
+        "expression": "MIT",
+        "status": "declared",
+        "notes": "The current placeholder source is original Apograph work."
+      },
+      "upstream": {
+        "kind": "original",
+        "sources": [],
+        "notes": "No external template source has been incorporated into the current draft."
+      },
+      "assets": [],
       "tags": ["report", "course", "project", "slides", "beamer", "latex"],
-      "release_zip_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/report-course-project-latex.zip",
-      "preview_pdf_url": "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/report-course-project-latex-preview.pdf",
+      "maintainers": [
+        {
+          "name": "Elia Innocenti",
+          "github": "eliainnocenti"
+        }
+      ],
+      "readiness_notes": "Placeholder only; neither entry point is implemented or publishable.",
       "created": "2026-06-12",
-      "updated": "2026-06-12"
+      "updated": "2026-07-12"
     }
   ]
 }

@@ -11,7 +11,7 @@
 
 % --- UniFi official colors ---
 % Source: Università di Firenze brand guidelines
-\definecolor{unifi-red}{HTML}{8B0000}           % primary institutional red
+\definecolor{unifi-red}{HTML}{8B0000}            % primary institutional red
 \definecolor{unifi-darkred}{HTML}{6B0000}        % darker variant
 \definecolor{unifi-gold}{HTML}{C5A55A}           % gold accent
 \definecolor{unifi-grey}{HTML}{4D4D4D}           % body text grey
@@ -21,10 +21,9 @@
 \colorlet{apo-inst-primary}{unifi-red}
 \colorlet{apo-inst-secondary}{unifi-gold}
 
-% --- Logo ---
-% The logo file (figures/unifi-logo.pdf) is fetched at runtime by
-% scripts/assets.py from the university's public servers. It is NEVER
-% committed to the repository.
+% The logo file (theme/assets/unifi-logo.pdf) is user-provided until
+% redistribution and trademark terms have been verified. It is not committed
+% to the repository.
 %
 % If the file is missing, a placeholder box is rendered instead —
 % compilation never fails.
@@ -35,15 +34,15 @@
 %   \unifilogo[width=5cm]          → custom width
 %
 \newcommand{\unifilogo}[1][height=1.5cm]{%
-  \IfFileExists{figures/unifi-logo.pdf}{%
-    \includegraphics[#1]{figures/unifi-logo.pdf}%
+  \IfFileExists{theme/assets/unifi-logo.pdf}{%
+    \includegraphics[#1]{theme/assets/unifi-logo.pdf}%
   }{%
     \fcolorbox{unifi-red}{unifi-lightgrey}{%
       \parbox[c][1.5cm][c]{4cm}{%
         \centering\small\sffamily\color{unifi-red}%
         {\bfseries Universit\`a di Firenze}\\[2pt]%
         {\scriptsize Logo placeholder}\\[1pt]%
-        {\tiny Run: make fetch-assets}%
+        {\tiny Add theme/assets/unifi-logo.pdf}%
       }%
     }%
   }%

@@ -5,7 +5,7 @@
 # Run `make help` to see all available targets.
 # =============================================================================
 
-.PHONY: help pack pack-all preview preview-one clean list
+.PHONY: help validate docs docs-check test check pack pack-all preview preview-one clean list
 
 # Default target
 help: ## Show this help message
@@ -23,6 +23,24 @@ help: ## Show this help message
 	@echo "    make preview"
 	@echo "    make pack ID=thesis-polito-msc-latex VSCODE=1"
 	@echo ""
+
+# ---------------------------------------------------------------------------
+# Catalog, documentation, and tests
+# ---------------------------------------------------------------------------
+
+validate: ## Validate catalog data and repository metadata
+	@python3 scripts/catalog.py validate
+
+docs: ## Regenerate catalog-backed README content
+	@python3 scripts/catalog.py generate-readme
+
+docs-check: ## Check that generated README content is current
+	@python3 scripts/catalog.py generate-readme --check
+
+test: ## Run the Python test suite
+	@python3 -m unittest discover -s tests -v
+
+check: validate docs-check test ## Run Phase 1 validation and tests
 
 # ---------------------------------------------------------------------------
 # Packing (bundle templates into self-contained ZIPs)
@@ -54,7 +72,7 @@ endif
 # Institutional Assets (logos, etc.)
 # ---------------------------------------------------------------------------
 
-fetch-assets: ## Fetch institutional assets (logos, etc.) from official servers
+fetch-assets: ## Fetch only catalog assets explicitly configured with mode=fetched
 	@python3 scripts/assets.py
 
 status-assets: ## Check status of institutional assets
@@ -67,8 +85,8 @@ clean-assets: ## Remove downloaded assets (preserves manual ones)
 # Utilities
 # ---------------------------------------------------------------------------
 
-list: ## List all available templates
-	@python3 scripts/preview.py --list
+list: ## List all catalog entries and maturity statuses
+	@python3 scripts/catalog.py list
 
 clean: ## Remove build artifacts (build/, *.zip, out/ dirs, LaTeX aux files)
 	@echo "Cleaning build artifacts..."

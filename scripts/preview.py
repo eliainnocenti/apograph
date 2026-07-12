@@ -24,6 +24,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from catalog import PUBLIC_STATUSES, require_valid_catalog, select_entrypoint
+
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -50,7 +52,9 @@ def load_catalog() -> dict:
         print(f"Error: CATALOG.json not found at {CATALOG_PATH}", file=sys.stderr)
         sys.exit(1)
     with open(CATALOG_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
+        catalog = json.load(f)
+    require_valid_catalog(catalog)
+    return catalog
 
 
 def compile_latex(template_entry: dict) -> bool:
@@ -61,7 +65,7 @@ def compile_latex(template_entry: dict) -> bool:
     """
     template_id = template_entry["id"]
     source_dir = REPO_ROOT / template_entry["source_dir"]
-    main_file = template_entry.get("main_file", "main.tex")
+    main_file = select_entrypoint(template_entry, preview=True).get("path", "main.tex")
     compiler = template_entry.get("compiler", "pdflatex")
 
     main_path = source_dir / main_file
@@ -142,7 +146,7 @@ def compile_typst(template_entry: dict) -> bool:
     """
     template_id = template_entry["id"]
     source_dir = REPO_ROOT / template_entry["source_dir"]
-    main_file = template_entry.get("main_file", "main.typ")
+    main_file = select_entrypoint(template_entry, preview=True).get("path", "main.typ")
 
     main_path = source_dir / main_file
     if not main_path.exists():
@@ -190,7 +194,7 @@ def compile_typst(template_entry: dict) -> bool:
 
 def compile_template(template_entry: dict) -> bool:
     """Compile a template using the appropriate compiler."""
-    language = template_entry.get("language", "latex")
+    language = template_entry.get("format", template_entry.get("language", "latex"))
 
     if language == "latex":
         return compile_latex(template_entry)
@@ -232,7 +236,7 @@ def main():
     if args.list:
         print(f"Available templates ({len(templates)}):\n")
         for t in templates:
-            print(f"  {t['id']:45s}  {t['name']}")
+            print(f"  {t['id']:45s}  {t['status']:10s}  {t['name']}")
         return
 
     if args.template_id:
@@ -255,7 +259,13 @@ def main():
 
     else:
         # Compile all templates
-        print(f"Compiling all {len(templates)} templates...\n")
+        templates = [t for t in templates if t.get("status") in PUBLIC_STATUSES]
+        if not templates:
+            print("No beta/stable templates are currently eligible for default compilation.")
+            print("Compile a draft explicitly by template ID when developing it.")
+            return
+
+        print(f"Compiling all {len(templates)} public templates...\n")
         results = {"pass": [], "fail": [], "skip": []}
 
         for entry in templates:
