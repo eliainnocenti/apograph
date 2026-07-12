@@ -1,0 +1,53 @@
+% ============================================================================
+% apograph-theorems.sty — Optional namespaced theorem environments
+% Part of the Apograph template collection
+% https://github.com/eliainnocenti/apograph
+% ============================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{apograph-theorems}[2026/07/12 v0.1.0 Apograph theorem environments]
+
+\RequirePackage{amsthm}
+
+\newif\ifapograph@theorems@chapter
+\newif\ifapograph@theorems@global
+\apograph@theorems@chapterfalse
+\apograph@theorems@globalfalse
+
+\DeclareOption{section}{%
+  \apograph@theorems@chapterfalse
+  \apograph@theorems@globalfalse
+}
+\DeclareOption{chapter}{%
+  \apograph@theorems@chaptertrue
+  \apograph@theorems@globalfalse
+}
+\DeclareOption{global}{\apograph@theorems@globaltrue}
+\ExecuteOptions{section}
+\ProcessOptions\relax
+
+\ifapograph@theorems@global
+  \newtheorem{apotheorem}{Theorem}
+\else
+  \ifapograph@theorems@chapter
+    \@ifundefined{c@chapter}{%
+      \PackageError{apograph-theorems}{The chapter option requires a chapter counter}{%
+        Use the section or global option with this document class.}%
+    }{}
+    \newtheorem{apotheorem}{Theorem}[chapter]
+  \else
+    \newtheorem{apotheorem}{Theorem}[section]
+  \fi
+\fi
+
+\newtheorem{apolemma}[apotheorem]{Lemma}
+\newtheorem{apoproposition}[apotheorem]{Proposition}
+\newtheorem{apocorollary}[apotheorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{apodefinition}[apotheorem]{Definition}
+\newtheorem{apoexample}[apotheorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{aporemark}[apotheorem]{Remark}
+
+\endinput

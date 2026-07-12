@@ -56,6 +56,7 @@ class CatalogValidationTests(unittest.TestCase):
             if item["id"] == "presentation-beamer-polito-latex"
         )
         template["status"] = "beta"
+        template["entrypoints"][0]["role"] = "showcase"
 
         errors = self.errors_for(candidate)
 

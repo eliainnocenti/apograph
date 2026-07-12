@@ -7,10 +7,11 @@
 This package defines three specialized container environments for code, notes, and highlights:
 \begin{columns}[T]
     \begin{column}{0.48\textwidth}
+        \raggedright
         \begin{toolbox}{\faBriefcase\; Toolbox Box}
             \footnotesize
-            Created via \texttt{\textbackslash begin\{toolbox\}\{Title\}}.
-            Uses \texttt{maincolor} frame and \texttt{sintefgrey} background.
+            Use the \texttt{toolbox} environment with a title.
+            Uses the primary frame and light background colors.
         \end{toolbox}
         
         \vspace{0.2cm}
@@ -19,15 +20,15 @@ This package defines three specialized container environments for code, notes, a
             \footnotesize
             \textbf{\faInfoCircle\; Highlight Box}
             
-            Created via \texttt{\textbackslash begin\{highlightbox\}\{color\}}.
-            Uses white background and a customizable frame color.
+            A highlighted container with a white background and a customizable frame color.
         \end{highlightbox}
     \end{column}
     \begin{column}{0.48\textwidth}
+        \raggedright
         \begin{scenariobox}{demo@amber}{\faExclamationTriangle\; Scenario Box}
             \footnotesize
-            Created via \texttt{\textbackslash begin\{scenariobox\}\{color\}\{Title\}}.
-            Uses custom frame color, custom title, and \texttt{sintefgrey} background.
+            Use the \texttt{scenariobox} environment with a color and title.
+            Uses a custom frame color, custom title, and light background.
         \end{scenariobox}
         
         \vspace{0.1cm}

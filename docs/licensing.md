@@ -20,8 +20,11 @@ and use of brand identifiers are separate verification questions.
 
 ### PoliTo Beamer theme
 
-The local `beamerthemesintef.sty` header states that it is adapted from the
-SINTEF Beamer theme and references CC BY 4.0 and GPL v3 or later. It names:
+Phase 3 identified the direct file-level comparison base as Andrea Gasparini's
+`sapienza-beamer-template` commit
+`24651c2ec532eb88544056c9b8130b7907fb553c`. Comparing that revision to the
+preserved PoliTo input accounts for the declared PoliTo adaptation and local
+path/content edits. Its GPL-3.0 license and the inherited file header name:
 
 - Federico Zenith;
 - Håvard Berland;
@@ -30,8 +33,19 @@ SINTEF Beamer theme and references CC BY 4.0 and GPL v3 or later. It names:
 - Liu Qilong;
 - local Apograph modifications by Elia Innocenti.
 
-The catalog records the currently known Overleaf and GitHub sources. This is
-provenance, not a resolved distribution expression.
+The current theme code retains a GPL-3.0-or-later notice. The adapted showcase
+content traces to Mattia Ippoliti's Overleaf template ID 27027, which Overleaf
+labels CC BY 4.0. The preserved local reference archive has SHA-256
+`bcb64bde2025c9d5b4fde6be9324792768c63e01434641176f59f2720afedf71` and a
+2024-11-06 file timestamp; it also contains earlier local path changes, so it is
+not represented as an untouched upstream release.
+
+The artifact ships `GPL-3.0-or-later AND CC-BY-4.0` as the proposed component
+expression, complete license texts, a modification record, attribution, and a
+non-endorsement statement. The catalog remains `review-required` until the
+maintainer accepts that component boundary; the Overleaf project-level CC BY
+label and embedded GPL code notice must not be collapsed into a guessed single
+license.
 
 ### Institution assets
 
@@ -42,18 +56,16 @@ that Apograph may redistribute them.
 
 ## Human decisions still required
 
-1. Identify the exact upstream revisions used by the local PoliTo theme.
-2. Obtain and retain the complete license files from each relevant revision.
-3. Determine whether the theme is dual-licensed, contains components under
-   different licenses, or requires one combined distribution expression.
-4. Confirm attribution, source-offer, notice, and modification-marking duties.
-5. Determine the provenance and terms of `sintefcolor.sty` separately if needed.
-6. Identify the exact source and copyright owner of each local PNG.
-7. Determine whether PoliTo and UniFi permit redistribution of their marks in an
+1. Review and accept or reject the proposed GPL/CC-BY component boundary for
+   the PoliTo artifact.
+2. Confirm that the shipped `NOTICE` and complete license texts satisfy the
+   applicable attribution and modification-marking duties.
+3. Identify the exact source and copyright owner of each local PNG.
+4. Determine whether PoliTo and UniFi permit redistribution of their marks in an
    unofficial open-source template.
-8. Decide whether textual institution references require a non-endorsement or
+5. Decide whether textual institution references require a non-endorsement or
    trademark notice beyond the current relationship field.
-9. Verify current institutional formatting requirements before describing any
+6. Verify current institutional formatting requirements before describing any
    thesis template as compliant.
 
 ## Evidence standard

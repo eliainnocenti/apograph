@@ -1,32 +1,19 @@
 % ============================================================================
-% apograph-math.sty — Shared math environments and macros
+% apograph-math.sty — Class-neutral shared math primitives
 % Part of the Apograph template collection
 % https://github.com/eliainnocenti/apograph
 % ============================================================================
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{apograph-math}[2026/06/12 v0.1.0 Apograph math utilities]
+\ProvidesPackage{apograph-math}[2026/07/12 v0.2.0 Apograph math primitives]
 
 % --- Core math packages ---
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
-\RequirePackage{amsthm}
 \RequirePackage{mathtools}      % extends amsmath: \coloneqq, \DeclarePairedDelimiter, etc.
 \RequirePackage{bm}             % bold math symbols via \bm{}
 
-% --- Theorem-like environments ---
-% Usage: \begin{theorem} ... \end{theorem}
-\theoremstyle{plain}
-\newtheorem{theorem}{Theorem}[chapter]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
-
-\theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
-
-\theoremstyle{remark}
-\newtheorem{remark}[theorem]{Remark}
+% Theorem numbering is document policy, not a math primitive. Load the optional
+% apograph-theorems package when namespaced theorem environments are wanted.
 
 % --- Common operators ---
 % Add your custom operators here. Examples:

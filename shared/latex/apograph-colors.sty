@@ -4,7 +4,7 @@
 % https://github.com/eliainnocenti/apograph
 % ============================================================================
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{apograph-colors}[2026/06/12 v0.1.0 Apograph color palettes]
+\ProvidesPackage{apograph-colors}[2026/07/12 v0.2.0 Apograph generic color primitives]
 
 \RequirePackage{xcolor}
 
@@ -25,11 +25,5 @@
 \definecolor{apo-code-string}{HTML}{032F62}   % strings
 \definecolor{apo-code-comment}{HTML}{6A737D}  % comments
 \definecolor{apo-code-number}{HTML}{005CC5}   % numbers
-
-% --- Institution-specific colors ---
-% These are defined in their own packages (apograph-polito.sty, apograph-unifi.sty)
-% but we provide generic aliases here that institutions can override.
-\providecolor{apo-inst-primary}{HTML}{2C3E50}
-\providecolor{apo-inst-secondary}{HTML}{3498DB}
 
 \endinput

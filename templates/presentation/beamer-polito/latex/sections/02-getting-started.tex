@@ -7,9 +7,9 @@
 To start working with this theme, initialize your \LaTeX\ document with:
 \begin{block}{Minimum Document Structure}
 \begin{lstlisting}[language=TeX]
-\documentclass{beamer}
-\usepackage{theme/beamerthemesintef} % PoliTo theme package
-\usetheme{sintef}
+\documentclass[aspectratio=169]{beamer}
+\usetheme{apographpolito}
+\input{config}
 \begin{document}
   \begin{frame}{Hello, world!}
   \end{frame} %
@@ -25,10 +25,10 @@ Define presentation details in your preamble using the following commands:
 \begin{lstlisting}[language=TeX]
 \title{Sample Presentation Title}
 \subtitle{Optional Subtitle}
-\course{Master's Degree in Computer Science}
+\apographCourse{Master's Degree in Computer Science}
 \author{Author Name}
-\IDnumber{1234567}
-\email{author@studenti.polito.it}
+\apographStudentID{1234567}
+\apographEmail{author@studenti.polito.it}
 \date{\today}
 \end{lstlisting}
 \end{block}
@@ -37,15 +37,15 @@ Render the title slide using \verb|\maketitle|.
 
 \begin{frame}[fragile]{Title Background Layouts}
 \framesubtitle{Full Background vs. Split View}
-You can style the title slide background using the \verb|\titlebackground| command before \verb|\maketitle|:
+You can style the title slide background using \verb|\apographTitleBackground| before \verb|\maketitle|:
 \begin{itemize}
     \item \textbf{Full-Screen Background}:
     \begin{block}{Full Background Code}
-    \verb|\titlebackground{theme/assets/background}|
+    \verb|\apographTitleBackground{theme/assets/background}|
     \end{block}
     \item \textbf{Split Background (Right-Clipped)}:
     \begin{block}{Starred Split Background Code}
-    \verb|\titlebackground*{theme/assets/background}|
+    \verb|\apographTitleBackground*{theme/assets/background}|
     \end{block}
 \end{itemize}
 \end{frame}

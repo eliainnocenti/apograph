@@ -1,6 +1,6 @@
 % =============================================================================
-% beamerthemesintef.sty — Politecnico di Torino presentation theme
-% Adapted from the SINTEF Beamer Theme under CC BY 4.0 and GPL v3
+% beamerthemeapographpolito.sty — unofficial PoliTo presentation theme
+% SPDX-License-Identifier: GPL-3.0-or-later
 %
 % Original author: Federico Zenith (federico.zenith@sintef.no)
 % Derived (through several iterations) from Håvard Berland's beamerthementnu class.
@@ -10,8 +10,11 @@
 %   - Andrea Gasparini (Sapienza adaptation)
 %   - Liu Qilong (Beamer-LaTeX-Themes)
 %
-% Modified & packaged for the Apograph library by:
-%   - Elia Innocenti (path cleaning, packaging structure, and robust fallbacks)
+% Modified & packaged for the Apograph library by Elia Innocenti.
+% Based on and compared against:
+%   https://github.com/andrea-gasparini/sapienza-beamer-template
+%   commit 24651c2ec532eb88544056c9b8130b7907fb553c
+% See NOTICE for the complete provenance and modification record.
 %
 % This program is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
@@ -26,38 +29,44 @@
 % You should have received a copy of the GNU General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %
-% For more information, visit the original Overleaf template:
+% PoliTo adaptation and presentation content:
 % https://www.overleaf.com/latex/templates/politecnico-di-torino-presentation/cnypkdbdyqky
 % =============================================================================
 
 
-% TODO: remove top-right logo from title page
-
-\ProvidesPackage{beamerthemesintef}[2021/11/02]
+\ProvidesPackage{beamerthemeapographpolito}[2026/07/12 v0.2.0 unofficial PoliTo Beamer theme]
 
 \RequirePackage{etoolbox}
 \RequirePackage{tikz}
 
-% Force 16:9 aspect ratio
-\RequirePackage{geometry}
-\geometry{paperwidth=16cm,paperheight=9cm}
+% Optional behavior is explicit so the minimal starter stays quiet.
+\newtoggle{apograph@sectionpages}
+\newtoggle{apograph@slidenumbers}
+\newtoggle{apograph@autoframesubtitles}
+\togglefalse{apograph@sectionpages}
+\toggletrue{apograph@slidenumbers}
+\togglefalse{apograph@autoframesubtitles}
+\DeclareOptionBeamer{sectionpages}{\toggletrue{apograph@sectionpages}}
+\DeclareOptionBeamer{noslidenumbers}{\togglefalse{apograph@slidenumbers}}
+\DeclareOptionBeamer{autoframesubtitles}{\toggletrue{apograph@autoframesubtitles}}
+\ProcessOptionsBeamer
 
 % Caladea is a Cambria clone, Carlito a Calibri clone
 \RequirePackage{caladea,carlito}
 \renewcommand{\familydefault}{\sfdefault}
 
-\RequirePackage{graphicx,theme/sintefcolor}
+\RequirePackage{graphicx,apograph-polito-colors}
 
 % No navigation symbols
 \setbeamertemplate{navigation symbols}{}
 
 \newcommand{\@footlineauthor}{\insertauthor \enspace$\vert$\enspace}
 \newcommand{\@footlinepayoff}{\@footlineauthor\inserttitle}
-\newcommand{\footlinepayoff}[1]{\renewcommand{\@footlinepayoff}{#1}}
+\newcommand{\apographFootlineText}[1]{\renewcommand{\@footlinepayoff}{#1}}
 % Define footline content
 \setbeamertemplate{footline}{%
   \begin{beamercolorbox}[wd=\textwidth,ht=5mm,dp=3mm,rightskip=1cm,leftskip=1cm]{footline}
-  \insertframenumber/\inserttotalframenumber
+  \iftoggle{apograph@slidenumbers}{\insertframenumber/\inserttotalframenumber}{}
   \ifstrempty{\@footlinepayoff}{}{%
     \usebeamerfont{footline}\hfill\@footlinepayoff
   }
@@ -65,20 +74,20 @@
 }
 
 % Set footline AND coordinate blocks with it
-\newcommand{\footlinecolor}[1]{% if #1 is empty, makes footline transparent
+\newcommand{\apographFootlineColor}[1]{% empty means transparent
   \ifstrempty{#1}{%
-    \footlinepayoff{}
+    \apographFootlineText{}
     \setbeamercolor{footline}{fg=darkgray, bg=}
     \setbeamercolor{block title}{fg=white,bg=maincolor}
     \setbeamercolor{block body}{fg=white,bg=maincolor}
   }{
-    \footlinepayoff{\@footlineauthor\inserttitle}
+    \apographFootlineText{\@footlineauthor\inserttitle}
     \setbeamercolor{footline}{fg=white,bg=#1}
     \setbeamercolor{block title}{fg=white,bg=#1}
     \setbeamercolor{block body}{fg=white,bg=#1}
   }%
 }
-\footlinecolor{} % Default: no footline
+\apographFootlineColor{} % Default: no footline
 
 \IfFileExists{theme/assets/logo_RGB.png}{%
   \pgfdeclareimage[width=0.09\paperwidth]{logo}{theme/assets/logo_RGB}%
@@ -91,8 +100,8 @@
 % Set colours
 % NOTE! Beamer colors should be set in the preamble. It often works fine in the 
 %       document itself, but NOT for normal text foreground.
-%       \themecolor should only be called from the preamble.
-\newcommand{\themecolor}[1]{
+%       \apographThemeColor should only be called from the preamble.
+\newcommand{\apographThemeColor}[1]{%
 	\ifstrequal{#1}{main}{%
         \setbeamercolor{footline}{fg=white}
 		\setbeamercolor{normal text}{fg=white,bg=maincolor}
@@ -100,16 +109,18 @@
 		\renewcommand{\@logo}{whitelogo}
 		\setbeamercolor{block title}{fg=maincolor,bg=sintefgrey}
 		\setbeamercolor{block body}{fg=darkgray,bg=sintefgrey}
-	}{%
+	}{\ifstrequal{#1}{white}{%
         \setbeamercolor{footline}{fg=darkgray}
 		\setbeamercolor{normal text}{fg=darkgray,bg=white}
 		\setbeamercolor{structure}{fg=maincolor}
 		\renewcommand{\@logo}{logo}
 		\setbeamercolor{block title}{fg=white,bg=maincolor}
 		\setbeamercolor{block body}{fg=darkgray,bg=sintefgrey}
-	}
+	}{%
+      \PackageError{beamerthemeapographpolito}{Unknown color mode '#1'}{Use 'white' or 'main'.}%
+    }}%
 }
-\themecolor{white} % Default: white theme
+\apographThemeColor{white} % Default: white theme
 
 \setbeamercolor{title}{fg=maincolor,bg=white}
 \setbeamercolor{alerted text}{fg=sintefred}
@@ -133,7 +144,7 @@
 \setbeamertemplate{itemize subitem}{\textemdash}
 \setbeamertemplate{itemize subsubitem}{\ensuremath{\circ}}
 
-\newenvironment{colorblock}[3][white]{%
+\newenvironment{apographcolorblock}[3][white]{%
 	\begingroup
 	\setbeamercolor{block title}{fg=#1,bg=#2}
 	\setbeamercolor{block body} {fg=#1,bg=#2}
@@ -178,9 +189,9 @@
 \def\@IDnumber{}
 \def\@email{}
 
-\newcommand{\course}[1]{\def\@courseLabel{#1}}
-\newcommand{\IDnumber}[1]{\def\@IDnumber{#1}}
-\newcommand{\email}[1]{\def\@email{#1}}
+\newcommand{\apographCourse}[1]{\def\@courseLabel{#1}}
+\newcommand{\apographStudentID}[1]{\def\@IDnumber{#1}}
+\newcommand{\apographEmail}[1]{\def\@email{#1}}
 
 % Define the title page
 \setbeamertemplate{title page}{%
@@ -210,7 +221,7 @@
 }
 
 % Define slide splitting dimensions (e.g. title and chapter slides)
-\newcommand{\TikzSplitSlide}[1]{%
+\newcommand{\apograph@splitbackground}[1]{%
   \rule{0.56\paperwidth}{0pt}%
   \begin{tikzpicture}
     \clip (-0.1\paperwidth,-0.5\paperheight) -- 
@@ -221,54 +232,55 @@
       \IfFileExists{#1.png}{%
         \includegraphics[height=\paperheight]{#1}%
       }{%
-        \tikz \node[draw=maincolor!50, fill=sintefgrey, minimum width=0.5\paperwidth, minimum height=\paperheight, align=center, font=\tiny\sffamily\color{maincolor}] {Background\\Placeholder};
+        \tikz \node[draw=maincolor!35, fill=sintefgrey, minimum width=0.5\paperwidth, minimum height=\paperheight, align=center, font=\tiny\sffamily\color{maincolor!70}] {Optional\\background};
       }%
     };
   \end{tikzpicture}
 }
 
-\newbool{splittitle}
-\newcommand{\@TitleBackground}{}
-\newcommand{\titlebackground}{\@ifstar{\SplitBackground}{\FullBackground}}
-\newcommand{\FullBackground}[1]{\renewcommand{\@TitleBackground}{#1}}
-\newcommand{\SplitBackground}[1]{%
-	\booltrue{splittitle}%
-	\renewcommand{\@TitleBackground}{#1}%
+\newbool{apograph@splittitle}
+\newcommand{\apograph@titlebackground}{}
+\newcommand{\apographTitleBackground}{%
+  \@ifstar{\apograph@splitbackgroundchoice}{\apograph@fullbackgroundchoice}%
+}
+\newcommand{\apograph@fullbackgroundchoice}[1]{%
+  \boolfalse{apograph@splittitle}%
+  \renewcommand{\apograph@titlebackground}{#1}%
+}
+\newcommand{\apograph@splitbackgroundchoice}[1]{%
+  \booltrue{apograph@splittitle}%
+  \renewcommand{\apograph@titlebackground}{#1}%
 }
 
 % Overwrite the maketitle command for the title page
 \renewcommand{\maketitle}{
 \begingroup
-  \ifdefempty{\@TitleBackground}{}{% Skip if \@TitleBackground is empty
+  \ifdefempty{\apograph@titlebackground}{}{% Skip if no image is configured
     \setbeamertemplate{background}{%
-      \ifbool{splittitle}{%
-        \TikzSplitSlide{\@TitleBackground}%
+      \ifbool{apograph@splittitle}{%
+        \apograph@splitbackground{\apograph@titlebackground}%
       }{% Normal, full-screen background
-        \IfFileExists{\@TitleBackground.png}{%
-          \includegraphics[height=\paperheight]{\@TitleBackground}%
-        }{% Fallback if full background file is missing
-          \tikz[remember picture, overlay] \node[shift={(2,-1.5)}, font=\tiny\sffamily\color{maincolor!50}] at (current page.center) {Background Placeholder};
-        }%
+        \IfFileExists{\apograph@titlebackground.png}{%
+          \includegraphics[height=\paperheight]{\apograph@titlebackground}%
+        }{}% Missing optional full background: keep the normal plain canvas.
       }%
     }%
   }
-  \begin{frame}%
+  \begin{frame}[plain,noframenumbering]%
   \titlepage%
   \end{frame}%
 \endgroup
 }
 
-\makeatletter
-    \newenvironment{withoutheadline}{
-        \setbeamertemplate{headline}[default]
-        \def\beamer@entrycode{\vspace*{-\headheight}}
-    }{}
-\makeatother
+\newenvironment{apographwithoutheadline}{%
+    \setbeamertemplate{headline}[default]
+    \def\beamer@entrycode{\vspace*{-\headheight}}
+}{}
 
 % Define chapter environment
-\newenvironment{chapter}[3][]{% Args: image (optional), color, frame title
+\newenvironment{apographchapter}[3][]{% Args: image (optional), color, frame title
   \begingroup
-  \themecolor{main}
+  \apographThemeColor{main}
   \setbeamertemplate{footline}{}
   \ifstrempty{#2}{
     \setbeamercolor{frametitle}{fg=white}
@@ -277,7 +289,7 @@
     \setbeamercolor{frametitle}{fg=white}
     \setbeamercolor{normal text}{fg=white,bg=#2}
   }
-  \ifstrempty{#1}{}{\setbeamertemplate{background}{\TikzSplitSlide{#1}}}
+  \ifstrempty{#1}{}{\setbeamertemplate{background}{\apograph@splitbackground{#1}}}
   \setbeamertemplate{frametitle}{%
     \vspace*{8ex}
     \begin{beamercolorbox}[wd=0.45\textwidth]{frametitle}
@@ -296,7 +308,7 @@
 }
 
 % Define sidepic environment
-\newenvironment{sidepic}[2]{% Args: image, frame title
+\newenvironment{apographsidepic}[2]{% Args: image, frame title
   \begingroup
   \setbeamertemplate{background}{%
   \hspace*{0.6\paperwidth}%
@@ -322,19 +334,21 @@
 }
 
 % Define backmatter
-\newcommand{\backmatter}[1][]{
+\newcommand{\apographClosingMessage}{Thank you for listening!}
+\newcommand{\apographSetClosingMessage}[1]{\renewcommand{\apographClosingMessage}{#1}}
+\newcommand{\apographBackmatter}[1][]{
 \begingroup
-  \themecolor{main}
-  \begin{frame}[c]
+  \apographThemeColor{main}
+  \begin{frame}[c,noframenumbering]
     \centering
     \begin{minipage}{\textwidth}
       \usebeamercolor[fg]{normal text}
       \centering
       \ifstrequal{#1}{notitle}{}{
-        \Huge \inserttitle
+        {\Huge \inserttitle\par}
         \vspace{5mm}
       }
-      \Large \textsl{\\ Thank you for listening! \\ Feel free to contact me for any doubt.}
+      {\Large \textsl{\apographClosingMessage}\par}
       
       \ifx\@email\@empty
       \else
@@ -349,21 +363,23 @@
 % Define sectioning and table of contents
 \AtBeginSection[]
 {
-    \begingroup
-    \themecolor{main}
-    \begin{frame}{Table of Contents}
-        \tableofcontents[currentsection]
-    \end{frame}
-    \endgroup
+    \iftoggle{apograph@sectionpages}{%
+      \begingroup
+      \apographThemeColor{main}
+      \begin{frame}{Contents}
+          \tableofcontents[currentsection]
+      \end{frame}
+      \endgroup
+    }{}
 }
 
 % style of section presented in the table of contents
 \setbeamertemplate{section in toc}{$\blacktriangleright$~\inserttocsection}
 
-% automate subtitle of each frame
-\makeatletter
-    \pretocmd\beamer@checkframetitle{\framesubtitle{\thesection \, \secname}}
-\makeatother
+% Optionally automate the subtitle of each frame.
+\iftoggle{apograph@autoframesubtitles}{%
+  \pretocmd\beamer@checkframetitle{\framesubtitle{\thesection \, \secname}}{}{}%
+}{}
 
 % avoid numbering of frames that are breaked into multiply slides
 \setbeamertemplate{frametitle continuation}{}

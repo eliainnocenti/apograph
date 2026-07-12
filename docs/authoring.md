@@ -47,6 +47,9 @@ same catalog, artifact, documentation, and quality concepts.
 
 Place only small composable primitives in `shared/`. Layout, spacing, headers,
 captions, chapter style, and Beamer policy normally belong to the template.
+`apograph-math` and `apograph-typography` are deliberately class-neutral;
+optional theorem numbering lives in the separate, namespaced
+`apograph-theorems` module.
 
 ## 6. Validate continuously
 

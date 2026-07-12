@@ -6,8 +6,8 @@
 \framesubtitle{Native vector flows using TikZ library}
 \centering
 \begin{tikzpicture}[
-    nodeDistance/.style={shape=rectangle, rounded corners=4pt, draw=maincolor, fill=sintefgrey, minimum width=2.4cm, minimum height=1.0cm, font=\scriptsize\bfseries, align=center},
-    arrow/.style={-{Stealth[length=3mm]}, thick, maincolor}
+    nodeDistance/.style={shape=rectangle, rounded corners=4pt, draw=apographpolito-primary, fill=apographpolito-light, minimum width=2.4cm, minimum height=1.0cm, font=\scriptsize\bfseries, align=center},
+    arrow/.style={-{Stealth[length=3mm]}, thick, apographpolito-primary}
 ]
     % Nodes
     \node[nodeDistance] (step1) {\faFile*[regular]\\[0.1cm] 1. Draft Content};
@@ -26,7 +26,7 @@
         \textbf{Workflow Design}:
         \begin{itemize}
             \item Position nodes dynamically with coordinates.
-            \item Style frames using the theme colors (e.g. \texttt{maincolor}, \texttt{sintefgrey}).
+            \item Style frames using \texttt{apographpolito-primary} and \texttt{apographpolito-light}.
         \end{itemize}
     \end{column}
     \begin{column}{0.48\textwidth}
@@ -47,7 +47,7 @@
         \centering
         \vspace{0.2cm}
         \begin{tikzpicture}[
-            box/.style={draw=maincolor, fill=sintefgrey, rounded corners=3pt,
+            box/.style={draw=apographpolito-primary, fill=apographpolito-light, rounded corners=3pt,
                 minimum width=4.2cm, minimum height=0.7cm,
                 font=\scriptsize, align=center, text=darkgray},
             locked/.style={draw=demo@red, fill=demo@red!8, rounded corners=3pt,
@@ -56,7 +56,7 @@
             unlocked/.style={draw=demo@green, fill=demo@green!8, rounded corners=3pt,
                 minimum width=4.2cm, minimum height=0.7cm,
                 font=\scriptsize, align=center, text=demo@green!70!black},
-            arrow/.style={-{Stealth[length=2.5mm]}, thick, maincolor},
+            arrow/.style={-{Stealth[length=2.5mm]}, thick, apographpolito-primary},
         ]
             \node[locked] (lock) {\faLock\; Panel State --- \textbf{LOCKED}};
             \node[box, below=0.6cm of lock] (cmd) {\faTerminal\; \texttt{run\_command\_here}};
@@ -67,7 +67,7 @@
         \end{tikzpicture}
     \end{column}
     \begin{column}{0.50\textwidth}
-        \begin{highlightbox}{maincolor}
+        \begin{highlightbox}{apographpolito-primary}
             \footnotesize\bfseries
             \faInfoCircle\; Gating Mechanics
             \vspace{0.15cm}

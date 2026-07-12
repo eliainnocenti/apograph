@@ -1,67 +1,23 @@
 % ============================================================================
-% apograph-typography.sty — Shared typography and font configuration
+% apograph-typography.sty — Class-neutral typography primitives
 % Part of the Apograph template collection
 % https://github.com/eliainnocenti/apograph
 % ============================================================================
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{apograph-typography}[2026/06/12 v0.1.0 Apograph typography]
+\ProvidesPackage{apograph-typography}[2026/07/12 v0.2.0 Apograph typography primitives]
 
-% --- Encoding (pdfLaTeX compatibility) ---
-\RequirePackage[T1]{fontenc}
-\RequirePackage[utf8]{inputenc}
+\RequirePackage{iftex}
 
-% --- Microtypography ---
-% Subtle improvements to letter spacing, word spacing, and margin kerning.
-% Makes text look noticeably more polished.
+% Legacy encodings apply only to pdfLaTeX. LuaLaTeX and XeLaTeX use Unicode
+% natively and should select fonts in the consuming template.
+\ifPDFTeX
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage[utf8]{inputenc}
+\fi
+
+% Microtype is a reusable rendering primitive. Link colors, spacing, captions,
+% headers, table packages, and page layout are template policy and deliberately
+% remain outside this shared module.
 \RequirePackage{microtype}
-
-% --- Hyperlinks ---
-% Colored links for on-screen reading; set to black for print.
-\RequirePackage[
-  colorlinks=true,
-  linkcolor=black,         % internal links (TOC, refs)
-  citecolor=blue!60!black, % citation links
-  urlcolor=blue!70!black,  % external URLs
-  pdfusetitle,             % use \title and \author for PDF metadata
-  bookmarks=true,
-  bookmarksnumbered=true,
-]{hyperref}
-
-% --- Cross-referencing ---
-% Must be loaded after hyperref.
-\RequirePackage[capitalise,noabbrev]{cleveref}
-
-% --- Line spacing ---
-% Default: 1.5 line spacing (common academic requirement).
-% Override in your template with \singlespacing, \doublespacing, etc.
-\RequirePackage{setspace}
-\onehalfspacing
-
-% --- Paragraph formatting ---
-% Uncomment ONE of these approaches:
-%
-% Option A: Indented paragraphs (traditional)
-% (This is the default LaTeX behavior — no package needed)
-%
-% Option B: No indent, space between paragraphs (modern)
-% \RequirePackage{parskip}
-
-% --- Headers and footers ---
-\RequirePackage{fancyhdr}
-
-% --- Captions ---
-\RequirePackage[
-  font=small,
-  labelfont=bf,
-  format=hang,
-]{caption}
-\RequirePackage{subcaption}
-
-% --- Tables ---
-\RequirePackage{booktabs}   % \toprule, \midrule, \bottomrule
-\RequirePackage{tabularx}   % tables with auto-width columns
-
-% --- Graphics ---
-\RequirePackage{graphicx}
 
 \endinput

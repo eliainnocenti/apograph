@@ -214,7 +214,7 @@
     {
       "id": "presentation-beamer-polito-latex",
       "name": "PoliTo Beamer Presentation",
-      "description": "In-progress unofficial Beamer presentation theme for Politecnico di Torino.",
+      "description": "Unofficial Beamer starter and showcase for Politecnico di Torino presentations.",
       "purpose": "presentation",
       "variant": "beamer-polito",
       "format": "latex",
@@ -228,27 +228,29 @@
       },
       "compiler": "pdflatex",
       "compatibility": {
-        "texlive": [],
+        "texlive": ["2026"],
         "overleaf": "untested"
       },
       "source_dir": "templates/presentation/beamer-polito/latex",
       "entrypoints": [
         {
           "path": "main.tex",
+          "role": "starter",
+          "include_in_artifact": true,
+          "preview": false
+        },
+        {
+          "path": "showcase.tex",
           "role": "showcase",
           "include_in_artifact": true,
           "preview": true
         }
       ],
-      "shared_deps": [
-        "shared/latex/apograph-math.sty",
-        "shared/latex/apograph-colors.sty",
-        "shared/latex/apograph-polito.sty"
-      ],
+      "shared_deps": [],
       "license": {
-        "expression": null,
+        "expression": "GPL-3.0-or-later AND CC-BY-4.0",
         "status": "review-required",
-        "notes": "The local theme header references CC BY 4.0 and GPL v3 or later material. The exact inbound license chain, compatibility, attribution, and resulting distribution expression require human evidence review."
+        "notes": "File-level evidence supports GPL-3.0-or-later for theme code and CC-BY-4.0 for adapted showcase content. Complete texts and attribution ship in the artifact. Maintainer sign-off remains required because the Overleaf project-level CC-BY-4.0 label coexists with an embedded GPL theme notice."
       },
       "upstream": {
         "kind": "adapted",
@@ -257,25 +259,32 @@
             "title": "Politecnico di Torino Presentation",
             "url": "https://www.overleaf.com/latex/templates/politecnico-di-torino-presentation/cnypkdbdyqky",
             "authors": ["Mattia Ippoliti"],
-            "revision": null,
+            "revision": "Overleaf template 27027; local reference snapshot 2024-11-06; archive sha256 bcb64bde2025c9d5b4fde6be9324792768c63e01434641176f59f2720afedf71",
             "license": "CC-BY-4.0"
+          },
+          {
+            "title": "Sapienza Beamer Presentation Template",
+            "url": "https://github.com/andrea-gasparini/sapienza-beamer-template",
+            "authors": ["Andrea Gasparini", "Federico Zenith", "Håvard Berland"],
+            "revision": "24651c2ec532eb88544056c9b8130b7907fb553c",
+            "license": "GPL-3.0-or-later"
           },
           {
             "title": "SINTEF Presentation",
             "url": "https://www.overleaf.com/latex/templates/sintef-presentation/jhbhdffczpnx",
             "authors": ["Federico Zenith"],
-            "revision": null,
-            "license": null
+            "revision": "ancestor identified by the pinned Sapienza file header; exact earlier revision unavailable",
+            "license": "GPL-3.0-or-later"
           },
           {
-            "title": "Beamer-LaTeX-Themes",
-            "url": "https://github.com/TOB-KNPOB/Beamer-LaTeX-Themes",
-            "authors": ["Liu Qilong", "Andrea Gasparini"],
-            "revision": null,
-            "license": null
+            "title": "College Beamer",
+            "url": "https://github.com/liu-qilong/college-beamer",
+            "authors": ["Liu Qilong"],
+            "revision": "821977cb4a02f2a925120eb2d86619478ca6b980",
+            "license": "CC-BY-4.0"
           }
         ],
-        "notes": "The local theme header also identifies earlier work by Håvard Berland. Source revisions and the full chain of adaptations are not yet pinned."
+        "notes": "The Sapienza commit is the direct file-level comparison base: the preserved PoliTo copy differs by its declared adaptation and local path/content changes. College Beamer is documented inspiration; no current file is directly vendored from it. NOTICE records hashes and modifications."
       },
       "assets": [
         {
@@ -361,7 +370,7 @@
           "github": "eliainnocenti"
         }
       ],
-      "readiness_notes": "Compiles locally as a showcase, but it has no separate minimal starter and its theme license, asset rights, documentation, clean-checkout artifact, and Overleaf compatibility remain unverified.",
+      "readiness_notes": "The minimal starter, separate showcase, documentation, component license texts, asset fallbacks, and isolated artifact path compile cleanly with TeX Live 2026. Beta remains blocked on maintainer license sign-off and a recorded Overleaf upload/compile result.",
       "created": "2026-06-12",
       "updated": "2026-07-12"
     },

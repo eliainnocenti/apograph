@@ -236,10 +236,19 @@ class PoliToArtifactIntegrationTests(unittest.TestCase):
                 source_date_epoch=315532800,
                 verify=True,
             )
-            self.assertEqual(len(result.compilation_results), 1)
+            self.assertEqual(
+                [item.entrypoint for item in result.compilation_results],
+                ["main.tex", "showcase.tex"],
+            )
             self.assertTrue(result.preview_path.is_file())
             with zipfile.ZipFile(result.zip_path) as archive:
                 names = set(archive.namelist())
+            self.assertIn("README.md", names)
+            self.assertIn("NOTICE", names)
+            self.assertIn("LICENSES/GPL-3.0-or-later.txt", names)
+            self.assertIn("LICENSES/CC-BY-4.0.txt", names)
+            self.assertIn("beamerthemeapographpolito.sty", names)
+            self.assertNotIn("theme/beamerthemesintef.sty", names)
             for asset in template["assets"]:
                 if asset["mode"] == "user-provided":
                     self.assertNotIn(asset["local_path"], names)

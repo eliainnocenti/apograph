@@ -37,7 +37,8 @@ class GovernanceDocumentationTests(unittest.TestCase):
         self.assertIn("Phase 0 completed on 2026-07-12", plan)
         self.assertIn("Phase 1 completed on 2026-07-12", plan)
         self.assertIn("Phase 2 completed on 2026-07-12", plan)
-        self.assertIn("Phase 3 is the next implementation phase", plan)
+        self.assertIn("Phase 3 started on 2026-07-12", plan)
+        self.assertIn("Execution:** in progress since 2026-07-12", plan)
 
 
 if __name__ == "__main__":

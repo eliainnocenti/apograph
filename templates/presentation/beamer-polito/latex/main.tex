@@ -1,117 +1,13 @@
-% main.tex — Politecnico di Torino Beamer presentation template demo/guide
-\documentclass{beamer}
+% main.tex — minimal unofficial PoliTo presentation starter
+\documentclass[aspectratio=169]{beamer}
 
-\usepackage{theme/beamerthemesintef} % PoliTo theme
-\usepackage{amsfonts,amsmath,oldgerm}
+\usetheme{apographpolito}
+\input{config}
 
-\usetheme{sintef}
-\AtBeginSection[]{} % Disable auto-generated TOC slides
-
-% ── Enhanced visual packages ──────────────────────────────────────────────────
-\usepackage{fontawesome5}       % Vector icons (GitHub, tools, arrows, etc.)
-\usepackage[most]{tcolorbox}    % Custom styled boxes
-\usepackage{booktabs}           % Professional tables
-\usepackage{tabularx}           % Flexible-width table columns
-\usepackage{tikz}               % Native diagrams
-\usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc, fit, backgrounds}
-\tikzset{
-    layer/.style={draw=#1, fill=#1!8, rounded corners=2pt,
-        minimum width=5.5cm, minimum height=0.55cm,
-        font=\scriptsize, align=left, text=darkgray}
-} % Defined here (not inside frames) so #1 is handled by pgfkeys, not Beamer
-\usepackage{listings}           % Code listings
-\usepackage{xcolor}             % Extended color support
-\usepackage{hyperref}           % Clickable links
-\usepackage{multicol}           % Multi-column layouts
-
-% ── Theme helpers ─────────────────────────────────────────────────────────────
-\newcommand{\testcolor}[1]{\colorbox{#1}{\textcolor{#1}{test}}~\texttt{#1}}
-\usefonttheme[onlymath]{serif}
-\titlebackground*{theme/assets/background}
-\newcommand{\hrefcol}[2]{\textcolor{cyan}{\href{#1}{#2}}}
-
-% ── Custom colors (Demo Showcase) ─────────────────────────────────────────────
-\definecolor{demo@darkbg}{HTML}{1A1A2E}
-\definecolor{demo@cyan}{HTML}{00D4AA}
-\definecolor{demo@amber}{HTML}{F5A623}
-\definecolor{demo@red}{HTML}{E74C3C}
-\definecolor{demo@blue}{HTML}{3498DB}
-\definecolor{demo@purple}{HTML}{9B59B6}
-\definecolor{demo@green}{HTML}{2ECC71}
-
-% ── tcolorbox styles ─────────────────────────────────────────────────────────
-\newtcolorbox{toolbox}[1]{
-    colback=sintefgrey,
-    colframe=maincolor,
-    fonttitle=\bfseries\small,
-    title={#1},
-    boxrule=0.5pt,
-    arc=2pt,
-    left=4pt, right=4pt, top=2pt, bottom=2pt,
-}
-
-\newtcolorbox{scenariobox}[2]{
-    colback=sintefgrey,
-    colframe=#1,
-    fonttitle=\bfseries\small,
-    title={#2},
-    boxrule=0.8pt,
-    arc=3pt,
-    left=4pt, right=4pt, top=2pt, bottom=2pt,
-}
-
-\newtcolorbox{highlightbox}[1]{
-    colback=white,
-    colframe=#1,
-    boxrule=1pt,
-    arc=2pt,
-    left=4pt, right=4pt, top=2pt, bottom=2pt,
-}
-
-% ── Code listing style ────────────────────────────────────────────────────────
-\lstset{
-    basicstyle=\ttfamily\scriptsize,
-    keywordstyle=\color{demo@blue},
-    commentstyle=\color{gray},
-    stringstyle=\color{demo@red},
-    showstringspaces=false,
-    breaklines=true,
-    frame=single,
-    tabsize=4,
-    language=bash
-}
-
-% ── Star rating command ───────────────────────────────────────────────────────
-\newcommand{\stars}[1]{%
-    \foreach \i in {1,...,#1}{\faStar}%
-    \ifnum#1<5\relax
-        \foreach \i in {1,...,\numexpr5-#1\relax}{\textcolor{gray!30}{\faStar}}%
-    \fi
-}
-
-% ── Presentation metadata ────────────────────────────────────────────────────
-\title{Politecnico di Torino Beamer Presentation Theme}
-\subtitle{Using \LaTeX\ to prepare slides}
-\course{Master's Degree in Computer Science}
-\author{\href{mailto:author@studenti.polito.it}{Author Name}}
-\IDnumber{1234567}
-\email{author@studenti.polito.it}
-\date{\today}
-
-% ══════════════════════════════════════════════════════════════════════════════
 \begin{document}
+
 \maketitle
-
-% ── Sections ──────────────────────────────────────────────────────────────────
-\input{sections/01-introduction}
-\input{sections/02-getting-started}
-\input{sections/03-colors-styles}
-\input{sections/04-layout-elements}
-\input{sections/05-custom-boxes}
-\input{sections/06-diagrams-tables}
-\input{sections/07-special-slides}
-
-\title{} % Reset for backmatter
-\backmatter
+\input{content/slides}
+\apographBackmatter
 
 \end{document}

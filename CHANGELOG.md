@@ -21,6 +21,11 @@ Semantic Versioning while it uses a single global release timeline.
 - Shared isolated compilation primitives and packed PoliTo Beamer integration
   coverage.
 - Compiling text/box fallbacks for all PoliTo showcase assets used by the draft.
+- A separate minimal PoliTo Beamer starter, user configuration surface,
+  feature-rich showcase entry point, source README, and attribution notice.
+- Complete GPL-3.0 and CC-BY-4.0 component license texts for the PoliTo artifact.
+- Class-compatibility fixtures for shared LaTeX modules across article, report,
+  book, and Beamer.
 
 ### Changed
 
@@ -32,6 +37,12 @@ Semantic Versioning while it uses a single global release timeline.
 - Institution logos/backgrounds remain user-provided and are never downloaded
   by the installer; artifacts document exact optional paths.
 - The shell installer refuses non-empty destinations instead of deleting them.
+- Shared math and typography modules now contain class-neutral primitives;
+  optional namespaced theorem environments live in `apograph-theorems.sty`.
+- The PoliTo theme exposes namespaced commands and opt-in section/subtitle
+  behavior while retaining compiling user-provided-asset fallbacks.
+- The PoliTo artifact records successful isolated starter/showcase compilation
+  with TeX Live 2026; Overleaf compatibility remains a separate manual gate.
 
 ### Removed
 

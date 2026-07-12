@@ -77,8 +77,9 @@ vendor the exact required shared modules.
 
 ## Current known gaps
 
-- The PoliTo theme is a showcase rather than a minimal starter.
-- Its license chain and asset redistribution evidence are incomplete.
+- The PoliTo starter/showcase structure and component notices are implemented,
+  but maintainer license sign-off and recorded Overleaf import evidence are
+  still required for beta.
 - The five other template entries are placeholders.
 - CI and release workflows do not yet implement the target gates.
 

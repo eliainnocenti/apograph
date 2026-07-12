@@ -1,0 +1,63 @@
+Apograph — unofficial PoliTo Beamer presentation
+=================================================
+
+This project is not an official Politecnico di Torino template and is not
+endorsed by Politecnico di Torino, SINTEF, Sapienza Università di Roma, or any
+other institution named below. Institution names and marks belong to their
+respective owners.
+
+Theme code
+----------
+
+`beamerthemeapographpolito.sty` and `apograph-polito-colors.sty` are
+modified descendants of the SINTEF/Sapienza Beamer theme. The file-level base
+used for comparison is:
+
+  Andrea Gasparini, sapienza-beamer-template
+  commit 24651c2ec532eb88544056c9b8130b7907fb553c (2022-12-09)
+  https://github.com/andrea-gasparini/sapienza-beamer-template
+
+That repository identifies the code as GPL version 3. The inherited file
+header identifies Federico Zenith as the original author and Håvard Berland's
+beamerthementnu as an earlier ancestor. Mattia Ippoliti adapted the work for
+Politecnico di Torino. The current Apograph files are distributed under
+GPL-3.0-or-later; the complete text is in `LICENSES/GPL-3.0-or-later.txt`.
+
+Apograph modifications include package/path normalization, optional behavior,
+namespaced public commands, a separate starter/config/showcase structure,
+user-provided-asset fallbacks, reproducible artifact packaging, and current
+documentation. These modifications were made by Elia Innocenti in 2026.
+
+Presentation content
+--------------------
+
+Parts of the showcase and its teaching examples are adapted from:
+
+  Mattia Ippoliti, “Politecnico di Torino Presentation”
+  https://www.overleaf.com/latex/templates/politecnico-di-torino-presentation/cnypkdbdyqky
+  Overleaf template ID 27027, listed as Creative Commons CC BY 4.0
+
+The local reference archive preserved by the maintainer has SHA-256
+`bcb64bde2025c9d5b4fde6be9324792768c63e01434641176f59f2720afedf71`.
+Its files carry a 2024-11-06 timestamp and include earlier local path changes;
+it is evidence of the adaptation input, not an untouched upstream release.
+
+Showcase material derived from that presentation is distributed under
+CC-BY-4.0 with modifications identified by this notice. The complete license
+text is in `LICENSES/CC-BY-4.0.txt`.
+
+Liu Qilong's College Beamer repository is retained as documented inspiration:
+
+  https://github.com/liu-qilong/college-beamer
+  historical revision 821977cb4a02f2a925120eb2d86619478ca6b980
+
+No current Apograph file is vendored directly from that repository.
+
+Institution assets
+------------------
+
+PoliTo logos and backgrounds are not included. They are cataloged as optional
+user-provided files because copyright, redistribution, and trademark evidence
+has not been established. The template compiles without them. Supplying a file
+locally does not change the license of that file and does not imply permission
+to redistribute or use an institution mark.

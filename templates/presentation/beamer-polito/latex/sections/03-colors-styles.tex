@@ -1,51 +1,50 @@
-% 03-colors-styles.tex - Theme Slide Colors & footlinecolor
+% 03-colors-styles.tex - Theme slide and footline colors
 
 \section{Colors \& Styles}
 
 \begin{frame}[fragile]{Theme Color Modes}
 \framesubtitle{Preamble Configuration}
-You can set the global slide background and text colors in the preamble using \verb|\themecolor{style}|:
+You can set the global slide background and text colors in the preamble using \verb|\apographThemeColor{style}|:
 \begin{itemize}
     \item \textbf{Light Theme (Default)}:
     \begin{block}{Light Theme Code}
-    \verb|\themecolor{white}|
+    \verb|\apographThemeColor{white}|
     \end{block}
-    Sets a white background with dark grey text and maincolor accents.
+    Sets a white background with dark grey text and primary-color accents.
     \item \textbf{Dark / Negative Theme}:
     \begin{block}{Dark Theme Code}
-    \verb|\themecolor{main}|
+    \verb|\apographThemeColor{main}|
     \end{block}
-    Inverts the style: white text on a maincolor (PoliTo blue) background.
+    Inverts the style: white text on the primary blue background.
 \end{itemize}
 \end{frame}
 
-\footlinecolor{sintefyellow}
+\apographFootlineColor{apographpolito-yellow}
 \begin{frame}[fragile]{Footline Colors}
 \framesubtitle{Customizing Slide Footers}
-You can change the footline color dynamically by placing \verb|\footlinecolor{<color>}| before a frame:
+You can change the footline color dynamically by placing \verb|\apographFootlineColor{<color>}| before a frame:
 \begin{itemize}
     \item Setting a color adds a footer block displaying the page number and presentation payoff (author | title).
-    \item Current slide's footer is colored using \testcolor{sintefyellow}.
-    \item Restore the default transparent footline with \verb|\footlinecolor{}| before a new frame.
+    \item Current slide's footer is colored using \testcolor{apographpolito-yellow}.
+    \item Restore the default transparent footline with \verb|\apographFootlineColor{}| before a new frame.
 \end{itemize}
 \begin{block}{Usage}
-\verb|\footlinecolor{sintefyellow}| \\
+\verb|\apographFootlineColor{apographpolito-yellow}| \\
 \verb|\begin{frame}{Footline Colors}...|
 \end{block}
 \end{frame}
 
-\footlinecolor{}
+\apographFootlineColor{}
 \begin{frame}[fragile]{Built-in Colors}
-\framesubtitle{Color Registry from sintefcolor.sty}
-The package defines a set of official, harmonized colors for blocks and text:
+\framesubtitle{Stable palette names from apograph-polito-colors.sty}
+The package defines a reusable palette for blocks and text. These names do not
+claim current official brand compliance:
 \begin{itemize}
     \item \textbf{Primary Colors}:
-    \testcolor{maincolor} and its sidebar companion \testcolor{sintefgrey} (or \texttt{sintefgray}).
+    \testcolor{apographpolito-primary} and \testcolor{apographpolito-light}.
     \item \textbf{Greens}:
-    \testcolor{sinteflightgreen}, \testcolor{sintefgreen}, \testcolor{sintefdarkgreen}.
+    \testcolor{apographpolito-lightgreen}, \testcolor{apographpolito-green}, \testcolor{apographpolito-darkgreen}.
     \item \textbf{Accent Colors}:
-    \testcolor{sintefyellow}, \testcolor{sintefred}, \testcolor{sinteflilla}.
-    \item \textbf{Deprecated Colors} (for backward compatibility):
-    \testcolor{sintefcyan}, \testcolor{sintefmagenta}, \testcolor{sinteflightgrey}.
+    \testcolor{apographpolito-yellow}, \testcolor{apographpolito-red}, \testcolor{apographpolito-purple}.
 \end{itemize}
 \end{frame}

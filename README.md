@@ -9,10 +9,10 @@
 ## Project status
 
 Apograph is in pre-release development. Its source tree contains draft template
-ideas and an in-progress PoliTo Beamer showcase, but no entry is currently
-eligible for public distribution. A template appears as publicly available only
-after its licensing, provenance, documentation, isolated-artifact compilation,
-and compatibility gates pass.
+ideas and a functional unofficial PoliTo Beamer starter/showcase, but no entry
+is currently eligible for public distribution. A template appears as publicly
+available only after its licensing, provenance, documentation,
+isolated-artifact compilation, and compatibility gates pass.
 
 The project deliberately distinguishes source inventory from released products:
 the presence of a directory under `templates/` does not mean that it is ready
