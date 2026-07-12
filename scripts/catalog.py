@@ -509,6 +509,45 @@ def public_templates(catalog: dict[str, Any]) -> list[dict[str, Any]]:
     )
 
 
+def build_ci_matrices(catalog: dict[str, Any]) -> dict[str, dict[str, list[dict[str, str]]]]:
+    """Build deterministic GitHub Actions matrices from validated catalog data."""
+    entries: dict[str, list[dict[str, str]]] = {"latex": [], "typst": []}
+    templates = sorted(catalog.get("templates", []), key=lambda item: item["id"])
+    for template in templates:
+        if template.get("status") not in PUBLIC_STATUSES:
+            continue
+        template_format = template["format"]
+        for entrypoint in template.get("entrypoints", []):
+            if entrypoint.get("role") == "test" or not entrypoint.get("include_in_artifact"):
+                continue
+            entries[template_format].append({
+                "id": f"{template['id']}--{entrypoint['role']}",
+                "template_id": template["id"],
+                "source_dir": template["source_dir"],
+                "main_file": entrypoint["path"],
+                "compiler": template["compiler"],
+                "format": template_format,
+            })
+    return {
+        template_format: {"include": entries[template_format]}
+        for template_format in entries
+    }
+
+
+def render_ci_outputs(catalog: dict[str, Any]) -> str:
+    """Render newline-delimited values suitable for appending to GITHUB_OUTPUT."""
+    matrices = build_ci_matrices(catalog)
+    lines: list[str] = []
+    for template_format in ("latex", "typst"):
+        matrix = matrices[template_format]
+        lines.append(
+            f"{template_format}_matrix="
+            f"{json.dumps(matrix, sort_keys=True, separators=(',', ':'))}"
+        )
+        lines.append(f"has_{template_format}={'true' if matrix['include'] else 'false'}")
+    return "\n".join(lines)
+
+
 def _escape_table(value: Any) -> str:
     return str(value).replace("|", "\\|").replace("\n", " ")
 
@@ -626,6 +665,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         "--status", action="append", choices=sorted(STATUSES), help="filter by status (repeatable)"
     )
 
+    subparsers.add_parser(
+        "ci-matrix", help="emit validated GitHub Actions matrix outputs"
+    )
+
     args = parser.parse_args(argv)
     try:
         catalog = load_catalog()
@@ -638,6 +681,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 print("README template listing updated" if changed else "README template listing already current")
         elif args.command == "list":
             print_templates(catalog, statuses=args.status)
+        elif args.command == "ci-matrix":
+            print(render_ci_outputs(catalog))
     except CatalogValidationError as exc:
         _print_errors(exc.errors)
         return 1

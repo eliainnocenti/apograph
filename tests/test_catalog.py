@@ -1,4 +1,5 @@
 import copy
+import json
 import unittest
 
 from scripts import catalog as catalog_module
@@ -105,6 +106,40 @@ class CatalogValidationTests(unittest.TestCase):
         public_ids = [item["id"] for item in catalog_module.public_templates(self.catalog)]
         self.assertEqual(public_ids, ["presentation-beamer-polito-latex"])
         self.assertNotIn("thesis-polito-msc-latex", public_ids)
+
+    def test_ci_matrix_contains_only_public_publishable_entrypoints(self):
+        matrices = catalog_module.build_ci_matrices(self.catalog)
+
+        self.assertEqual(matrices["typst"], {"include": []})
+        latex_entries = matrices["latex"]["include"]
+        self.assertEqual(
+            [entry["id"] for entry in latex_entries],
+            [
+                "presentation-beamer-polito-latex--starter",
+                "presentation-beamer-polito-latex--showcase",
+            ],
+        )
+        self.assertTrue(
+            all(
+                entry["template_id"] == "presentation-beamer-polito-latex"
+                for entry in latex_entries
+            )
+        )
+        self.assertTrue(
+            all(entry["source_dir"].endswith("/latex") for entry in latex_entries)
+        )
+
+    def test_ci_matrix_output_is_github_output_compatible(self):
+        output = catalog_module.render_ci_outputs(self.catalog)
+        values = dict(line.split("=", 1) for line in output.splitlines())
+
+        self.assertEqual(values["has_latex"], "true")
+        self.assertEqual(values["has_typst"], "false")
+        self.assertEqual(
+            json.loads(values["latex_matrix"]),
+            catalog_module.build_ci_matrices(self.catalog)["latex"],
+        )
+        self.assertEqual(json.loads(values["typst_matrix"]), {"include": []})
 
     def test_readme_generation_is_idempotent(self):
         current = catalog_module.README_PATH.read_text(encoding="utf-8")

@@ -40,6 +40,16 @@ class GovernanceDocumentationTests(unittest.TestCase):
         self.assertIn("Phase 3 completed on 2026-07-12", plan)
         self.assertIn("Execution:** completed on 2026-07-12", plan)
 
+    def test_compile_workflow_uses_tested_catalog_matrix_command(self):
+        workflow = (
+            catalog_module.REPO_ROOT / ".github" / "workflows" / "compile.yml"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn(
+            'python3 scripts/catalog.py ci-matrix >> "$GITHUB_OUTPUT"', workflow
+        )
+        self.assertNotIn("python3 -c", workflow)
+
 
 if __name__ == "__main__":
     unittest.main()

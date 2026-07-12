@@ -30,6 +30,7 @@ Semantic Versioning while it uses a single global release timeline.
   book, and Beamer.
 - Exact-ZIP Overleaf verification for both PoliTo entry points using pdfLaTeX
   and TeX Live 2025.
+- A validated, locally testable catalog-to-CI matrix command for GitHub Actions.
 
 ### Changed
 
@@ -49,6 +50,8 @@ Semantic Versioning while it uses a single global release timeline.
   with TeX Live 2026 and zero-diagnostic Overleaf TeX Live 2025 compilation.
 - Starter content now lives only under `content/`; preview-only source is
   isolated under `showcase/` so users see one document-authoring surface.
+- The compile workflow no longer embeds quote-sensitive Python inside a shell
+  string; it consumes the tested catalog matrix command instead.
 
 ### Removed
 

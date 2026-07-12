@@ -41,39 +41,7 @@ jobs:
 
       - name: Build matrix from CATALOG.json
         id: set-matrix
-        run: |
-          # Extract template entries and build a JSON matrix
-          python3 -c "
-          import json
-          with open('CATALOG.json') as f:
-              catalog = json.load(f)
-          latex_entries = []
-          typst_entries = []
-          for t in catalog['templates']:
-              if t.get('status') not in ('beta', 'stable'):
-                  continue
-              template_format = t.get('format', 'latex')
-              for entrypoint in t.get('entrypoints', []):
-                  if entrypoint.get('role') == 'test':
-                      continue
-                  entry = {
-                      'id': f"{t['id']}--{entrypoint['role']}",
-                      'template_id': t['id'],
-                      'source_dir': t['source_dir'],
-                      'main_file': entrypoint['path'],
-                      'compiler': t.get('compiler', 'pdflatex'),
-                      'format': template_format,
-                  }
-                  if template_format == 'latex':
-                      latex_entries.append(entry)
-                  elif template_format == 'typst':
-                      typst_entries.append(entry)
-          
-          print(f'latex_matrix={json.dumps({\"include\": latex_entries})}')
-          print(f'has_latex={str(len(latex_entries) > 0).lower()}')
-          print(f'typst_matrix={json.dumps({\"include\": typst_entries})}')
-          print(f'has_typst={str(len(typst_entries) > 0).lower()}')
-          " >> "$GITHUB_OUTPUT"
+        run: python3 scripts/catalog.py ci-matrix >> "$GITHUB_OUTPUT"
 
   # ---------------------------------------------------------------------------
   # Compile each LaTeX template

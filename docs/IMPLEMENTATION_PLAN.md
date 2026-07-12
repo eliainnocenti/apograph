@@ -15,6 +15,8 @@ Execution progress:
   component notices, shared-class fixtures, clean TeX Live 2026 artifact
   compilation, maintainer license review, and exact-ZIP Overleaf TeX Live 2025
   verification are recorded; PoliTo Beamer is the first beta entry.
+- Phase 4 started on 2026-07-12 with a tested catalog-to-CI matrix generator;
+  the remaining compile/release workflow replacement is still in progress.
 
 ## 1. Product definition
 
@@ -862,6 +864,8 @@ Exit criteria:
   knowledge.
 
 ### Phase 4 — CI and first release candidate
+
+**Execution:** in progress since 2026-07-12.
 
 **Objective:** automate exactly the workflow used locally.
 
