@@ -1,15 +1,17 @@
 # Release process
 
 Apograph uses one global collection version. Phase 4 established an unpublished
-candidate path; Phase 5 adds a protected tag-publication path for the v0.1.0
-prerelease. Creating a candidate never creates a GitHub Release or an entry in
-the repository's Releases sidebar. A candidate is a workflow artifact attached
-to its Actions run and is subject to that workflow's retention period.
+candidate path; Phase 5 established the protected tag-publication path used for
+the v0.1.0 prerelease. Creating a candidate never creates a GitHub Release or an
+entry in the repository's Releases sidebar. A candidate is a workflow artifact
+attached to its Actions run and is subject to that workflow's retention period.
 
-The candidate path was last verified by manual run `29235596362` for commit
-`847240b6aba98680c099cce93c03c7399b4f9141`. It produced the catalog snapshot,
+The candidate path was last verified by manual run `29241810927` for commit
+`83e81c7712c5e215e110eed89fda561f8bc94cde`. It produced the catalog snapshot,
 ZIP, checksum, preview, build report, and release index and reported
-`Published: false`.
+`Published: false`. Protected-tag run `29242144638` then rebuilt and published
+that commit as the `v0.1.0` prerelease and verified the exact public asset set:
+<https://github.com/eliainnocenti/apograph/releases/tag/v0.1.0>.
 
 ## Preconditions
 

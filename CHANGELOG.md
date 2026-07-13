@@ -44,6 +44,8 @@ Semantic Versioning while it uses a single global release timeline.
   template-problem issue form.
 - Local, VS Code, and Overleaf onboarding plus explicit beta limitations and
   artifact provenance in public and per-template documentation.
+- The public `v0.1.0` prerelease with six verified release assets, protected-tag
+  publication evidence, and a validated one-click Overleaf import.
 
 ### Changed
 

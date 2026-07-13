@@ -20,8 +20,10 @@ Execution progress:
   runner. Manual Release run `29235596362` built one unpublished candidate for
   commit `847240b6aba98680c099cce93c03c7399b4f9141`, uploaded the complete six-file
   candidate set, reported `Published: false`, and created no GitHub Release.
-- Phase 5 began on 2026-07-13. The repository is public and the v0.1.0
-  prerelease is limited to the independently qualified PoliTo Beamer beta.
+- Phase 5 completed on 2026-07-13. The public `v0.1.0` prerelease contains only
+  the independently qualified PoliTo Beamer beta. Its protected-tag run,
+  published assets, checksums, direct download, isolated compilation, and
+  one-click Overleaf import are verified below.
 
 ## 1. Product definition
 
@@ -911,25 +913,52 @@ Exit criteria:
 
 ### Phase 5 — documentation and v0.1.0 beta release
 
-**Execution:** in progress since 2026-07-13.
+**Execution:** completed on 2026-07-13.
+
+Publication evidence:
+
+- Main-branch Compile Templates run `29241049439` passed all six required jobs.
+- Manual Release run `29241810927` built and uploaded the final unpublished
+  six-file candidate for commit
+  `83e81c7712c5e215e110eed89fda561f8bc94cde`.
+- An active tag ruleset, ID `18868148`, targets `v*` and restricts tag creation,
+  updates, deletion, and force-pushes with an explicit repository-admin bypass.
+- Protected-tag Release run `29242144638` accepted `github.ref_protected`,
+  rebuilt and tested the candidate in TeX Live 2026, published the prerelease,
+  and verified its exact public asset set and versioned URLs.
+- The public release is
+  <https://github.com/eliainnocenti/apograph/releases/tag/v0.1.0>. Its six
+  uploaded release assets are the catalog snapshot, ZIP, SHA-256 sidecar,
+  preview, build report, and release index. GitHub additionally presents its
+  standard source archives.
+- The downloaded public ZIP hash is
+  `130f1e0446de2c395bda3381d28f87982e122770e91ce257e4a0d1bb90f02824`;
+  the public preview hash is
+  `ecda8c0e97745d24c3362683a31c995cab64d7276b66e2135c9287e79e8783e9`.
+  The extracted ZIP compiled `main.tex` (5 pages) and `showcase.tex` (30 pages)
+  in isolation with TeX Live 2026 and contained no ignored institution assets.
+- The generated README Preview and Download ZIP URLs resolved to the published
+  assets. Open in Overleaf imported the public ZIP, exposed `config.tex`,
+  `main.tex`, and `showcase.tex`, selected the starter, and compiled it with
+  TeX Live 2025 with zero errors and zero warnings.
 
 **Objective:** publish a small honest release, not a large placeholder catalog.
 
 Tasks:
 
 - [x] Finish root and per-template documentation.
-- [ ] Verify all links and online flows manually once.
+- [x] Verify all links and online flows manually once.
 - [x] Limit the release scope to the PoliTo beta; no draft passes the release
   boundary.
 - [x] Attach previews, checksums, catalog snapshot, and notices.
 - [x] Record known limitations and feedback channels.
-- [ ] Configure the protected `v*` tag ruleset and publish `v0.1.0`.
-- [ ] Record the tag workflow and public-link evidence below.
+- [x] Configure the protected `v*` tag ruleset and publish `v0.1.0`.
+- [x] Record the tag workflow and public-link evidence above.
 
 Exit criteria:
 
-- [ ] A public release exists and is reproducible.
-- [ ] README download and Overleaf actions work.
+- [x] A public release exists and is reproducible.
+- [x] README download and Overleaf actions work.
 - [x] Drafts are not misrepresented as available products.
 
 ### Phase 6 — second generic template
