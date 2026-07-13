@@ -581,7 +581,16 @@ def build_artifact(
     if epoch < 0:
         raise ArtifactError("SOURCE_DATE_EPOCH may not be negative")
 
-    temp_root = Path(tempfile.mkdtemp(prefix=f"apograph-{template['id']}-"))
+    # Keep the complete staging transaction on the destination filesystem.
+    # CI mounts GITHUB_WORKSPACE separately from /tmp, so publishing a /tmp
+    # delivery with os.replace would fail with EXDEV instead of remaining
+    # atomic.
+    temp_root = Path(
+        tempfile.mkdtemp(
+            prefix=f".apograph-{template['id']}-",
+            dir=output_dir,
+        )
+    )
     stage_dir = temp_root / "artifact"
     compile_dir = stage_dir / ".apograph-build"
     delivery_dir = temp_root / "delivery"

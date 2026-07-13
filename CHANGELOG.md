@@ -60,6 +60,9 @@ Semantic Versioning while it uses a single global release timeline.
 - TeX Live container jobs explicitly trust only the mounted GitHub workspace
   for release-mode Git verification, and checkout now uses its pinned Node 24
   release.
+- Artifact delivery staging now lives on the selected output filesystem, so
+  atomic publication also works when CI mounts the workspace separately from
+  `/tmp`.
 
 ### Removed
 

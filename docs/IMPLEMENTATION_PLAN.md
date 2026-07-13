@@ -17,10 +17,10 @@ Execution progress:
   verification are recorded; PoliTo Beamer is the first beta entry.
 - Phase 4 started on 2026-07-12. Catalog discovery and source compilation passed
   GitHub Actions run `29210122561`; pinned artifact-first compile/release
-  workflows and deterministic candidate metadata are implemented. Run
-  `29210672054` exposed container-mounted checkout ownership as the remaining
-  packed-artifact blocker; the workflows now trust only `GITHUB_WORKSPACE`
-  inside their isolated TeX Live containers and await a clean rerun.
+  workflows and deterministic candidate metadata are implemented. Runs
+  `29210672054` and `29234325379` exposed container ownership and cross-device
+  atomic-publication assumptions respectively. Both have targeted fixes with
+  regression coverage; a clean packed-artifact rerun is still required.
 
 ## 1. Product definition
 
@@ -879,7 +879,13 @@ Runner evidence:
   entry points. Its packed-artifact job reached and passed all 36 tests, then
   failed because Git rejected the container-mounted checkout as dubious
   ownership. The workflow-level fix scopes `safe.directory` to
-  `GITHUB_WORKSPACE`; Gate C remains pending until the corrected run succeeds.
+  `GITHUB_WORKSPACE`.
+- Run `29234325379` confirmed that trust fix and again passed catalog, Python,
+  source compilation, and all 36 container tests. Artifact publication then
+  failed with `EXDEV` because `/tmp` and the mounted workspace are different
+  filesystems. The builder now creates its owned staging transaction under the
+  output directory, preserving same-filesystem `os.replace` semantics. Gate C
+  remains pending until the corrected run succeeds.
 
 **Objective:** automate exactly the workflow used locally.
 

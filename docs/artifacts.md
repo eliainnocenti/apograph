@@ -81,8 +81,11 @@ does not allow compilation to be skipped:
 python3 scripts/pack.py --all --mode release --source-commit <sha>
 ```
 
-Outputs are installed only after the temporary build succeeds. Existing output
-files are preserved unless `--force` is explicit. `--keep-failed` retains an
+Outputs are installed only after the temporary build succeeds. The builder
+creates its owned staging directory inside the selected output directory so
+final `os.replace` publication stays atomic even when the operating-system
+temporary directory and workspace are different filesystems. Existing output
+files are preserved unless `--force` is explicit. `--keep-failed` retains that
 owned temporary directory for diagnostics; it never repurposes or clears a
 user-selected directory. Release mode also verifies that the checkout is clean
 and that `--source-commit` exactly matches `HEAD`.

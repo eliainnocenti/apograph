@@ -1,6 +1,7 @@
 import copy
 import hashlib
 import json
+import os
 import tempfile
 import unittest
 import zipfile
@@ -160,6 +161,29 @@ class ArtifactBuilderTests(unittest.TestCase):
             self.build("first")
         rebuilt = self.build("first", force=True)
         self.assertTrue(rebuilt.zip_path.is_file())
+
+    def test_atomic_delivery_is_staged_on_output_filesystem(self):
+        output_dir = (self.root / "first").resolve()
+        real_replace = os.replace
+        published: list[tuple[Path, Path]] = []
+
+        def same_filesystem_replace(source, destination):
+            source_path = Path(source)
+            destination_path = Path(destination)
+            self.assertTrue(source_path.is_relative_to(output_dir))
+            self.assertEqual(destination_path.parent, output_dir)
+            self.assertEqual(source_path.stat().st_dev, output_dir.stat().st_dev)
+            published.append((source_path, destination_path))
+            real_replace(source_path, destination_path)
+
+        with mock.patch(
+            "scripts.apograph.artifacts.os.replace",
+            side_effect=same_filesystem_replace,
+        ):
+            result = self.build("first")
+
+        self.assertEqual(len(published), 3)
+        self.assertTrue(result.zip_path.is_file())
 
     def test_missing_shared_dependency_is_fatal(self):
         (self.root / "shared/latex/apograph-fixture.sty").unlink()
