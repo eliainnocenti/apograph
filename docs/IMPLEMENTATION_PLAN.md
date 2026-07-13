@@ -15,12 +15,11 @@ Execution progress:
   component notices, shared-class fixtures, clean TeX Live 2026 artifact
   compilation, maintainer license review, and exact-ZIP Overleaf TeX Live 2025
   verification are recorded; PoliTo Beamer is the first beta entry.
-- Phase 4 started on 2026-07-12. Catalog discovery and source compilation passed
-  GitHub Actions run `29210122561`; pinned artifact-first compile/release
-  workflows and deterministic candidate metadata are implemented. Runs
-  `29210672054` and `29234325379` exposed container ownership and cross-device
-  atomic-publication assumptions respectively. Both have targeted fixes with
-  regression coverage; a clean packed-artifact rerun is still required.
+- Phase 4 completed on 2026-07-13. Compile run `29235231851` passed catalog,
+  Python, source, packed-artifact, upload, and summary gates from a clean GitHub
+  runner. Manual Release run `29235596362` built one unpublished candidate for
+  commit `847240b6aba98680c099cce93c03c7399b4f9141`, uploaded the complete six-file
+  candidate set, reported `Published: false`, and created no GitHub Release.
 
 ## 1. Product definition
 
@@ -870,7 +869,7 @@ Exit criteria:
 
 ### Phase 4 — CI and first release candidate
 
-**Execution:** in progress since 2026-07-12.
+**Execution:** completed on 2026-07-13.
 
 Runner evidence:
 
@@ -884,8 +883,14 @@ Runner evidence:
   source compilation, and all 36 container tests. Artifact publication then
   failed with `EXDEV` because `/tmp` and the mounted workspace are different
   filesystems. The builder now creates its owned staging transaction under the
-  output directory, preserving same-filesystem `os.replace` semantics. Gate C
-  remains pending until the corrected run succeeds.
+  output directory, preserving same-filesystem `os.replace` semantics.
+- Run `29235231851` passed all six required Compile Templates jobs, including
+  packed artifact creation, candidate upload, and the strict pipeline summary.
+- Manual Release run `29235596362` succeeded for
+  `847240b6aba98680c099cce93c03c7399b4f9141`. It uploaded `CATALOG.json`, the
+  ZIP, ZIP checksum, preview, build report, and release index as one workflow
+  artifact. The summary reported `Published: false`; no tag or GitHub Release
+  was created.
 
 **Objective:** automate exactly the workflow used locally.
 
@@ -899,8 +904,8 @@ Tasks:
 
 Exit criteria:
 
-- Gate C passes from a clean GitHub Actions checkout.
-- The release candidate is byte/file equivalent to the tested output.
+- [x] Gate C passes from a clean GitHub Actions checkout.
+- [x] The release candidate is byte/file equivalent to the tested output.
 
 ### Phase 5 — documentation and v0.1.0 beta release
 

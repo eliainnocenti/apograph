@@ -1,8 +1,16 @@
 # Release process
 
 Apograph has one beta template but no published collection release. Phase 4
-implements an unpublished candidate path and a separately gated tag-publication
-path; creating a candidate never creates a GitHub Release.
+implemented an unpublished candidate path and a separately gated
+tag-publication path; creating a candidate never creates a GitHub Release or an
+entry in the repository's Releases sidebar. An unpublished candidate is a
+workflow artifact attached to its Actions run and is subject to that workflow's
+retention period.
+
+The candidate path was last verified by manual run `29235596362` for commit
+`847240b6aba98680c099cce93c03c7399b4f9141`. It produced the catalog snapshot,
+ZIP, checksum, preview, build report, and release index and reported
+`Published: false`.
 
 ## Preconditions
 

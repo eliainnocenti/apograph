@@ -80,9 +80,9 @@ vendor the exact required shared modules.
 - The PoliTo Beamer beta passes licensing, isolated artifact compilation,
   preview, documentation, and Overleaf TeX Live 2025 import gates.
 - The five other template entries are placeholders.
-- The compile and release workflows now use pinned actions and the canonical
-  artifact builder. Their new packed-artifact and unpublished-candidate paths
-  still require GitHub-runner verification before Phase 4 can close.
+- The compile and release workflows use pinned actions and the canonical
+  artifact builder. Clean-runner packed-artifact and unpublished-candidate
+  paths passed Gate C on 2026-07-13.
 
-The remaining gaps are Phase 4 concerns and are intentionally not hidden by the
-first beta promotion.
+The remaining gaps belong to Phase 5 and later: no public collection release or
+static gallery exists yet, and draft templates are intentionally unavailable.

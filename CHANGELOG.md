@@ -33,6 +33,8 @@ Semantic Versioning while it uses a single global release timeline.
 - A validated, locally testable catalog-to-CI matrix command for GitHub Actions.
 - Release-candidate validation and indexing for ZIPs, previews, checksum
   sidecars, build reports, source commits, catalog snapshots, and source epochs.
+- Clean-runner Gate C evidence and an unpublished six-file release candidate for
+  the first beta template.
 
 ### Changed
 
@@ -63,6 +65,8 @@ Semantic Versioning while it uses a single global release timeline.
 - Artifact delivery staging now lives on the selected output filesystem, so
   atomic publication also works when CI mounts the workspace separately from
   `/tmp`.
+- Candidate uploads now use the fully pinned Node 24-based
+  `actions/upload-artifact` v7.0.1 release.
 
 ### Removed
 

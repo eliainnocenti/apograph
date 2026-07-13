@@ -38,6 +38,7 @@ class GovernanceDocumentationTests(unittest.TestCase):
         self.assertIn("Phase 1 completed on 2026-07-12", plan)
         self.assertIn("Phase 2 completed on 2026-07-12", plan)
         self.assertIn("Phase 3 completed on 2026-07-12", plan)
+        self.assertIn("Phase 4 completed on 2026-07-13", plan)
         self.assertIn("Execution:** completed on 2026-07-12", plan)
 
     def test_compile_workflow_uses_tested_catalog_matrix_command(self):
