@@ -4,11 +4,12 @@
   "title": "Apograph template catalog",
   "type": "object",
   "additionalProperties": false,
-  "required": ["$schema", "schema_version", "release_version", "repository", "templates"],
+  "required": ["$schema", "schema_version", "release_version", "release_channel", "repository", "templates"],
   "properties": {
     "$schema": {"const": "./catalog.schema.json"},
     "schema_version": {"$ref": "#/$defs/semver"},
     "release_version": {"$ref": "#/$defs/semver"},
+    "release_channel": {"enum": ["prerelease", "stable"]},
     "repository": {
       "type": "object",
       "additionalProperties": false,

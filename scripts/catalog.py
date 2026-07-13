@@ -16,7 +16,7 @@ import re
 import sys
 from pathlib import Path, PurePosixPath
 from typing import Any, Iterable, Optional, Sequence
-from urllib.parse import urlparse
+from urllib.parse import quote, urlparse
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -35,6 +35,7 @@ ASSET_MODES = {"bundled", "fetched", "user-provided", "generated", "placeholder"
 LICENSE_STATUSES = {"declared", "review-required", "verified"}
 UPSTREAM_KINDS = {"original", "adapted", "redistributed"}
 OVERLEAF_STATES = {"untested", "compatible", "incompatible", "not-applicable"}
+RELEASE_CHANNELS = {"prerelease", "stable"}
 
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 SEMVER_RE = re.compile(
@@ -46,7 +47,10 @@ SEMVER_RE = re.compile(
 )
 SHA256_RE = re.compile(r"^[a-f0-9]{64}$")
 
-ROOT_FIELDS = {"$schema", "schema_version", "release_version", "repository", "templates"}
+ROOT_FIELDS = {
+    "$schema", "schema_version", "release_version", "release_channel",
+    "repository", "templates",
+}
 REPOSITORY_FIELDS = {"name", "url", "description", "maintainer", "tooling_license"}
 TEMPLATE_FIELDS = {
     "id", "name", "description", "purpose", "variant", "format", "status",
@@ -450,6 +454,12 @@ def validate_catalog(catalog: dict[str, Any], check_repository: bool = True) -> 
         value = catalog.get(field)
         if not isinstance(value, str) or not SEMVER_RE.fullmatch(value):
             errors.append(f"catalog.{field}: expected a semantic version")
+    _enum(
+        catalog.get("release_channel"),
+        RELEASE_CHANNELS,
+        "catalog.release_channel",
+        errors,
+    )
 
     repository = catalog.get("repository")
     if _fields(repository, REPOSITORY_FIELDS, "catalog.repository", errors):
@@ -473,6 +483,18 @@ def validate_catalog(catalog: dict[str, Any], check_repository: bool = True) -> 
                 f"repository: remove duplicate source manifest {path.relative_to(REPO_ROOT)}; "
                 "template.json is generated into artifacts"
             )
+        release_version = catalog.get("release_version")
+        if (
+            isinstance(release_version, str)
+            and SEMVER_RE.fullmatch(release_version)
+            and not release_version.endswith("-dev")
+        ):
+            notes_path = REPO_ROOT / "docs" / "releases" / f"v{release_version}.md"
+            if not notes_path.is_file():
+                errors.append(
+                    "repository: non-development releases require notes at "
+                    f"{notes_path.relative_to(REPO_ROOT)}"
+                )
 
     return errors
 
@@ -507,6 +529,45 @@ def public_templates(catalog: dict[str, Any]) -> list[dict[str, Any]]:
         (template for template in catalog.get("templates", []) if template.get("status") in PUBLIC_STATUSES),
         key=lambda template: (template.get("purpose", ""), template.get("name", "")),
     )
+
+
+def release_tag(catalog: dict[str, Any]) -> str:
+    """Return the immutable GitHub tag associated with this catalog snapshot."""
+    return f"v{catalog['release_version']}"
+
+
+def release_asset_url(catalog: dict[str, Any], filename: str) -> str:
+    """Return one immutable GitHub Release asset URL."""
+    repository_url = catalog["repository"]["url"].rstrip("/")
+    return f"{repository_url}/releases/download/{release_tag(catalog)}/{filename}"
+
+
+def template_release_urls(
+    catalog: dict[str, Any], template: dict[str, Any]
+) -> dict[str, Optional[str]]:
+    """Return catalog-backed public actions for one released template."""
+    template_id = template["id"]
+    download = release_asset_url(catalog, f"{template_id}.zip")
+    has_preview = any(
+        entrypoint.get("include_in_artifact") and entrypoint.get("preview")
+        for entrypoint in template.get("entrypoints", [])
+    )
+    overleaf = None
+    if (
+        template.get("format") == "latex"
+        and template.get("compatibility", {}).get("overleaf") == "compatible"
+    ):
+        overleaf = "https://www.overleaf.com/docs?snip_uri=" + quote(
+            download, safe=""
+        )
+    return {
+        "download": download,
+        "checksum": release_asset_url(catalog, f"{template_id}.zip.sha256"),
+        "preview": release_asset_url(catalog, f"{template_id}.preview.pdf")
+        if has_preview
+        else None,
+        "overleaf": overleaf,
+    }
 
 
 def build_ci_matrices(catalog: dict[str, Any]) -> dict[str, dict[str, list[dict[str, str]]]]:
@@ -561,13 +622,20 @@ def render_public_listing(catalog: dict[str, Any]) -> str:
     lines = [PUBLIC_START, ""]
     if public:
         lines.extend([
-            "| Template | Purpose | Institution | Format | Status | ID |",
-            "|---|---|---|---|---|---|",
+            "| Template | Purpose | Institution | Format | Status | ID | Actions |",
+            "|---|---|---|---|---|---|---|",
         ])
         for template in public:
             institution = template["institution"]
+            urls = template_release_urls(catalog, template)
+            actions = []
+            if urls["preview"]:
+                actions.append(f"[Preview]({urls['preview']})")
+            actions.append(f"[Download ZIP]({urls['download']})")
+            if urls["overleaf"]:
+                actions.append(f"[Open in Overleaf]({urls['overleaf']})")
             lines.append(
-                "| {name} | {purpose} | {institution} ({relationship}) | {format} | {status} | `{id}` |".format(
+                "| {name} | {purpose} | {institution} ({relationship}) | {format} | {status} | `{id}` | {actions} |".format(
                     name=_escape_table(template["name"]),
                     purpose=_escape_table(template["purpose"]),
                     institution=_escape_table(institution["name"]),
@@ -575,6 +643,7 @@ def render_public_listing(catalog: dict[str, Any]) -> str:
                     format=_escape_table(template["format"]),
                     status=_escape_table(template["status"]),
                     id=_escape_table(template["id"]),
+                    actions=" · ".join(actions),
                 )
             )
     else:

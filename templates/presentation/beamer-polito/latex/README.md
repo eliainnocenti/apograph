@@ -18,6 +18,13 @@ Build output can be kept outside the source tree with:
 latexmk -pdf -outdir=out main.tex
 ```
 
+## Start in VS Code
+
+Open the extracted project folder and install the recommended LaTeX Workshop
+extension when prompted. The release artifact includes `.vscode/settings.json`
+with a `latexmk (pdflatex)` recipe that writes generated files under `out/`.
+Open `main.tex` and run **LaTeX Workshop: Build LaTeX project**.
+
 `showcase.tex` is a feature tour used to generate the preview. Its supporting
 slides live under `showcase/`, are not loaded by `main.tex`, and can be removed
 together with `showcase.tex` when you no longer need the component guide. The
@@ -31,6 +38,16 @@ project root. No `TEXINPUTS`, repository checkout, or asset download is needed.
 
 The packed starter and showcase were verified with Overleaf pdfLaTeX and TeX
 Live 2025 on 2026-07-12, without optional institution assets.
+
+## Compatibility and limitations
+
+- Tested with pdfLaTeX in TeX Live 2025 (Overleaf) and TeX Live 2026 (CI).
+- The theme is unofficial and does not claim compliance with a current PoliTo
+  presentation standard.
+- Institution branding is intentionally absent from the distributed ZIP; the
+  compiling fallbacks are the default legal-safe experience.
+- The release is beta: public commands and layout details may still change
+  before a stable release.
 
 ## Project structure
 
@@ -92,3 +109,9 @@ The theme code is GPL-3.0-or-later. Adapted presentation/showcase content is
 CC-BY-4.0. See `NOTICE` for exact upstream revisions, authors, modifications,
 asset exclusions, and the non-endorsement statement. These licenses do not
 grant trademark permission for institution marks.
+
+Release artifacts also contain generated `template.json` and `APOGRAPH.md`
+files recording the collection version, exact source commit, dependency list,
+asset policy, and checksums. Report reproducible problems through
+[Apograph Issues](https://github.com/eliainnocenti/apograph/issues) and include
+the template ID, collection version, compiler, and the smallest failing source.

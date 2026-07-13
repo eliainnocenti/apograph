@@ -347,7 +347,12 @@ def _editor_files(stage_dir: Path, template: Mapping[str, Any]) -> None:
     )
 
 
-def _artifact_readme(template: Mapping[str, Any]) -> str:
+def _artifact_readme(
+    template: Mapping[str, Any],
+    *,
+    release_version: str,
+    source_commit: Optional[str],
+) -> str:
     lines = [
         f"# {template['name']}",
         "",
@@ -401,6 +406,9 @@ def _artifact_readme(template: Mapping[str, Any]) -> str:
             "",
             "This README and `template.json` were generated from Apograph's catalog.",
             "See `template.json` for template, asset, license, and upstream metadata.",
+            f"Collection release: `v{release_version}`.",
+            f"Source commit: `{source_commit or 'developer build (uncommitted)'}`.",
+            "Report problems at https://github.com/eliainnocenti/apograph/issues.",
             "",
         ]
     )
@@ -606,7 +614,14 @@ def build_artifact(
             _editor_files(stage_dir, template)
         readme_path = stage_dir / "README.md"
         generated_readme_name = "README.md" if not readme_path.exists() else "APOGRAPH.md"
-        (stage_dir / generated_readme_name).write_text(_artifact_readme(template), encoding="utf-8")
+        (stage_dir / generated_readme_name).write_text(
+            _artifact_readme(
+                template,
+                release_version=release_version,
+                source_commit=source_commit,
+            ),
+            encoding="utf-8",
+        )
         _write_metadata(
             stage_dir,
             template,

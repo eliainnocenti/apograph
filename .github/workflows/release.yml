@@ -27,9 +27,17 @@ jobs:
           python3 scripts/catalog.py validate
           python3 scripts/catalog.py generate-readme --check
 
+      - name: Read catalog-backed release metadata
+        id: release-metadata
+        run: python3 scripts/release.py github-output >> "$GITHUB_OUTPUT"
+
       - name: Validate publication tag
         if: ${{ startsWith(github.ref, 'refs/tags/v') }}
-        run: python3 scripts/release.py validate-tag --tag "$GITHUB_REF_NAME"
+        env:
+          GITHUB_REF_PROTECTED: ${{ github.ref_protected }}
+        run: >-
+          python3 scripts/release.py validate-tag --tag "$GITHUB_REF_NAME"
+          --ref-protected "$GITHUB_REF_PROTECTED"
 
       - name: Build and verify release outputs in TeX Live 2026
         uses: xu-cheng/texlive-action@22c04326a5d855880f9d39bb955138bf11c6df80 # v3
@@ -59,12 +67,22 @@ jobs:
           retention-days: 30
 
       - name: Publish verified tag artifacts
+        id: publish
         if: ${{ startsWith(github.ref, 'refs/tags/v') }}
-        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3.0.1
         with:
+          name: ${{ steps.release-metadata.outputs.release_name }}
+          body_path: ${{ steps.release-metadata.outputs.release_notes_path }}
+          prerelease: ${{ steps.release-metadata.outputs.prerelease }}
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: build/release/*
+
+      - name: Verify published release assets and URLs
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/release.py verify-published --tag "$GITHUB_REF_NAME"
 
       - name: Release summary
         run: |
@@ -74,6 +92,8 @@ jobs:
             echo "- Commit: \`$GITHUB_SHA\`"
             echo "- Ref: \`$GITHUB_REF_NAME\`"
             echo "- Published: ${{ startsWith(github.ref, 'refs/tags/v') }}"
+            echo "- Channel: ${{ steps.release-metadata.outputs.prerelease == 'true' && 'prerelease' || 'stable' }}"
+            echo "- Release: ${{ steps.publish.outputs.url }}"
             echo
             echo "### Files"
             find build/release -maxdepth 1 -type f -print \

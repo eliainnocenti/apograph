@@ -20,6 +20,8 @@ Execution progress:
   runner. Manual Release run `29235596362` built one unpublished candidate for
   commit `847240b6aba98680c099cce93c03c7399b4f9141`, uploaded the complete six-file
   candidate set, reported `Published: false`, and created no GitHub Release.
+- Phase 5 began on 2026-07-13. The repository is public and the v0.1.0
+  prerelease is limited to the independently qualified PoliTo Beamer beta.
 
 ## 1. Product definition
 
@@ -909,22 +911,26 @@ Exit criteria:
 
 ### Phase 5 — documentation and v0.1.0 beta release
 
+**Execution:** in progress since 2026-07-13.
+
 **Objective:** publish a small honest release, not a large placeholder catalog.
 
 Tasks:
 
-- Finish root and per-template documentation.
-- Verify all links and online flows manually once.
-- Publish only the PoliTo beta and any other template that independently passes
-  all gates.
-- Attach previews, checksums, catalog snapshot, and notices.
-- Record known limitations and feedback channels.
+- [x] Finish root and per-template documentation.
+- [ ] Verify all links and online flows manually once.
+- [x] Limit the release scope to the PoliTo beta; no draft passes the release
+  boundary.
+- [x] Attach previews, checksums, catalog snapshot, and notices.
+- [x] Record known limitations and feedback channels.
+- [ ] Configure the protected `v*` tag ruleset and publish `v0.1.0`.
+- [ ] Record the tag workflow and public-link evidence below.
 
 Exit criteria:
 
-- A public release exists and is reproducible.
-- README download and Overleaf actions work.
-- Drafts are not misrepresented as available products.
+- [ ] A public release exists and is reproducible.
+- [ ] README download and Overleaf actions work.
+- [x] Drafts are not misrepresented as available products.
 
 ### Phase 6 — second generic template
 

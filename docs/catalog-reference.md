@@ -7,7 +7,9 @@ semantics implemented by `scripts/catalog.py`.
 
 - `$schema`: relative schema path.
 - `schema_version`: version of the catalog contract.
-- `release_version`: current collection development/release version.
+- `release_version`: immutable collection version used by tags and asset URLs.
+- `release_channel`: `prerelease` for beta collection releases or `stable` for
+  a normal GitHub Release.
 - `repository`: canonical identity and original-tooling license.
 - `templates`: template records.
 
@@ -61,6 +63,13 @@ Do not insert a guessed SPDX expression merely to satisfy validation.
 The validator enforces stronger evidence for beta/stable entries, including a
 verified license expression, starter entry point, and an explicit Overleaf result
 for LaTeX. Stable entries additionally need preview and tested toolchain data.
+
+The collection version produces the tag `v<release_version>`. Public catalog
+actions resolve directly to assets under that immutable tag; Overleaf receives
+the same ZIP URL through its `snip_uri` import endpoint. The release workflow
+derives the GitHub release name, notes path, and prerelease flag from these root
+fields. A publication tag must match the catalog and changelog and must be
+covered by an active GitHub tag protection ruleset.
 
 ## Commands
 

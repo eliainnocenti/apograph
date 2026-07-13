@@ -134,6 +134,9 @@ class ArtifactBuilderTests(unittest.TestCase):
         self.assertNotIn("theme/assets/undeclared.png", names)
         self.assertIn("`theme/assets/logo.pdf`", readme)
         self.assertIn("no automatic logo download URL", readme)
+        self.assertIn("Collection release: `v0.1.0-dev`", readme)
+        self.assertIn("Source commit: `fixture-commit`", readme)
+        self.assertIn("github.com/eliainnocenti/apograph/issues", readme)
         asset = metadata["artifact"]["assets"][0]
         self.assertFalse(asset["included"])
         self.assertEqual(asset["mode"], "user-provided")

@@ -75,7 +75,7 @@ must be small and composable. Template policy—layout, line spacing, headers,
 captions, and Beamer behavior—normally remains template-local. Release artifacts
 vendor the exact required shared modules.
 
-## Current known gaps
+## Current release boundary
 
 - The PoliTo Beamer beta passes licensing, isolated artifact compilation,
   preview, documentation, and Overleaf TeX Live 2025 import gates.
@@ -83,6 +83,9 @@ vendor the exact required shared modules.
 - The compile and release workflows use pinned actions and the canonical
   artifact builder. Clean-runner packed-artifact and unpublished-candidate
   paths passed Gate C on 2026-07-13.
+- Collection v0.1.0 publishes only that beta as an immutable GitHub prerelease;
+  its README download, preview, and Overleaf actions all resolve to the same
+  versioned artifact.
 
-The remaining gaps belong to Phase 5 and later: no public collection release or
-static gallery exists yet, and draft templates are intentionally unavailable.
+The static gallery and additional independently qualified templates remain
+later phases. Draft templates are intentionally unavailable.

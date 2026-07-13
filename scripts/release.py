@@ -5,11 +5,15 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
 import sys
 from pathlib import Path
 from typing import Any, Optional, Sequence
+from urllib.error import HTTPError, URLError
+from urllib.parse import quote, urlparse
+from urllib.request import Request, urlopen
 
 try:
     from . import catalog as catalog_module
@@ -46,6 +50,121 @@ def validate_release_tag(catalog: dict[str, Any], tag: str, changelog: str) -> s
     if not heading.search(changelog):
         raise ReleaseError(f"CHANGELOG.md has no release heading for {version}")
     return version
+
+
+def validate_protected_ref(value: str) -> None:
+    """Reject publication from a tag without an active GitHub protection rule."""
+    if value.lower() != "true":
+        raise ReleaseError(
+            "publication tag is not protected; configure an active v* tag ruleset"
+        )
+
+
+def release_notes_path(catalog: dict[str, Any]) -> Path:
+    return Path("docs") / "releases" / f"v{catalog['release_version']}.md"
+
+
+def render_github_outputs(catalog: dict[str, Any]) -> str:
+    """Render release metadata for a GitHub Actions output file."""
+    version = catalog["release_version"]
+    return "\n".join(
+        [
+            f"release_version={version}",
+            f"release_tag=v{version}",
+            f"release_name=Apograph v{version}",
+            f"prerelease={'true' if catalog['release_channel'] == 'prerelease' else 'false'}",
+            f"release_notes_path={release_notes_path(catalog).as_posix()}",
+        ]
+    )
+
+
+def expected_release_asset_names(catalog: dict[str, Any]) -> set[str]:
+    """Return the complete public collection asset set for one release."""
+    names = {"CATALOG.json", "release-index.json"}
+    for template in catalog_module.public_templates(catalog):
+        template_id = template["id"]
+        names.update(
+            {
+                f"{template_id}.zip",
+                f"{template_id}.zip.sha256",
+                f"{template_id}.build.json",
+            }
+        )
+        if catalog_module.template_release_urls(catalog, template)["preview"]:
+            names.add(f"{template_id}.preview.pdf")
+    return names
+
+
+def _repository_slug(catalog: dict[str, Any]) -> str:
+    parsed = urlparse(catalog["repository"]["url"])
+    parts = [part for part in parsed.path.split("/") if part]
+    if parsed.netloc.lower() != "github.com" or len(parts) != 2:
+        raise ReleaseError("catalog repository URL is not a canonical GitHub repository")
+    return "/".join(parts)
+
+
+def verify_published_release(
+    catalog: dict[str, Any],
+    tag: str,
+    *,
+    token: Optional[str] = None,
+) -> str:
+    """Verify the published GitHub Release and its exact asset/link set."""
+    repository = _repository_slug(catalog)
+    api_url = (
+        f"https://api.github.com/repos/{repository}/releases/tags/"
+        f"{quote(tag, safe='')}"
+    )
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "apograph-release-verifier/1",
+    }
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    try:
+        with urlopen(Request(api_url, headers=headers), timeout=30) as response:
+            release = json.loads(response.read().decode("utf-8"))
+    except (HTTPError, URLError, OSError, json.JSONDecodeError) as exc:
+        raise ReleaseError(f"could not read published GitHub Release: {exc}") from exc
+    if not isinstance(release, dict):
+        raise ReleaseError("GitHub Release response is not an object")
+    if release.get("tag_name") != tag:
+        raise ReleaseError("published GitHub Release tag does not match")
+    if release.get("draft") is not False:
+        raise ReleaseError("published GitHub Release is still a draft")
+    expected_prerelease = catalog["release_channel"] == "prerelease"
+    if release.get("prerelease") is not expected_prerelease:
+        raise ReleaseError("published GitHub Release channel does not match catalog")
+
+    assets = release.get("assets")
+    if not isinstance(assets, list):
+        raise ReleaseError("published GitHub Release has no asset list")
+    assets_by_name = {
+        asset.get("name"): asset
+        for asset in assets
+        if isinstance(asset, dict) and isinstance(asset.get("name"), str)
+    }
+    expected_names = expected_release_asset_names(catalog)
+    actual_names = set(assets_by_name)
+    if actual_names != expected_names:
+        missing = sorted(expected_names - actual_names)
+        unexpected = sorted(actual_names - expected_names)
+        details = []
+        if missing:
+            details.append(f"missing assets: {', '.join(missing)}")
+        if unexpected:
+            details.append(f"unexpected assets: {', '.join(unexpected)}")
+        raise ReleaseError("published release asset set mismatch; " + "; ".join(details))
+    for name, asset in assets_by_name.items():
+        if asset.get("state") != "uploaded":
+            raise ReleaseError(f"published release asset is not uploaded: {name}")
+        expected_url = catalog_module.release_asset_url(catalog, name)
+        if asset.get("browser_download_url") != expected_url:
+            raise ReleaseError(f"published release URL mismatch: {name}")
+    html_url = release.get("html_url")
+    if not isinstance(html_url, str) or not html_url:
+        raise ReleaseError("published GitHub Release has no public URL")
+    return html_url
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -173,6 +292,7 @@ def assemble_release_candidate(
     index = {
         "format_version": "1.0.0",
         "release_version": catalog["release_version"],
+        "release_channel": catalog["release_channel"],
         "tag": tag,
         "source_commit": source_commit,
         "source_date_epoch": source_epochs.pop(),
@@ -185,6 +305,10 @@ def assemble_release_candidate(
     (build_dir / "release-index.json").write_text(
         json.dumps(index, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
+    actual_files = {path.name for path in build_dir.iterdir() if path.is_file()}
+    expected_files = expected_release_asset_names(catalog)
+    if actual_files != expected_files:
+        raise ReleaseError("assembled release file set does not match catalog")
     return index
 
 
@@ -196,6 +320,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         "validate-tag", help="validate a publication tag against catalog and changelog"
     )
     tag_parser.add_argument("--tag", required=True)
+    tag_parser.add_argument("--ref-protected", required=True)
 
     assemble_parser = subparsers.add_parser(
         "assemble", help="verify build outputs and create release metadata"
@@ -203,6 +328,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     assemble_parser.add_argument("--build-dir", type=Path, required=True)
     assemble_parser.add_argument("--source-commit", required=True)
     assemble_parser.add_argument("--tag")
+
+    subparsers.add_parser(
+        "github-output", help="emit catalog-backed GitHub Release metadata"
+    )
+
+    verify_parser = subparsers.add_parser(
+        "verify-published", help="verify a published GitHub Release and its assets"
+    )
+    verify_parser.add_argument("--tag", required=True)
 
     args = parser.parse_args(argv)
     try:
@@ -212,6 +346,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             version = validate_release_tag(
                 catalog, args.tag, CHANGELOG_PATH.read_text(encoding="utf-8")
             )
+            validate_protected_ref(args.ref_protected)
             print(f"Release tag valid: {version}")
         elif args.command == "assemble":
             index = assemble_release_candidate(
@@ -223,6 +358,16 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             print(
                 f"Release candidate assembled: {len(index['templates'])} template(s)"
             )
+        elif args.command == "github-output":
+            print(render_github_outputs(catalog))
+        elif args.command == "verify-published":
+            validate_release_tag(
+                catalog, args.tag, CHANGELOG_PATH.read_text(encoding="utf-8")
+            )
+            url = verify_published_release(
+                catalog, args.tag, token=os.environ.get("GITHUB_TOKEN")
+            )
+            print(f"Published release verified: {url}")
     except (catalog_module.CatalogValidationError, ReleaseError) as exc:
         print(f"Release validation failed: {exc}", file=sys.stderr)
         return 1

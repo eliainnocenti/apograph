@@ -14,7 +14,7 @@ class GovernanceDocumentationTests(unittest.TestCase):
             catalog_module.REPO_ROOT / "README.md",
             catalog_module.REPO_ROOT / "CONTRIBUTING.md",
             catalog_module.REPO_ROOT / "AGENTS.md",
-            *sorted((catalog_module.REPO_ROOT / "docs").glob("*.md")),
+            *sorted((catalog_module.REPO_ROOT / "docs").rglob("*.md")),
         ]
         missing = []
         for markdown_file in markdown_files:
@@ -85,6 +85,10 @@ class GovernanceDocumentationTests(unittest.TestCase):
         self.assertIn("workflow_dispatch:", release_workflow)
         self.assertIn("scripts/release.py validate-tag", release_workflow)
         self.assertIn("scripts/release.py assemble", release_workflow)
+        self.assertIn("--ref-protected", release_workflow)
+        self.assertIn("github.ref_protected", release_workflow)
+        self.assertIn("scripts/release.py verify-published", release_workflow)
+        self.assertIn("steps.release-metadata.outputs.prerelease", release_workflow)
         self.assertIn("Publish verified tag artifacts", release_workflow)
         self.assertEqual(
             [

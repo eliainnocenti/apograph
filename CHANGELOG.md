@@ -5,6 +5,8 @@ Semantic Versioning while it uses a single global release timeline.
 
 ## Unreleased
 
+## 0.1.0 — 2026-07-13
+
 ### Added
 
 - Approved repository implementation plan.
@@ -35,6 +37,13 @@ Semantic Versioning while it uses a single global release timeline.
   sidecars, build reports, source commits, catalog snapshots, and source epochs.
 - Clean-runner Gate C evidence and an unpublished six-file release candidate for
   the first beta template.
+- Versioned preview, ZIP, checksum, and one-click Overleaf actions generated
+  from the catalog's collection version.
+- Catalog-backed prerelease metadata, protected-tag validation, exact
+  post-publication asset verification, v0.1.0 release notes, and a structured
+  template-problem issue form.
+- Local, VS Code, and Overleaf onboarding plus explicit beta limitations and
+  artifact provenance in public and per-template documentation.
 
 ### Changed
 
@@ -67,6 +76,8 @@ Semantic Versioning while it uses a single global release timeline.
   `/tmp`.
 - Candidate uploads now use the fully pinned Node 24-based
   `actions/upload-artifact` v7.0.1 release.
+- The collection version is now `0.1.0` with the `prerelease` channel; public
+  artifacts record the version and exact source commit in generated guidance.
 
 ### Removed
 

@@ -16,6 +16,15 @@ class CatalogValidationTests(unittest.TestCase):
     def test_repository_catalog_is_valid(self):
         self.assertEqual(catalog_module.validate_catalog(self.catalog), [])
 
+    def test_release_notes_match_collection_version(self):
+        notes = (
+            catalog_module.REPO_ROOT
+            / "docs"
+            / "releases"
+            / f"v{self.catalog['release_version']}.md"
+        )
+        self.assertTrue(notes.is_file())
+
     def test_schema_and_standard_library_validator_fields_stay_aligned(self):
         schema = catalog_module.load_json(catalog_module.SCHEMA_PATH)
         mappings = [
@@ -102,10 +111,27 @@ class CatalogValidationTests(unittest.TestCase):
 
         self.assertIn("PoliTo Beamer Presentation", rendered)
         self.assertIn("| beta | `presentation-beamer-polito-latex` |", rendered)
+        self.assertIn(
+            "/releases/download/v0.1.0/presentation-beamer-polito-latex.zip",
+            rendered,
+        )
+        self.assertIn("https://www.overleaf.com/docs?snip_uri=", rendered)
         self.assertIn("Draft inventory", rendered)
         public_ids = [item["id"] for item in catalog_module.public_templates(self.catalog)]
         self.assertEqual(public_ids, ["presentation-beamer-polito-latex"])
         self.assertNotIn("thesis-polito-msc-latex", public_ids)
+
+    def test_release_urls_are_versioned_and_catalog_backed(self):
+        template = catalog_module.public_templates(self.catalog)[0]
+        urls = catalog_module.template_release_urls(self.catalog, template)
+
+        self.assertEqual(catalog_module.release_tag(self.catalog), "v0.1.0")
+        self.assertEqual(
+            urls["download"],
+            "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/"
+            "presentation-beamer-polito-latex.zip",
+        )
+        self.assertIn("snip_uri=https%3A%2F%2Fgithub.com%2F", urls["overleaf"])
 
     def test_ci_matrix_contains_only_public_publishable_entrypoints(self):
         matrices = catalog_module.build_ci_matrices(self.catalog)

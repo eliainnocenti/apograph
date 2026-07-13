@@ -6,25 +6,24 @@
 [![Compile Templates](https://github.com/eliainnocenti/apograph/actions/workflows/compile.yml/badge.svg)](https://github.com/eliainnocenti/apograph/actions/workflows/compile.yml)
 [![License: MIT](https://img.shields.io/badge/original_tooling-MIT-blue.svg)](LICENSE)
 
-## Project status
+## Current release
 
-Apograph is in pre-release development. The unofficial PoliTo Beamer
-starter/showcase is the first beta entry; the remaining template ideas are
-drafts. A template appears in the public catalog only after its licensing,
-provenance, documentation, isolated-artifact compilation, and compatibility
-gates pass. Canonical release downloads will be published in Phase 5.
+Apograph v0.1.0 is the first public beta. It contains one tested product: the
+**unofficial PoliTo Beamer presentation** starter and showcase. It is not
+endorsed by Politecnico di Torino, and institution logos/backgrounds are not
+redistributed. The remaining template ideas are drafts, not downloads.
 
-The project deliberately distinguishes source inventory from released products:
-the presence of a directory under `templates/` does not mean that it is ready
-for use.
+Use the actions in the catalog below rather than copying a source directory from
+the repository. Each release ZIP is self-contained and is the exact artifact
+compiled by CI.
 
 ## Available templates
 
 <!-- BEGIN GENERATED:PUBLIC_TEMPLATES -->
 
-| Template | Purpose | Institution | Format | Status | ID |
-|---|---|---|---|---|---|
-| PoliTo Beamer Presentation | presentation | Politecnico di Torino (unofficial) | latex | beta | `presentation-beamer-polito-latex` |
+| Template | Purpose | Institution | Format | Status | ID | Actions |
+|---|---|---|---|---|---|---|
+| PoliTo Beamer Presentation | presentation | Politecnico di Torino (unofficial) | latex | beta | `presentation-beamer-polito-latex` | [Preview](https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/presentation-beamer-polito-latex.preview.pdf) · [Download ZIP](https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/presentation-beamer-polito-latex.zip) · [Open in Overleaf](https://www.overleaf.com/docs?snip_uri=https%3A%2F%2Fgithub.com%2Feliainnocenti%2Fapograph%2Freleases%2Fdownload%2Fv0.1.0%2Fpresentation-beamer-polito-latex.zip) |
 
 <details>
 <summary>Draft inventory (not release-ready)</summary>
@@ -48,6 +47,39 @@ python3 scripts/catalog.py generate-readme
 ```
 
 CI checks that it remains synchronized with the catalog.
+
+## Use a template
+
+Choose one of the actions in the public catalog:
+
+- **Preview** opens the PDF produced from the packed showcase.
+- **Download ZIP** gives you the complete starter for local tools and VS Code.
+- **Open in Overleaf** imports that same versioned ZIP into a new Overleaf
+  project; sign-in may be required.
+
+For a local start, extract the ZIP, edit `config.tex` and
+`content/slides.tex`, then run:
+
+```bash
+latexmk -pdf main.tex
+```
+
+In VS Code, open the extracted folder and accept the recommended LaTeX Workshop
+extension. The artifact supplies a build recipe and keeps generated files under
+`out/`. In Overleaf, keep `main.tex` selected as the main document. No repository
+checkout, Python package, CLI installation, custom `TEXINPUTS`, or asset download
+is required.
+
+To verify a local download:
+
+```bash
+shasum -a 256 -c presentation-beamer-polito-latex.zip.sha256
+```
+
+The first beta is tested with pdfLaTeX in TeX Live 2025 on Overleaf and TeX Live
+2026 in CI. See the [v0.1.0 release notes](docs/releases/v0.1.0.md) for known
+limitations. Report reproducible problems through
+[GitHub Issues](https://github.com/eliainnocenti/apograph/issues).
 
 ## Architecture
 

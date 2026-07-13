@@ -1,0 +1,71 @@
+name: Template problem
+description: Report a reproducible problem with an Apograph release artifact.
+title: "[template]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Apograph. Please report behavior from a downloaded release artifact, not an uncommitted monorepo checkout.
+  - type: input
+    id: template
+    attributes:
+      label: Template ID
+      description: Copy the ID from template.json or the public catalog.
+      placeholder: presentation-beamer-polito-latex
+    validations:
+      required: true
+  - type: input
+    id: release
+    attributes:
+      label: Apograph release
+      description: Copy the collection release from template.json or APOGRAPH.md.
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - Overleaf
+        - Local TeX Live or MacTeX
+        - VS Code with LaTeX Workshop
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: toolchain
+    attributes:
+      label: Compiler and distribution
+      placeholder: pdfLaTeX, TeX Live 2026
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Minimal reproduction
+      description: List the smallest steps and source change that reproduce the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and log excerpt
+      description: Paste the relevant compiler output; remove personal or confidential content.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I reproduced this from an unmodified release ZIP before making the minimal change described above.
+          required: true
+        - label: I did not attach institution branding or other files I may not redistribute.
+          required: true

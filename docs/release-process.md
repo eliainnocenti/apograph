@@ -1,11 +1,10 @@
 # Release process
 
-Apograph has one beta template but no published collection release. Phase 4
-implemented an unpublished candidate path and a separately gated
-tag-publication path; creating a candidate never creates a GitHub Release or an
-entry in the repository's Releases sidebar. An unpublished candidate is a
-workflow artifact attached to its Actions run and is subject to that workflow's
-retention period.
+Apograph uses one global collection version. Phase 4 established an unpublished
+candidate path; Phase 5 adds a protected tag-publication path for the v0.1.0
+prerelease. Creating a candidate never creates a GitHub Release or an entry in
+the repository's Releases sidebar. A candidate is a workflow artifact attached
+to its Actions run and is subject to that workflow's retention period.
 
 The candidate path was last verified by manual run `29235596362` for commit
 `847240b6aba98680c099cce93c03c7399b4f9141`. It produced the catalog snapshot,
@@ -21,6 +20,8 @@ ZIP, checksum, preview, build report, and release index and reported
   artifact.
 - Previews are generated from the exact packed artifact.
 - Changelog and global release version agree.
+- A version-matched file exists under `docs/releases/` and records limitations
+  and feedback channels.
 - Artifact names are derived from stable template IDs.
 
 ## Candidate workflow
@@ -38,15 +39,23 @@ ZIP, checksum, preview, build report, and release index and reported
    `release-index.json` that were tested together.
 6. Inspect the candidate file list, notices, and release index. Test direct ZIP
    extraction and Overleaf import for each LaTeX artifact.
-7. Update `release_version` and move the matching changelog entry out of
-   `Unreleased`.
-8. Create the protected `v<release_version>` tag only after candidate approval.
-9. The tag run rebuilds and verifies the candidate, validates tag/catalog/
-   changelog agreement, and publishes exactly its own tested output directory.
-10. Verify every generated release and preview URL after publication.
+7. Set `release_version`, set `release_channel`, add the matching release notes,
+   and move the matching changelog entry out of `Unreleased`.
+8. Configure an active tag ruleset matching `v*`. Restrict tag creation,
+   updates, and deletion; keep an explicit repository-admin bypass for the
+   maintainer who creates an approved release.
+9. Create `v<release_version>` only after candidate approval. The workflow
+   rejects a tag when `github.ref_protected` is false.
+10. The tag run rebuilds and verifies the candidate, validates tag/catalog/
+    changelog agreement, and publishes exactly its own tested output directory.
+11. The workflow queries the published release and fails if its prerelease
+    state, asset names, upload state, or versioned download URLs differ from the
+    catalog-backed expectation.
+12. Manually open the README preview, download, and Overleaf actions once.
 
-The current `0.1.0-dev` version is intentionally rejected by the publication
-tag gate.
+Development (`-dev`) versions are intentionally rejected by the publication
+tag gate. `release_channel: prerelease` maps to GitHub's prerelease flag; it does
+not alter the semantic version or filenames.
 
 ## Failure behavior
 
@@ -56,7 +65,8 @@ They must not be converted to warnings or hidden with `|| true`.
 
 Candidate metadata assembly also fails on missing or unexpected public-template
 reports, developer-mode reports, commit/version mismatches, checksum drift, or
-inconsistent source epochs.
+inconsistent source epochs. Publication additionally fails for an unprotected
+tag or a GitHub Release whose exact public asset set is wrong.
 
 ## Rollback
 
