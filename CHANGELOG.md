@@ -57,6 +57,9 @@ Semantic Versioning while it uses a single global release timeline.
 - Compile and release workflows now pin all actions, run the canonical artifact
   builder in TeX Live 2026, upload the exact tested candidate, and keep manual
   candidates separate from tag-triggered publication.
+- TeX Live container jobs explicitly trust only the mounted GitHub workspace
+  for release-mode Git verification, and checkout now uses its pinned Node 24
+  release.
 
 ### Removed
 

@@ -69,11 +69,30 @@ class GovernanceDocumentationTests(unittest.TestCase):
         self.assertIn("scripts/pack.py --all --mode release", compile_workflow)
         self.assertIn("scripts/release.py assemble", compile_workflow)
         self.assertIn("Upload exact tested release candidate", compile_workflow)
+        safe_directory_command = (
+            'git config --global --add safe.directory "$GITHUB_WORKSPACE"'
+        )
+        self.assertEqual(
+            [
+                line.strip()
+                for line in compile_workflow.splitlines()
+                if "safe.directory" in line
+            ],
+            [safe_directory_command],
+        )
 
         self.assertIn("workflow_dispatch:", release_workflow)
         self.assertIn("scripts/release.py validate-tag", release_workflow)
         self.assertIn("scripts/release.py assemble", release_workflow)
         self.assertIn("Publish verified tag artifacts", release_workflow)
+        self.assertEqual(
+            [
+                line.strip()
+                for line in release_workflow.splitlines()
+                if "safe.directory" in line
+            ],
+            [safe_directory_command],
+        )
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 # Apograph implementation plan
 
 Status: approved architecture, ready for execution  
-Last updated: 2026-07-12
+Last updated: 2026-07-13
 
 Execution progress:
 
@@ -17,8 +17,10 @@ Execution progress:
   verification are recorded; PoliTo Beamer is the first beta entry.
 - Phase 4 started on 2026-07-12. Catalog discovery and source compilation passed
   GitHub Actions run `29210122561`; pinned artifact-first compile/release
-  workflows and deterministic candidate metadata are implemented locally and
-  await runner verification.
+  workflows and deterministic candidate metadata are implemented. Run
+  `29210672054` exposed container-mounted checkout ownership as the remaining
+  packed-artifact blocker; the workflows now trust only `GITHUB_WORKSPACE`
+  inside their isolated TeX Live containers and await a clean rerun.
 
 ## 1. Product definition
 
@@ -869,6 +871,15 @@ Exit criteria:
 ### Phase 4 — CI and first release candidate
 
 **Execution:** in progress since 2026-07-12.
+
+Runner evidence:
+
+- Run `29210122561` passed catalog discovery and both public source entry points.
+- Run `29210672054` passed catalog validation, Python tests, and both source
+  entry points. Its packed-artifact job reached and passed all 36 tests, then
+  failed because Git rejected the container-mounted checkout as dubious
+  ownership. The workflow-level fix scopes `safe.directory` to
+  `GITHUB_WORKSPACE`; Gate C remains pending until the corrected run succeeds.
 
 **Objective:** automate exactly the workflow used locally.
 
