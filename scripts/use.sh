@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 # Thin launcher for Apograph's canonical Python CLI.
 #
-# From a published release:
-#   curl -fsSL https://raw.githubusercontent.com/eliainnocenti/apograph/v0.2.0/scripts/use.sh \
-#     | bash -s -- thesis-polito-latex my-thesis
+# Install the canonical client:
+#   pipx install apograph-templates
 #
 # From a repository checkout:
 #   bash scripts/use.sh thesis-polito-latex my-thesis
@@ -11,8 +10,7 @@
 set -euo pipefail
 
 PRODUCT_PREFIX="apograph-templates "
-REPOSITORY="https://github.com/eliainnocenti/apograph.git"
-CLI_REF="${APOGRAPH_CLI_REF:-v0.2.0}"
+CLI_SPEC="${APOGRAPH_CLI_SPEC:-apograph-templates}"
 
 error() {
     printf 'apograph: error: %s\n' "$*" >&2
@@ -52,7 +50,7 @@ run_pipx() {
     if ! command -v pipx >/dev/null 2>&1; then
         return 1
     fi
-    exec pipx run --spec "git+${REPOSITORY}@${CLI_REF}" apograph new "$@"
+    exec pipx run --spec "${CLI_SPEC}" apograph new "$@"
 }
 
 run_installed "$@" || true
@@ -61,6 +59,6 @@ run_pipx "$@" || true
 
 error "no verified Apograph CLI installation was found"
 error "install pipx, then run:"
-error "  pipx install 'git+${REPOSITORY}@${CLI_REF}'"
+error "  pipx install apograph-templates"
 error "or download a template ZIP directly from the Apograph Releases page"
 exit 1

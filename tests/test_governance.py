@@ -50,6 +50,10 @@ class GovernanceDocumentationTests(unittest.TestCase):
         pyproject = (catalog_module.REPO_ROOT / "pyproject.toml").read_text(
             encoding="utf-8"
         )
+        readme = (catalog_module.REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        launcher = (catalog_module.REPO_ROOT / "scripts" / "use.sh").read_text(
+            encoding="utf-8"
+        )
 
         self.assertIn('name = "apograph-templates"', pyproject)
         self.assertIn('dependencies = []', pyproject)
@@ -61,6 +65,10 @@ class GovernanceDocumentationTests(unittest.TestCase):
             (catalog_module.REPO_ROOT / "MANIFEST.in").read_text(encoding="utf-8"),
             "prune tests\n",
         )
+        self.assertIn("pipx install apograph-templates", readme)
+        self.assertNotIn("pipx install \"git+", readme)
+        self.assertIn('CLI_SPEC="${APOGRAPH_CLI_SPEC:-apograph-templates}"', launcher)
+        self.assertIn('pipx run --spec "${CLI_SPEC}"', launcher)
 
     def test_compile_workflow_uses_tested_catalog_matrix_command(self):
         workflow = (

@@ -4,6 +4,7 @@
 > starter projects.
 
 [![Compile Templates](https://github.com/eliainnocenti/apograph/actions/workflows/compile.yml/badge.svg)](https://github.com/eliainnocenti/apograph/actions/workflows/compile.yml)
+[![PyPI](https://img.shields.io/pypi/v/apograph-templates.svg)](https://pypi.org/project/apograph-templates/)
 [![License: MIT](https://img.shields.io/badge/original_tooling-MIT-blue.svg)](LICENSE)
 
 ## Current release
@@ -75,11 +76,12 @@ reproducible problems through
 ## Command-line setup
 
 The optional `apograph` client discovers only published releases and installs
-the exact catalog-backed ZIP after verifying its SHA-256 digest. In v0.2.0 it is
-distributed from the protected, versioned source tag rather than PyPI:
+the exact catalog-backed ZIP after verifying its SHA-256 digest. Install the
+independently versioned client from [PyPI](https://pypi.org/project/apograph-templates/)
+with Python 3.10 or newer:
 
 ```bash
-pipx install "git+https://github.com/eliainnocenti/apograph.git@v0.2.0"
+pipx install apograph-templates
 ```
 
 Then list, inspect, or create a project:
@@ -97,17 +99,15 @@ destination that already exists and never rewrites template source. Anonymous
 GitHub access is sufficient; `GITHUB_TOKEN` is accepted when users need a higher
 API allowance.
 
-On macOS/Linux, the thin launcher can run an installed client, the current
-checkout, or an isolated `pipx run` client:
+For one-off use without a permanent installation:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/eliainnocenti/apograph/v0.2.0/scripts/use.sh \
-  | bash -s -- thesis-polito-latex my-thesis
+pipx run --spec apograph-templates apograph new \
+  thesis-polito-latex my-thesis
 ```
 
-The PyPI distribution name `apograph` belongs to an unrelated project. If this
-client is later published there, its distribution name will be
-`apograph-templates`; its executable will remain `apograph`.
+The PyPI distribution name `apograph` belongs to an unrelated project. Install
+the distribution `apograph-templates`; its executable is still `apograph`.
 
 ## Architecture
 

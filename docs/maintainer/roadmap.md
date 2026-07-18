@@ -64,7 +64,7 @@ Likely candidates are the generic academic presentation, UniFi thesis, academic
 report, and course-project report. Typst entries should be added only where an
 independently useful Typst design exists; format symmetry is not a goal.
 
-## Current product milestone — Apograph CLI
+## Completed product milestone — Apograph CLI
 
 - [x] Implement a dependency-free Python command-line application with `list`,
   `info`, and `new` commands.
@@ -76,8 +76,8 @@ independently useful Typst design exists; format symmetry is not a goal.
 - [x] Test the source client, wheel, and source distribution in isolation.
 - [x] Configure the protected `pypi` GitHub environment and the PyPI Trusted
   Publisher for `apograph-templates`.
-- [ ] Publish CLI version `0.1.0` after the `v0.2.0` collection release is
-  available for its default end-to-end resolution path.
+- [x] Publish CLI version `0.1.0` after the `v0.2.0` collection release became
+  available, then verify the public wheel against that live release.
 
 ## Later product milestones
 
