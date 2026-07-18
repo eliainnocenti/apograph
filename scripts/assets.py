@@ -359,7 +359,7 @@ def main():
         description="Fetch institutional assets (logos, etc.) for apograph templates.",
         epilog="Examples:\n"
                "  python scripts/assets.py                    # fetch all\n"
-               "  python scripts/assets.py thesis-polito-msc-latex  # fetch for one\n"
+               "  python scripts/assets.py thesis-polito-latex  # fetch for one\n"
                "  python scripts/assets.py --status            # check status\n"
                "  python scripts/assets.py --clean             # remove auto-fetched\n"
                "  python scripts/assets.py --force             # re-download all\n",

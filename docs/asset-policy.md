@@ -59,10 +59,11 @@ with the file absent.
 
 ## Current institution assets
 
-The local PoliTo logo and three used background PNG files are ignored and
-classified as user-provided pending evidence. Their preservation hashes are recorded in
-`docs/WORKTREE_INVENTORY.md`. The PoliTo and UniFi PDF logo placeholders likewise
-represent unresolved user-provided assets, not downloadable dependencies.
+The two PoliTo presentation logos, three presentation backgrounds, and expected
+PoliTo/UniFi thesis logos are ignored and classified as user-provided pending
+redistribution evidence. Local reference copies and historical preservation
+records remain under the ignored `tmp/` maintainer area. Placeholders represent
+expected destination paths, not downloadable dependencies.
 
 ## Human evidence checklist
 

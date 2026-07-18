@@ -10,6 +10,7 @@ from pathlib import Path
 from unittest import mock
 
 from scripts.apograph.artifacts import ArtifactError, build_artifact
+from scripts.apograph.compile import compile_entrypoints
 from scripts import catalog as catalog_module
 
 
@@ -31,7 +32,7 @@ def fixture_template() -> dict:
         },
         "compiler": "pdflatex",
         "compatibility": {"texlive": [], "overleaf": "untested"},
-        "source_dir": "templates/report/fixture/latex",
+        "source_dir": "templates/report/fixture-latex",
         "entrypoints": [
             {"path": "main.tex", "role": "starter", "include_in_artifact": True, "preview": True},
             {"path": "showcase.tex", "role": "showcase", "include_in_artifact": False, "preview": False},
@@ -64,7 +65,7 @@ class ArtifactBuilderTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary.name)
-        self.source = self.root / "templates/report/fixture/latex"
+        self.source = self.root / "templates/report/fixture-latex"
         self.source.mkdir(parents=True)
         shared = self.root / "shared/latex"
         shared.mkdir(parents=True)
@@ -276,12 +277,67 @@ class PoliToArtifactIntegrationTests(unittest.TestCase):
             self.assertIn("LICENSES/CC-BY-4.0.txt", names)
             self.assertIn("beamerthemeapographpolito.sty", names)
             self.assertIn("content/slides.tex", names)
-            self.assertIn("showcase/slides/01-introduction.tex", names)
+            self.assertIn("showcase.tex", names)
+            self.assertFalse(any(name.startswith("showcase/") for name in names))
             self.assertFalse(any(name.startswith("sections/") for name in names))
             self.assertNotIn("theme/beamerthemesintef.sty", names)
             for asset in template["assets"]:
                 if asset["mode"] == "user-provided":
                     self.assertNotIn(asset["local_path"], names)
+
+
+@unittest.skipUnless(shutil.which("latexmk"), "latexmk is required for isolated integration compilation")
+class PoliToThesisArtifactIntegrationTests(unittest.TestCase):
+    def test_packed_thesis_compiles_in_master_and_bachelor_modes_without_logo(self):
+        catalog = catalog_module.load_catalog()
+        template = next(
+            item for item in catalog["templates"] if item["id"] == "thesis-polito-latex"
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            temporary_path = Path(temporary)
+            result = build_artifact(
+                template,
+                temporary_path / "artifact",
+                repo_root=catalog_module.REPO_ROOT,
+                release_version=catalog["release_version"],
+                source_commit="integration-fixture",
+                source_date_epoch=315532800,
+                verify=True,
+            )
+            self.assertEqual(
+                [item.entrypoint for item in result.compilation_results],
+                ["main.tex"],
+            )
+            self.assertIsNone(result.preview_path)
+
+            extracted = temporary_path / "bachelor"
+            with zipfile.ZipFile(result.zip_path) as archive:
+                names = set(archive.namelist())
+                archive.extractall(extracted)
+            self.assertIn("apograph-polito.sty", names)
+            self.assertIn("theme/apograph-polito-thesis.sty", names)
+            self.assertIn("NOTICE", names)
+            self.assertNotIn("theme/assets/polito-logo.pdf", names)
+
+            config_path = extracted / "config.tex"
+            config = config_path.read_text(encoding="utf-8")
+            config_path.write_text(
+                config.replace(
+                    "\\apographBachelorThesisfalse",
+                    "\\apographBachelorThesistrue",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            bachelor_results = compile_entrypoints(
+                template,
+                extracted,
+                temporary_path / "bachelor-output",
+            )
+            self.assertEqual(
+                [item.entrypoint for item in bachelor_results],
+                ["main.tex"],
+            )
 
 
 if __name__ == "__main__":

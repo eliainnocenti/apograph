@@ -40,7 +40,7 @@ def compile_template(template: dict) -> bool:
                 print(f"    {line}", file=sys.stderr)
         return False
 
-    preview_path = source_dir.parent / "preview.pdf"
+    preview_path = source_dir / "preview.pdf"
     shutil.copyfile(results[0].pdf_path, preview_path)
     print(f"  Preview: {preview_path.relative_to(REPO_ROOT)}")
     return True

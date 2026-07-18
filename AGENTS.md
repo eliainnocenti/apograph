@@ -57,9 +57,11 @@ compile the packed PoliTo showcase in isolation as a mandatory check.
 - Do not commit LaTeX auxiliary files.
 - Treat preview PDFs as generated artifacts even when an existing preview is
   temporarily present in the working tree.
-- Use small, reviewable changes aligned with one implementation-plan phase.
-- Update `docs/IMPLEMENTATION_PLAN.md` and `CHANGELOG.md` when a completed phase
-  changes repository contracts.
+- Use small, reviewable changes aligned with one active roadmap milestone.
+- Update `docs/maintainer/roadmap.md` when milestone scope or status changes.
+- Record user-visible release changes only in
+  `docs/releases/v<release_version>.md`; that file is validated and used as the
+  GitHub Release body. Do not create a second changelog narrative.
 
 ## Licensing and provenance
 

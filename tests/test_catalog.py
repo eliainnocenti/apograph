@@ -19,11 +19,19 @@ class CatalogValidationTests(unittest.TestCase):
     def test_release_notes_match_collection_version(self):
         notes = (
             catalog_module.REPO_ROOT
-            / "docs"
-            / "releases"
-            / f"v{self.catalog['release_version']}.md"
+            / catalog_module.release_notes_path(self.catalog)
         )
         self.assertTrue(notes.is_file())
+        self.assertTrue(
+            catalog_module.release_notes_heading_matches(
+                self.catalog, notes.read_text(encoding="utf-8")
+            )
+        )
+        self.assertFalse(
+            catalog_module.release_notes_heading_matches(
+                self.catalog, "# Apograph v999.0.0\n"
+            )
+        )
 
     def test_schema_and_standard_library_validator_fields_stay_aligned(self):
         schema = catalog_module.load_json(catalog_module.SCHEMA_PATH)
@@ -58,6 +66,17 @@ class CatalogValidationTests(unittest.TestCase):
         errors = self.errors_for(candidate)
 
         self.assertTrue(any("may not contain '..'" in error for error in errors), errors)
+
+    def test_source_path_matches_flat_purpose_variant_format_layout(self):
+        catalog = copy.deepcopy(self.catalog)
+        catalog["templates"][0]["source_dir"] = "templates/thesis/polito/latex"
+
+        errors = catalog_module.validate_catalog(catalog, check_repository=False)
+
+        self.assertTrue(
+            any("expected templates/thesis/polito-latex" in error for error in errors),
+            errors,
+        )
 
     def test_public_template_requires_starter_and_verified_license(self):
         candidate = copy.deepcopy(self.catalog)
@@ -119,7 +138,7 @@ class CatalogValidationTests(unittest.TestCase):
         self.assertIn("Draft inventory", rendered)
         public_ids = [item["id"] for item in catalog_module.public_templates(self.catalog)]
         self.assertEqual(public_ids, ["presentation-beamer-polito-latex"])
-        self.assertNotIn("thesis-polito-msc-latex", public_ids)
+        self.assertNotIn("thesis-polito-latex", public_ids)
 
     def test_release_urls_are_versioned_and_catalog_backed(self):
         template = catalog_module.public_templates(self.catalog)[0]
@@ -152,7 +171,7 @@ class CatalogValidationTests(unittest.TestCase):
             )
         )
         self.assertTrue(
-            all(entry["source_dir"].endswith("/latex") for entry in latex_entries)
+            all(entry["source_dir"].endswith("-latex") for entry in latex_entries)
         )
 
     def test_ci_matrix_output_is_github_output_compatible(self):

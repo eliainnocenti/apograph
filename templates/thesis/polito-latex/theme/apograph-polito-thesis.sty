@@ -1,0 +1,104 @@
+% apograph-polito-thesis.sty — unofficial PoliTo thesis title page
+% SPDX-License-Identifier: CC-BY-4.0
+%
+% Adapted from Luigi De Russis's “Politecnico di Torino Thesis Template”.
+% See NOTICE for provenance, modifications, and the non-endorsement statement.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{theme/apograph-polito-thesis}[2026/07/18 v0.1.0 unofficial PoliTo thesis layout]
+
+\RequirePackage{array}
+\RequirePackage{carlito}
+\RequirePackage{etoolbox}
+\RequirePackage{geometry}
+\RequirePackage{graphicx}
+
+\newcommand{\apographLocalized}[2]{\iflanguage{italian}{#1}{#2}}
+\newcommand{\apographAbstractHeading}{\apographLocalized{Sommario}{Abstract}}
+\newcommand{\apographCandidatesHeading}{\apographLocalized{Candidato/i}{Candidate(s)}}
+\newcommand{\apographSupervisorsHeading}{\apographLocalized{Relatore/i}{Supervisor(s)}}
+\newcommand{\apographCosupervisorsHeading}{\apographLocalized{Correlatore/i}{Co-supervisor(s)}}
+\newcommand{\apographAcademicYearHeading}{\apographLocalized{Anno accademico}{Academic year}}
+\newcommand{\apographGraduationSessionHeading}{\apographLocalized{Sessione di laurea}{Graduation session}}
+\newcommand{\apographDegreeHeading}{%
+  \ifapographBachelorThesis
+    \apographLocalized{Corso di laurea}{Bachelor's degree programme}%
+  \else
+    \apographLocalized{Corso di laurea magistrale}{Master's degree programme}%
+  \fi
+}
+\newcommand{\apographThesisKind}{%
+  \ifapographBachelorThesis
+    \apographLocalized{Tesi di laurea}{Bachelor's thesis}%
+  \else
+    \apographLocalized{Tesi di laurea magistrale}{Master's thesis}%
+  \fi
+}
+
+\newcommand{\apographPoliToTitlePage}{%
+  \newgeometry{top=24mm,bottom=28mm,left=30mm,right=30mm}%
+  \begin{titlepage}
+    \thispagestyle{empty}
+    \begingroup
+    \carlito
+    \centering
+
+    \IfFileExists{theme/assets/polito-logo.pdf}{%
+      \includegraphics[width=92mm,height=24mm,keepaspectratio]{theme/assets/polito-logo.pdf}%
+    }{%
+      \fcolorbox{polito-blue}{white}{%
+        \parbox[c][20mm][c]{88mm}{%
+          \centering\color{polito-blue}%
+          {\Large\bfseries Politecnico di Torino\par}%
+          \vspace{1mm}%
+          {\scriptsize Optional user-provided logo omitted}%
+        }%
+      }%
+    }
+
+    \vspace{14mm}
+    {\Large\bfseries Politecnico di Torino\par}
+    \vspace{4mm}
+    {\large \apographDegreeHeading\par}
+    {\large\bfseries \apographDegreeProgramme\par}
+    \vspace{2mm}
+    {\normalsize \apographAcademicYearHeading\ \apographAcademicYear\par}
+    {\normalsize \apographGraduationSessionHeading: \apographGraduationSession\par}
+
+    \vfill
+    {\large\color{polito-blue}\apographThesisKind\par}
+    \vspace{4mm}
+    {\fontsize{24}{29}\selectfont\bfseries\color{polito-blue}%
+      \apographThesisTitle\par}
+    \ifdefempty{\apographThesisSubtitle}{}{%
+      \vspace{3mm}%
+      {\fontsize{15}{19}\selectfont\bfseries\color{polito-grey}%
+        \apographThesisSubtitle\par}%
+    }
+
+    \vfill
+    \begin{minipage}[t]{0.47\textwidth}
+      \raggedright
+      {\bfseries \apographSupervisorsHeading\par}
+      \vspace{1.5mm}
+      \apographSupervisors\par
+      \ifdefempty{\apographCosupervisors}{}{%
+        \vspace{4mm}%
+        {\bfseries \apographCosupervisorsHeading\par}%
+        \vspace{1.5mm}%
+        \apographCosupervisors\par
+      }
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[t]{0.43\textwidth}
+      \raggedleft
+      {\bfseries \apographCandidatesHeading\par}
+      \vspace{1.5mm}
+      \apographCandidates\par
+    \end{minipage}
+
+    \endgroup
+  \end{titlepage}
+  \restoregeometry
+}
+
+\endinput

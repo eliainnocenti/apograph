@@ -12,26 +12,26 @@
   },
   "templates": [
     {
-      "id": "thesis-polito-msc-latex",
-      "name": "PoliTo Master's Thesis",
-      "description": "Draft master's thesis starter for Politecnico di Torino.",
+      "id": "thesis-polito-latex",
+      "name": "PoliTo Thesis",
+      "description": "Unofficial Bachelor's and Master's thesis starter aligned with published Politecnico di Torino guidance.",
       "purpose": "thesis",
-      "variant": "polito-msc",
+      "variant": "polito",
       "format": "latex",
       "status": "draft",
       "institution": {
         "id": "polito",
         "name": "Politecnico di Torino",
         "relationship": "unofficial",
-        "requirements_url": null,
-        "last_verified": null
+        "requirements_url": "https://didattica.polito.it/guida/2025/en/stesura_della_tesi?cds=18&sdu=37",
+        "last_verified": "2026-07-18"
       },
       "compiler": "pdflatex",
       "compatibility": {
-        "texlive": [],
+        "texlive": ["2026"],
         "overleaf": "untested"
       },
-      "source_dir": "templates/thesis/polito-msc/latex",
+      "source_dir": "templates/thesis/polito-latex",
       "entrypoints": [
         {
           "path": "main.tex",
@@ -47,14 +47,22 @@
         "shared/latex/apograph-polito.sty"
       ],
       "license": {
-        "expression": "MIT",
+        "expression": "CC-BY-4.0 AND MIT",
         "status": "declared",
-        "notes": "The current placeholder source is original Apograph work. Institutional formatting requirements remain unverified."
+        "notes": "The adapted thesis starter and title-page implementation retain the upstream CC BY 4.0 terms; Apograph shared modules remain MIT. The template stays draft until final human review and Overleaf verification."
       },
       "upstream": {
-        "kind": "original",
-        "sources": [],
-        "notes": "No external template source has been incorporated into the current draft."
+        "kind": "adapted",
+        "sources": [
+          {
+            "title": "Politecnico di Torino Thesis Template",
+            "url": "https://www.overleaf.com/latex/templates/politecnico-di-torino-thesis-template/cmpmxftwvvbr",
+            "authors": ["Luigi De Russis"],
+            "revision": "Local Overleaf reference snapshot reviewed 2026-07-18",
+            "license": "CC-BY-4.0"
+          }
+        ],
+        "notes": "Apograph adapts the upstream toptesi project into a smaller starter with isolated configuration, a Bachelor/Master metadata switch, optional user-provided logo fallback, and self-contained release packaging. Published PoliTo guidance is a formatting reference, not endorsement."
       },
       "assets": [
         {
@@ -69,20 +77,20 @@
           "license": {
             "expression": null,
             "status": "review-required",
-            "notes": "Redistribution and trademark terms require human evidence."
+            "notes": "PoliTo's student guidance documents private-portal acquisition and academic use. Public redistribution and broader trademark permission for Apograph remain unproven."
           }
         }
       ],
-      "tags": ["thesis", "master", "polito", "politecnico", "torino", "latex"],
+      "tags": ["thesis", "bachelor", "master", "polito", "politecnico", "torino", "latex"],
       "maintainers": [
         {
           "name": "Elia Innocenti",
           "github": "eliainnocenti"
         }
       ],
-      "readiness_notes": "Placeholder only; institutional requirements, starter content, documentation, and compatibility are not yet verified.",
+      "readiness_notes": "Implemented as one configurable Bachelor/Master starter and compared with published thesis guidance. Both modes compile from the isolated packed artifact without a logo in TeX Live 2026. It remains draft pending final licensing review and an exact-ZIP Overleaf test.",
       "created": "2026-06-12",
-      "updated": "2026-07-12"
+      "updated": "2026-07-18"
     },
     {
       "id": "thesis-unifi-bsc-latex",
@@ -104,7 +112,7 @@
         "texlive": [],
         "overleaf": "untested"
       },
-      "source_dir": "templates/thesis/unifi-bsc/latex",
+      "source_dir": "templates/thesis/unifi-bsc-latex",
       "entrypoints": [
         {
           "path": "main.tex",
@@ -153,9 +161,9 @@
           "github": "eliainnocenti"
         }
       ],
-      "readiness_notes": "Placeholder only; institutional requirements, starter content, documentation, and compatibility are not yet verified.",
+      "readiness_notes": "Compiling skeleton only; institutional requirements, representative content, documentation, preview, and compatibility are not yet verified.",
       "created": "2026-06-12",
-      "updated": "2026-07-12"
+      "updated": "2026-07-18"
     },
     {
       "id": "presentation-beamer-academic-latex",
@@ -177,7 +185,7 @@
         "texlive": [],
         "overleaf": "untested"
       },
-      "source_dir": "templates/presentation/beamer-academic/latex",
+      "source_dir": "templates/presentation/beamer-academic-latex",
       "entrypoints": [
         {
           "path": "main.tex",
@@ -208,9 +216,9 @@
           "github": "eliainnocenti"
         }
       ],
-      "readiness_notes": "Placeholder only; theme, starter content, preview, documentation, and compatibility are not implemented.",
+      "readiness_notes": "Compiling skeleton only; theme, representative content, preview, documentation, and compatibility are not implemented.",
       "created": "2026-06-12",
-      "updated": "2026-07-12"
+      "updated": "2026-07-18"
     },
     {
       "id": "presentation-beamer-polito-latex",
@@ -224,15 +232,15 @@
         "id": "polito",
         "name": "Politecnico di Torino",
         "relationship": "unofficial",
-        "requirements_url": null,
-        "last_verified": null
+        "requirements_url": "https://www.polito.it/en/polito/about-us/corporate-image",
+        "last_verified": "2026-07-18"
       },
       "compiler": "pdflatex",
       "compatibility": {
         "texlive": ["2025", "2026"],
         "overleaf": "compatible"
       },
-      "source_dir": "templates/presentation/beamer-polito/latex",
+      "source_dir": "templates/presentation/beamer-polito-latex",
       "entrypoints": [
         {
           "path": "main.tex",
@@ -300,7 +308,7 @@
           "license": {
             "expression": null,
             "status": "review-required",
-            "notes": "The local file is ignored. Source, redistribution permission, and trademark terms require human evidence."
+            "notes": "The local file is ignored. Authorized acquisition paths are documented for students and third parties, but redistribution and trademark permission for Apograph remain unproven."
           }
         },
         {
@@ -315,7 +323,7 @@
           "license": {
             "expression": null,
             "status": "review-required",
-            "notes": "The local file is ignored. Source, redistribution permission, and trademark terms require human evidence."
+            "notes": "The local file is ignored. Authorized acquisition paths are documented for students and third parties, but redistribution and trademark permission for Apograph remain unproven."
           }
         },
         {
@@ -330,7 +338,7 @@
           "license": {
             "expression": null,
             "status": "review-required",
-            "notes": "The local file is ignored. Source and redistribution permission require human evidence."
+            "notes": "The local file is ignored. Mattia Ippoliti's Overleaf project records the original layout and filename, not Apograph redistribution permission."
           }
         },
         {
@@ -345,7 +353,7 @@
           "license": {
             "expression": null,
             "status": "review-required",
-            "notes": "The local file is ignored. Source and redistribution permission require human evidence."
+            "notes": "The local file is ignored. Mattia Ippoliti's Overleaf project records the original layout and filename, not Apograph redistribution permission."
           }
         },
         {
@@ -360,7 +368,7 @@
           "license": {
             "expression": null,
             "status": "review-required",
-            "notes": "The local file is ignored. Source and redistribution permission require human evidence."
+            "notes": "The local file is ignored. Mattia Ippoliti's Overleaf project records the original layout and filename, not Apograph redistribution permission."
           }
         }
       ],
@@ -371,9 +379,9 @@
           "github": "eliainnocenti"
         }
       ],
-      "readiness_notes": "Beta gates passed on 2026-07-12. The packed starter and showcase compile cleanly in isolation with TeX Live 2026 and from the exact uploaded ZIP on Overleaf pdfLaTeX with TeX Live 2025. Overleaf produced 5 starter pages and 30 showcase pages with zero reported errors, warnings, or informational diagnostics. Optional institution assets were absent and their fallbacks compiled successfully.",
+      "readiness_notes": "The v0.1.0 beta gates passed on 2026-07-12: the packed starter and showcase compiled in isolation with TeX Live 2026 and from the exact uploaded ZIP on Overleaf pdfLaTeX with TeX Live 2025. The current source revision restores Mattia Ippoliti's original teaching showcase in one file, retains legal-safe fallbacks, and passed isolated TeX Live 2026 source/artifact gates on 2026-07-18; repeat the exact-ZIP Overleaf test before the next release.",
       "created": "2026-06-12",
-      "updated": "2026-07-13"
+      "updated": "2026-07-18"
     },
     {
       "id": "report-academic-latex",
@@ -395,7 +403,7 @@
         "texlive": [],
         "overleaf": "untested"
       },
-      "source_dir": "templates/report/academic/latex",
+      "source_dir": "templates/report/academic-latex",
       "entrypoints": [
         {
           "path": "main.tex",
@@ -427,9 +435,9 @@
           "github": "eliainnocenti"
         }
       ],
-      "readiness_notes": "Placeholder only; layout, starter content, preview, documentation, and compatibility are not implemented.",
+      "readiness_notes": "Compiling skeleton only; layout, representative content, preview, documentation, and compatibility are not implemented.",
       "created": "2026-06-12",
-      "updated": "2026-07-12"
+      "updated": "2026-07-18"
     },
     {
       "id": "report-course-project-latex",
@@ -451,7 +459,7 @@
         "texlive": [],
         "overleaf": "untested"
       },
-      "source_dir": "templates/report/course-project/latex",
+      "source_dir": "templates/report/course-project-latex",
       "entrypoints": [
         {
           "path": "main.tex",
@@ -489,9 +497,9 @@
           "github": "eliainnocenti"
         }
       ],
-      "readiness_notes": "Placeholder only; neither entry point is implemented or publishable.",
+      "readiness_notes": "Compiling report and companion-slide skeletons only; layout, representative content, preview, documentation, and compatibility are not implemented.",
       "created": "2026-06-12",
-      "updated": "2026-07-12"
+      "updated": "2026-07-18"
     }
   ]
 }

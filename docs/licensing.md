@@ -48,6 +48,28 @@ records the template license as `verified`; the Overleaf project-level CC BY
 label and embedded GPL code notice remain distinct components rather than being
 collapsed into a guessed single license.
 
+### PoliTo thesis
+
+The draft `thesis-polito-latex` adapts Luigi De Russis's “Politecnico di Torino
+Thesis Template” on Overleaf, whose project page identifies Luigi De Russis and
+CC BY 4.0. The source was reviewed as a template for both Bachelor's and
+Master's theses using `toptesi` and a custom title page.
+
+Apograph records the adapted thesis/title-page files as CC-BY-4.0 and the
+separately vendored shared modules as MIT. Its `NOTICE` identifies the upstream,
+the 2026 modifications by Elia Innocenti, published guidance used as design
+evidence, and the non-endorsement boundary. The catalog status remains
+`declared` and the template remains draft until final human review and an
+exact-ZIP Overleaf test; neither published guidance nor the upstream project
+establishes official endorsement. Both degree modes pass isolated packed-
+artifact compilation in TeX Live 2026.
+
+For the current portable baseline, maintainer Elia Innocenti accepted Carlito
+with pdfLaTeX on 2026-07-18. Carlito is documented as a portable sans-serif
+fallback rather than an exact substitute for the Visual Identity Manual's
+Poppins typeface. Optional Poppins support may be added later with its own font
+license record and LuaLaTeX/XeLaTeX compatibility gates.
+
 ### Institution assets
 
 Local PoliTo logos/backgrounds and the expected PoliTo/UniFi logos have no
@@ -62,8 +84,6 @@ that Apograph may redistribute them.
    unofficial open-source template.
 3. Decide whether textual institution references require a non-endorsement or
    trademark notice beyond the current relationship field.
-4. Verify current institutional formatting requirements before describing any
-   thesis template as compliant.
 
 ## Evidence standard
 

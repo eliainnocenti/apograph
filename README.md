@@ -33,7 +33,7 @@ compiled by CI.
 | Academic Beamer Presentation | presentation | Generic / Unaffiliated | latex | `presentation-beamer-academic-latex` |
 | Academic Report | report | Generic / Unaffiliated | latex | `report-academic-latex` |
 | Course Project Report | report | Generic / Unaffiliated | latex | `report-course-project-latex` |
-| PoliTo Master's Thesis | thesis | Politecnico di Torino | latex | `thesis-polito-msc-latex` |
+| PoliTo Thesis | thesis | Politecnico di Torino | latex | `thesis-polito-latex` |
 | UniFi Bachelor's Thesis | thesis | Università degli Studi di Firenze | latex | `thesis-unifi-bsc-latex` |
 
 </details>
@@ -86,7 +86,7 @@ limitations. Report reproducible problems through
 Templates are organized primarily by purpose:
 
 ```text
-templates/<purpose>/<variant>/<format>/
+templates/<purpose>/<variant>-<format>/
 ```
 
 `CATALOG.json` is the only authored metadata source. Institution, format,
@@ -98,10 +98,9 @@ Shared source modules live under `shared/`. During development, maintainers edit
 them once. Release artifacts vendor the exact required modules at ZIP root so a
 downloaded template has no runtime dependency on this repository.
 
-See [the architecture documentation](docs/architecture.md) and the
-[artifact contract](docs/artifacts.md), then the
-[implementation plan](docs/IMPLEMENTATION_PLAN.md), for the complete contracts
-and delivery sequence.
+See the [maintainer development guide](docs/maintainer/development.md) for the
+catalog, authoring, artifact, validation, and release contracts, and the
+[roadmap](docs/maintainer/roadmap.md) for active work.
 
 ## Maintainer quick start
 
@@ -135,16 +134,21 @@ This creates a deterministic ZIP, checksum, build report, and packed-source
 preview under `build/`. `python3 scripts/preview.py <id>` remains a faster
 source-tree convenience and is not the release gate.
 
-## Contributing
+## Adding templates
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before adding a template or institution
-asset. In particular:
+Apograph is currently maintained as a personal curated collection. The public
+repository accepts reproducible bug reports through Issues; a third-party
+contribution workflow can be added later if routine external submissions become
+part of the project. Maintainer rules include:
 
 - new entries start as `draft`;
 - adapted work needs upstream provenance and license evidence;
 - institution marks need a declared redistribution/trademark policy;
 - `official` is reserved for templates endorsed by the represented institution;
 - generated metadata and public listings must not be edited by hand.
+
+The full workflow is in the [maintainer development
+guide](docs/maintainer/development.md).
 
 ## Licensing
 

@@ -1,0 +1,50 @@
+% main.tex — unofficial PoliTo Bachelor/Master thesis starter
+% SPDX-License-Identifier: CC-BY-4.0
+
+% Configuration is loaded first because the degree-level switch selects the
+% appropriate toptesi class module before \documentclass is evaluated.
+\input{config}
+\ifapographBachelorThesis
+  \PassOptionsToPackage{tipotesi=triennale}{toptesi}
+\else
+  \PassOptionsToPackage{tipotesi=magistrale}{toptesi}
+\fi
+\PassOptionsToPackage{numerazioneromana,cucitura=7mm}{toptesi}
+\documentclass[a4paper,12pt,oneside,openright]{toptesi}
+
+\usepackage[english,italian]{babel}
+\usepackage{lmodern}
+\usepackage{apograph-typography}
+\usepackage{apograph-math}
+\usepackage{apograph-polito}
+\usepackage{theme/apograph-polito-thesis}
+\usepackage{csquotes}
+\usepackage[
+  backend=biber,
+  style=numeric,
+  sorting=none,
+  maxbibnames=9,
+  maxcitenames=2
+]{biblatex}
+\addbibresource{bibliography.bib}
+\usepackage[hidelinks]{hyperref}
+
+\begin{document}
+\selectlanguage{\apographDocumentLanguage}
+
+\apographPoliToTitlePage
+
+\frontmatter
+\chapter*{\apographAbstractHeading}
+\addcontentsline{toc}{chapter}{\apographAbstractHeading}
+\input{content/abstract}
+
+\tableofcontents
+
+\mainmatter
+\input{content/chapters/introduction}
+
+\backmatter
+\printbibliography[heading=bibintoc]
+
+\end{document}

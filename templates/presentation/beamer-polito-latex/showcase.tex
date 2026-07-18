@@ -1,0 +1,324 @@
+% showcase.tex — adapted teaching deck and preview source
+% SPDX-License-Identifier: CC-BY-4.0
+%
+% Based on Mattia Ippoliti's “Politecnico di Torino Presentation”.
+% Adapted and packaged for Apograph by Elia Innocenti. See NOTICE.
+\documentclass[aspectratio=169]{beamer}
+
+\usepackage{amsfonts,amsmath,oldgerm}
+\usetheme{apographpolito}
+
+\newcommand{\testcolor}[1]{\colorbox{#1}{\textcolor{#1}{test}}~\texttt{#1}}
+\newcommand{\hrefcol}[2]{\textcolor{cyan}{\href{#1}{#2}}}
+\usefonttheme[onlymath]{serif}
+
+\apographTitleBackground*{theme/assets/background}
+\title{Politecnico di Torino Beamer Presentation Theme}
+\subtitle{Using \LaTeX\ to prepare slides}
+\apographCourse{Master's Degree in Computer Science}
+\author{Mattia Ippoliti (original teaching deck)\\Elia Innocenti (Apograph adaptation)}
+\date{Apograph showcase}
+\apographStudentID{}
+\apographEmail{}
+\apographSetClosingMessage{Thank you for listening!}
+
+\begin{document}
+\maketitle
+
+\begin{frame}{About this adaptation}
+This teaching deck is adapted from
+\hrefcol{https://www.overleaf.com/latex/templates/politecnico-di-torino-presentation/cnypkdbdyqky}{Mattia Ippoliti's PoliTo presentation},
+which in turn derives from
+\hrefcol{https://www.overleaf.com/latex/templates/sintef-presentation/jhbhdffczpnx}{Federico Zenith's SINTEF presentation theme}
+and related Beamer adaptations.
+
+\vspace{\baselineskip}
+
+Elia Innocenti reorganized the project for Apograph, namespaced its public
+commands, separated the minimal starter from this showcase, and added compiling
+fallbacks for assets that Apograph cannot redistribute. Full provenance,
+modification details, and component licenses are in \texttt{NOTICE}.
+\end{frame}
+
+\section{Introduction}
+
+\begin{frame}{Beamer for presentation slides}
+\begin{itemize}
+\item We assume you can use \LaTeX; if you cannot,
+\hrefcol{https://en.wikibooks.org/wiki/LaTeX/}{you can learn it here}
+\item Beamer is one of the most popular and powerful document classes for
+presentations in \LaTeX
+\item Beamer also has a detailed
+\hrefcol{https://ctan.org/pkg/beamer}{user manual}
+\item Here we present only the most basic features needed to get started
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Beamer vs. PowerPoint}
+Compared to PowerPoint, using \LaTeX\ is useful because:
+\begin{itemize}
+\item It is not What-You-See-Is-What-You-Get, but
+What-You-\emph{Mean}-Is-What-You-Get: you write the content and the computer
+does the typesetting
+\item It produces a \texttt{pdf}: fewer problems with fonts, formulas, and
+program versions
+\item It is easier to keep styles, fonts, and highlighting consistent
+\item Math typesetting in \TeX\ is excellent:
+\begin{equation*}
+\mathrm{i}\,\hslash\frac{\partial}{\partial t}\Psi(\mathbf{r},t)=
+-\frac{\hslash^2}{2\,m}\nabla^2\Psi(\mathbf{r},t)
++V(\mathbf{r})\Psi(\mathbf{r},t)
+\end{equation*}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Getting Started}
+\framesubtitle{Selecting the Apograph PoliTo theme}
+Start a presentation with this minimal document:
+\begin{block}{Minimum Apograph Beamer Document}
+\verb|\documentclass[aspectratio=169]{beamer}|\\
+\verb|\usetheme{apographpolito}|\\
+\verb|\begin{document}|\\
+\verb|\begin{frame}{Hello, world!}|\\
+\verb|\end{frame}|\\
+\verb|\end{document}|\\
+\end{block}
+The downloadable project already contains the theme and its dependencies.
+\end{frame}
+
+\begin{frame}[fragile]{Title page}
+Set the ordinary Beamer metadata and the optional course label in the preamble:
+\begin{block}{Commands for the Title Page}
+\begin{verbatim}
+\title{Sample Title}
+\subtitle{Sample subtitle}
+\author{First Author, Second Author}
+\date{\today}
+\apographCourse{Course or event}
+\end{verbatim}
+\end{block}
+Write the title page with \verb|\maketitle|. Use
+\verb|\apographTitleBackground{...}| for a full background, or its starred
+form for a split view on the right. Missing optional images produce a safe
+plain or neutral fallback.
+\end{frame}
+
+\begin{frame}[fragile]{Writing a Simple Slide}
+\framesubtitle{It's really easy!}
+\begin{itemize}[<+->]
+\item A typical slide has a bulleted list
+\item Items can be uncovered in sequence
+\end{itemize}
+\begin{block}{Code for a Page with an Itemised List}<+->
+\begin{verbatim}
+\begin{frame}{Writing a Simple Slide}
+  \framesubtitle{It's really easy!}
+  \begin{itemize}[<+->]
+    \item A typical slide has a bulleted list
+    \item Items can be uncovered in sequence
+  \end{itemize}\end{frame}
+\end{verbatim}
+\end{block}
+\end{frame}
+
+\section{Personalization}
+
+\apographFootlineColor{apographpolito-yellow}
+\begin{frame}[fragile]{Changing Slide Style}
+\begin{itemize}
+\item Select the white or main-color slide style in the preamble with
+\verb|\apographThemeColor{white}| (default) or
+\verb|\apographThemeColor{main}|
+  \begin{itemize}
+  \item Avoid changing it inside the document; Beamer color state is global
+  \end{itemize}
+\item Change the footline color before a frame with
+\verb|\apographFootlineColor{<color>}|
+  \begin{itemize}
+  \item Theme colors include \testcolor{apographpolito-primary},
+  \testcolor{apographpolito-yellow}, \testcolor{apographpolito-green}, and
+  \testcolor{apographpolito-darkgreen}
+  \item Restore the transparent footline with
+  \verb|\apographFootlineColor{}|
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Blocks}
+\begin{columns}
+\begin{column}{0.3\textwidth}
+\begin{block}{Standard Blocks}
+These coordinate with the selected theme and footline color.
+\begin{verbatim}
+\begin{block}{title}
+content...
+\end{block}
+\end{verbatim}
+\end{block}
+\end{column}
+\begin{column}{0.7\textwidth}
+\begin{apographcolorblock}[black]{apographpolito-lightgreen}{Colour Blocks}
+Choose the block color explicitly. Text is white by default, but an optional
+first argument changes it.
+\small
+\begin{verbatim}
+\begin{apographcolorblock}[black]
+  {apographpolito-lightgreen}{title}
+content...
+\end{apographcolorblock}
+\end{verbatim}
+\end{apographcolorblock}
+Other palette choices include \testcolor{apographpolito-purple},
+\testcolor{apographpolito-primary}, \testcolor{apographpolito-darkgreen}, and
+\testcolor{apographpolito-yellow}.
+\end{column}
+\end{columns}
+\end{frame}
+
+\apographFootlineColor{}
+\begin{frame}[fragile]{Using Colours}
+\begin{itemize}[<alert@2>]
+\item Use \verb|\textcolor{<color name>}{text}| for explicit color
+\item The palette exposes stable Apograph names:
+  \begin{itemize}
+  \item Primary: \testcolor{apographpolito-primary} and its light companion
+  \testcolor{apographpolito-light}
+  \item Greens: \testcolor{apographpolito-lightgreen},
+  \testcolor{apographpolito-green}, and
+  \testcolor{apographpolito-darkgreen}
+  \item Accents: \testcolor{apographpolito-yellow},
+  \testcolor{apographpolito-red}, and \testcolor{apographpolito-purple}
+  \end{itemize}
+\item Do not abuse colors: \verb|\emph{}| is usually enough
+\item Use \verb|\alert{}| to bring the \alert<2->{focus} somewhere
+\item<2-|alert@2> If you highlight too much, you do not highlight at all!
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Adding images}
+\begin{columns}
+\begin{column}{0.7\textwidth}
+Adding images works like in normal \LaTeX:
+\begin{block}{Code for Adding Images}
+\begin{verbatim}
+\usepackage{graphicx}
+% ...
+\includegraphics[width=\textwidth]
+  {theme/assets/logo_RGB}
+\end{verbatim}
+\end{block}
+\end{column}
+\begin{column}{0.3\textwidth}
+\IfFileExists{theme/assets/logo_RGB.png}{%
+  \includegraphics[width=\textwidth]{theme/assets/logo_RGB}%
+}{%
+  \centering\fbox{\parbox[c][18mm][c]{0.8\linewidth}{\centering Optional\\user-provided logo}}%
+}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Splitting in Columns}
+Splitting a page is easy and common; typically one side has a picture and the
+other text:
+\begin{columns}
+\begin{column}{0.6\textwidth}
+This is the first column.
+\end{column}
+\begin{column}{0.3\textwidth}
+And this is the second.
+\end{column}
+\end{columns}
+\begin{block}{Column Code}
+\begin{verbatim}
+\begin{columns}
+  \begin{column}{0.6\textwidth}
+    This is the first column
+  \end{column}
+  \begin{column}{0.3\textwidth}
+    And this is the second
+  \end{column}
+\end{columns}
+\end{verbatim}
+\end{block}
+\end{frame}
+
+\begin{apographchapter}[theme/assets/background_negative]{}{Special Slides}
+\begin{itemize}
+\item Chapter slides
+\item Side-picture slides
+\end{itemize}
+\end{apographchapter}
+
+\apographFootlineColor{apographpolito-red}
+\begin{frame}[fragile]{Chapter slides}
+\begin{itemize}
+\item Chapter slides behave like frames with a richer layout
+\item Open one with
+\verb|\begin{apographchapter}[<image>]{<color>}{<title>}|
+\item The image is optional; color and title are mandatory arguments
+\item The palette includes \testcolor{apographpolito-primary},
+\testcolor{apographpolito-darkgreen}, \testcolor{apographpolito-green},
+\testcolor{apographpolito-lightgreen}, \testcolor{apographpolito-red},
+\testcolor{apographpolito-yellow}, and \testcolor{apographpolito-purple}
+\item Matching the following footline to the chapter color can provide useful
+visual continuity
+\end{itemize}
+\end{frame}
+
+\begin{apographsidepic}{theme/assets/background_alternative}{Side-Picture Slides}
+\begin{itemize}
+\item Open one with
+\texttt{\textbackslash begin\{apographsidepic\}\{<image>\}\{<title>\}}
+\item Content behaves like an ordinary frame in the left-hand area
+\item A neutral placeholder appears when the optional image is absent
+\end{itemize}
+\end{apographsidepic}
+
+\apographFootlineColor{}
+\begin{frame}{Fonts}
+\begin{itemize}
+\item The paramount task of fonts is being readable
+\item There are good choices:
+  \begin{itemize}
+  \item {\textrm{Use serif fonts only with high-definition projectors}}
+  \item {\textsf{Use sans-serif fonts otherwise, or if you prefer them}}
+  \end{itemize}
+\item And choices that should be used sparingly:
+  \begin{itemize}
+  \item {\texttt{Avoid monospace for normal prose}}
+  \item {\frakfamily Gothic, calligraphic, or decorative fonts should remain
+  exceptional}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Finishing the presentation}
+\begin{itemize}
+\item Insert a final slide with \verb|\apographBackmatter|
+  \begin{itemize}
+  \item Change its message with \verb|\apographSetClosingMessage{...}|
+  \item Remove the title from it with
+  \verb|\apographBackmatter[notitle]|
+  \item Set footline text explicitly with
+  \verb|\apographFootlineText{...}|
+  \end{itemize}
+\item The starter uses a 16:9 aspect ratio. Converting a finished presentation
+to 4:3 can disturb spacing, so choose the target ratio before authoring.
+\end{itemize}
+\end{frame}
+
+\section{Summary}
+
+\begin{frame}{Good Luck!}
+\begin{itemize}
+\item This is enough for an introduction to the theme and Beamer workflow
+\item Start real work in \texttt{main.tex}, \texttt{config.tex}, and
+\texttt{content/slides.tex}; this showcase is only a reference
+\item Corrections and reproducible problems are welcome through
+\hrefcol{https://github.com/eliainnocenti/apograph/issues}{Apograph Issues}
+\end{itemize}
+\end{frame}
+
+\apographBackmatter
+\end{document}

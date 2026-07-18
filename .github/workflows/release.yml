@@ -74,7 +74,6 @@ jobs:
           name: ${{ steps.release-metadata.outputs.release_name }}
           body_path: ${{ steps.release-metadata.outputs.release_notes_path }}
           prerelease: ${{ steps.release-metadata.outputs.prerelease }}
-          generate_release_notes: true
           fail_on_unmatched_files: true
           files: build/release/*
 

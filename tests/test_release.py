@@ -17,18 +17,22 @@ class ReleaseMetadataTests(unittest.TestCase):
         cls.template = catalog_module.public_templates(cls.catalog)[0]
         cls.source_commit = "a" * 40
 
-    def test_release_tag_must_match_catalog_and_changelog(self):
+    def test_release_tag_must_match_catalog_and_release_notes(self):
         catalog = copy.deepcopy(self.catalog)
 
         version = release_module.validate_release_tag(
-            catalog, "v0.1.0", "# Changelog\n\n## 0.1.0 — 2026-07-13\n"
+            catalog, "v0.1.0", "# Apograph v0.1.0 — first public beta\n"
         )
 
         self.assertEqual(version, "0.1.0")
         with self.assertRaisesRegex(release_module.ReleaseError, "does not match"):
-            release_module.validate_release_tag(catalog, "v0.2.0", "## 0.1.0\n")
-        with self.assertRaisesRegex(release_module.ReleaseError, "no release heading"):
-            release_module.validate_release_tag(catalog, "v0.1.0", "## Unreleased\n")
+            release_module.validate_release_tag(
+                catalog, "v0.2.0", "# Apograph v0.1.0\n"
+            )
+        with self.assertRaisesRegex(release_module.ReleaseError, "has no"):
+            release_module.validate_release_tag(
+                catalog, "v0.1.0", "# Apograph v0.2.0\n"
+            )
 
     def test_development_version_cannot_be_published(self):
         catalog = copy.deepcopy(self.catalog)
@@ -37,8 +41,19 @@ class ReleaseMetadataTests(unittest.TestCase):
             release_module.validate_release_tag(
                 catalog,
                 f"v{catalog['release_version']}",
-                f"## {catalog['release_version']}\n",
+                f"# Apograph v{catalog['release_version']}\n",
             )
+
+    def test_versioned_release_notes_are_required(self):
+        catalog = copy.deepcopy(self.catalog)
+        with tempfile.TemporaryDirectory() as temporary:
+            with mock.patch.object(release_module, "REPO_ROOT", Path(temporary)):
+                with self.assertRaisesRegex(release_module.ReleaseError, "missing release notes"):
+                    release_module.load_release_notes(catalog)
+
+    def test_repository_release_notes_heading_matches_catalog(self):
+        notes = release_module.load_release_notes(self.catalog)
+        release_module.validate_release_notes(self.catalog, notes)
 
     def test_publication_requires_a_protected_tag(self):
         release_module.validate_protected_ref("true")

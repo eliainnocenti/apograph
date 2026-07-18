@@ -18,7 +18,7 @@ help: ## Show this help message
 		awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 	@echo ""
 	@echo "  Examples:"
-	@echo "    make pack ID=thesis-polito-msc-latex"
+	@echo "    make pack ID=thesis-polito-latex"
 	@echo "    make pack-all"
 	@echo "    make preview"
 	@echo "    make pack ID=presentation-beamer-polito-latex FORCE=1"
@@ -48,7 +48,7 @@ check: validate docs-check test ## Run catalog, documentation, artifact, and com
 
 pack: ## Pack a single template into a ZIP (requires ID=<template-id>)
 ifndef ID
-	$(error ID is required. Usage: make pack ID=thesis-polito-msc-latex)
+	$(error ID is required. Usage: make pack ID=thesis-polito-latex)
 endif
 	@python3 scripts/pack.py $(ID) \
 		$(if $(OUT),--out $(OUT),) \
@@ -77,7 +77,7 @@ preview: ## Compile all templates and generate preview PDFs
 
 preview-one: ## Compile a single template (requires ID=<template-id>)
 ifndef ID
-	$(error ID is required. Usage: make preview-one ID=thesis-polito-msc-latex)
+	$(error ID is required. Usage: make preview-one ID=thesis-polito-latex)
 endif
 	@python3 scripts/preview.py $(ID)
 
@@ -113,7 +113,7 @@ clean: ## Remove build artifacts (build/, *.zip, out/ dirs, LaTeX aux files)
 		-o -name "*.snm" -o -name "*.vrb" | xargs rm -f 2>/dev/null || true
 	@echo "Done."
 
-clean-previews: ## Remove all template preview PDFs (tracked in Git)
+clean-previews: ## Remove generated template preview PDFs
 	@echo "Cleaning preview PDFs..."
 	@find templates -name "preview.pdf" -exec rm -f {} + 2>/dev/null || true
 	@echo "Done."

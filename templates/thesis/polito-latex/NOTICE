@@ -1,0 +1,60 @@
+Apograph — unofficial PoliTo Bachelor/Master thesis
+===================================================
+
+This project is not an official Politecnico di Torino template and is not
+endorsed by Politecnico di Torino. Institution names and marks belong to their
+respective owners.
+
+Upstream template
+-----------------
+
+This starter is adapted from:
+
+  Luigi De Russis, “Politecnico di Torino Thesis Template”
+  https://www.overleaf.com/latex/templates/politecnico-di-torino-thesis-template/cmpmxftwvvbr
+  Overleaf project description: Creative Commons CC BY 4.0
+  Local reference snapshot reviewed 2026-07-18
+
+The upstream project describes itself as a template for both Master's and
+Bachelor's theses, built on the maintained toptesi class and aligned with
+published PoliTo thesis guidance and the 2023 Visual Identity Manual.
+
+Apograph modifications
+----------------------
+
+Elia Innocenti adapted and repackaged the source in 2026. Changes include:
+
+- one configuration switch for Bachelor's or Master's toptesi mode;
+- a small config/main/content/theme project structure;
+- line-separated candidate, supervisor, and co-supervisor fields;
+- a custom bilingual title page exposing every field named by published
+  guidance;
+- a compiling text fallback for the absent institution logo;
+- a portable Carlito/pdfLaTeX title-page fallback instead of redistributing
+  Poppins in the current baseline;
+- reduced packages and example content;
+- self-contained Apograph artifact and VS Code integration.
+
+The adapted thesis files are distributed under CC-BY-4.0. The complete text is
+in LICENSES/CC-BY-4.0.txt. Apograph shared modules vendored into an artifact are
+separate MIT-licensed components covered by the repository root license and
+their file headers.
+
+Published guidance
+------------------
+
+The implementation was compared on 2026-07-18 with PoliTo's published thesis
+guidance (“Writing your thesis”) and the cited “Saper Comunicare” and 2023
+Visual Identity Manual references. Those sources are requirements/design
+evidence only: they do not make this adaptation official or endorsed.
+
+Institution asset
+-----------------
+
+The PoliTo logo is not included. It is cataloged as an optional user-provided
+file at theme/assets/polito-logo.pdf. PoliTo's student guidance says enrolled
+users can obtain the title-page template and logo from the private Teaching
+Portal and may use the logo for academic purposes. The public corporate-image
+policy separately states that third-party logo use requires authorization.
+Supplying a file locally does not imply permission to redistribute or use it in
+another context.

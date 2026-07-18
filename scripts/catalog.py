@@ -74,6 +74,21 @@ PUBLIC_START = "<!-- BEGIN GENERATED:PUBLIC_TEMPLATES -->"
 PUBLIC_END = "<!-- END GENERATED:PUBLIC_TEMPLATES -->"
 
 
+def release_notes_path(catalog: dict[str, Any]) -> Path:
+    """Return the required release narrative for the catalog version."""
+    return Path("docs") / "releases" / f"v{catalog['release_version']}.md"
+
+
+def release_notes_heading_matches(catalog: dict[str, Any], notes: str) -> bool:
+    """Return whether release notes start a heading for the catalog version."""
+    version = catalog["release_version"]
+    heading = re.compile(
+        rf"^#\s+Apograph\s+v{re.escape(version)}(?:\s+[-—].*)?\s*$",
+        re.MULTILINE,
+    )
+    return heading.search(notes) is not None
+
+
 class CatalogValidationError(Exception):
     """Raised when catalog validation reports one or more errors."""
 
@@ -278,8 +293,17 @@ def _validate_template(template: Any, index: int, ids: set[str], errors: list[st
     source_path = _safe_relative_path(template.get("source_dir"), f"{context}.source_dir", errors)
     source_dir: Optional[Path] = None
     if source_path is not None:
-        if not source_path.parts or source_path.parts[0] != "templates":
-            errors.append(f"{context}.source_dir: must live below templates/")
+        purpose = template.get("purpose")
+        variant = template.get("variant")
+        if purpose in PURPOSES and isinstance(variant, str) and template_format in FORMATS:
+            expected_source_path = PurePosixPath(
+                "templates", purpose, f"{variant}-{template_format}"
+            )
+            if source_path != expected_source_path:
+                errors.append(
+                    f"{context}.source_dir: expected {expected_source_path} "
+                    "for purpose/variant/format"
+                )
         source_dir = _resolve_repo_path(source_path)
         if not source_dir.is_dir():
             errors.append(f"{context}.source_dir: directory does not exist: {source_path}")
@@ -477,7 +501,7 @@ def validate_catalog(catalog: dict[str, Any], check_repository: bool = True) -> 
         _validate_template(template, index, ids, errors)
 
     if check_repository:
-        duplicate_manifests = sorted(REPO_ROOT.glob("templates/*/*/*/template.json"))
+        duplicate_manifests = sorted((REPO_ROOT / "templates").rglob("template.json"))
         for path in duplicate_manifests:
             errors.append(
                 f"repository: remove duplicate source manifest {path.relative_to(REPO_ROOT)}; "
@@ -489,11 +513,18 @@ def validate_catalog(catalog: dict[str, Any], check_repository: bool = True) -> 
             and SEMVER_RE.fullmatch(release_version)
             and not release_version.endswith("-dev")
         ):
-            notes_path = REPO_ROOT / "docs" / "releases" / f"v{release_version}.md"
+            notes_path = REPO_ROOT / release_notes_path(catalog)
             if not notes_path.is_file():
                 errors.append(
                     "repository: non-development releases require notes at "
                     f"{notes_path.relative_to(REPO_ROOT)}"
+                )
+            elif not release_notes_heading_matches(
+                catalog, notes_path.read_text(encoding="utf-8")
+            ):
+                errors.append(
+                    "repository: release notes must contain a top-level heading "
+                    f"'# Apograph v{release_version}'"
                 )
 
     return errors

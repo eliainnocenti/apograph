@@ -6,7 +6,6 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import re
 import shutil
 import sys
 from pathlib import Path
@@ -24,15 +23,40 @@ except ImportError:  # Direct execution from scripts/.
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-CHANGELOG_PATH = REPO_ROOT / "CHANGELOG.md"
 
 
 class ReleaseError(RuntimeError):
     """Raised when release-candidate evidence is incomplete or inconsistent."""
 
 
-def validate_release_tag(catalog: dict[str, Any], tag: str, changelog: str) -> str:
-    """Validate that a publication tag matches catalog and changelog versions."""
+def release_notes_path(catalog: dict[str, Any]) -> Path:
+    """Return the catalog-versioned release-notes path used by GitHub."""
+    return catalog_module.release_notes_path(catalog)
+
+
+def load_release_notes(catalog: dict[str, Any]) -> str:
+    """Load and validate the single authored release narrative."""
+    relative_path = release_notes_path(catalog)
+    absolute_path = REPO_ROOT / relative_path
+    try:
+        notes = absolute_path.read_text(encoding="utf-8")
+    except FileNotFoundError as exc:
+        raise ReleaseError(f"missing release notes: {relative_path}") from exc
+    validate_release_notes(catalog, notes)
+    return notes
+
+
+def validate_release_notes(catalog: dict[str, Any], release_notes: str) -> None:
+    """Require a top-level heading for the catalog release version."""
+    version = catalog["release_version"]
+    if not catalog_module.release_notes_heading_matches(catalog, release_notes):
+        raise ReleaseError(
+            f"{release_notes_path(catalog)} has no '# Apograph v{version}' heading"
+        )
+
+
+def validate_release_tag(catalog: dict[str, Any], tag: str, release_notes: str) -> str:
+    """Validate a publication tag and its versioned release notes."""
     if not tag.startswith("v") or len(tag) == 1:
         raise ReleaseError("release tag must use the form v<release_version>")
     version = tag[1:]
@@ -43,12 +67,7 @@ def validate_release_tag(catalog: dict[str, Any], tag: str, changelog: str) -> s
         )
     if version.endswith("-dev"):
         raise ReleaseError("development release_version values may not be published")
-    heading = re.compile(
-        rf"^##\s+(?:{re.escape(version)}|\[{re.escape(version)}\])(?:\s+[-—].*)?$",
-        re.MULTILINE,
-    )
-    if not heading.search(changelog):
-        raise ReleaseError(f"CHANGELOG.md has no release heading for {version}")
+    validate_release_notes(catalog, release_notes)
     return version
 
 
@@ -60,12 +79,9 @@ def validate_protected_ref(value: str) -> None:
         )
 
 
-def release_notes_path(catalog: dict[str, Any]) -> Path:
-    return Path("docs") / "releases" / f"v{catalog['release_version']}.md"
-
-
 def render_github_outputs(catalog: dict[str, Any]) -> str:
     """Render release metadata for a GitHub Actions output file."""
+    load_release_notes(catalog)
     version = catalog["release_version"]
     return "\n".join(
         [
@@ -317,7 +333,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     tag_parser = subparsers.add_parser(
-        "validate-tag", help="validate a publication tag against catalog and changelog"
+        "validate-tag", help="validate a publication tag against versioned release notes"
     )
     tag_parser.add_argument("--tag", required=True)
     tag_parser.add_argument("--ref-protected", required=True)
@@ -342,10 +358,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     try:
         catalog = catalog_module.load_catalog()
         catalog_module.require_valid_catalog(catalog)
+        release_notes = load_release_notes(catalog)
         if args.command == "validate-tag":
-            version = validate_release_tag(
-                catalog, args.tag, CHANGELOG_PATH.read_text(encoding="utf-8")
-            )
+            version = validate_release_tag(catalog, args.tag, release_notes)
             validate_protected_ref(args.ref_protected)
             print(f"Release tag valid: {version}")
         elif args.command == "assemble":
@@ -361,9 +376,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         elif args.command == "github-output":
             print(render_github_outputs(catalog))
         elif args.command == "verify-published":
-            validate_release_tag(
-                catalog, args.tag, CHANGELOG_PATH.read_text(encoding="utf-8")
-            )
+            validate_release_tag(catalog, args.tag, release_notes)
             url = verify_published_release(
                 catalog, args.tag, token=os.environ.get("GITHUB_TOKEN")
             )

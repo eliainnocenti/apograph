@@ -1,7 +1,0 @@
-This is a placeholder for: Politecnico di Torino official logo
-Expected file: polito-logo.pdf
-
-The template will compile without this file (using a placeholder box).
-To use the real asset, obtain an authorized copy and save it as:
-  polito-logo.pdf
-Consult CATALOG.json and docs/asset-policy.md for its asset mode.

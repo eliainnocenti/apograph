@@ -60,18 +60,16 @@ out/
 
 # -----------------------------------------------------------------------------
 # Typst build output
-# Typst compiles to PDF; we track preview.pdf explicitly.
+# Typst compiles directly to PDF; previews are generated release artifacts.
 # -----------------------------------------------------------------------------
 # (Typst doesn't generate aux files — just the output PDF)
 
 # -----------------------------------------------------------------------------
 # Generated PDFs
-# We do NOT track compiled PDFs, EXCEPT for:
-#   - preview.pdf files (committed for the catalog)
-#   - asset PDFs in assets/ directories (logos, diagrams)
+# We do NOT track compiled PDFs, EXCEPT for asset PDFs in assets/ directories
+# when their redistribution has been explicitly approved.
 # -----------------------------------------------------------------------------
 *.pdf
-!**/preview.pdf
 !**/assets/**/*.pdf
 
 # Ignore institutional branding assets inside theme/assets/
