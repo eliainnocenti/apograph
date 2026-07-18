@@ -87,7 +87,7 @@
           "github": "eliainnocenti"
         }
       ],
-      "readiness_notes": "Reworked as a faithful packaging of Luigi De Russis's upstream template rather than a visual reinterpretation. Master and Bachelor modes compile from the isolated artifact without a logo in TeX Live 2026; a private reference-logo injection reproduced the upstream eight-page document and title-page design. Maintainer Elia Innocenti successfully compiled a packed ZIP of this source revision on Overleaf with pdfLaTeX on 2026-07-18. The licensing, documentation, isolated-artifact, and Overleaf gates passed for promotion to beta in v0.2.0.",
+      "readiness_notes": "Reworked as a faithful packaging of Luigi De Russis's upstream template rather than a visual reinterpretation. Master and Bachelor modes compile from the isolated artifact without a logo in TeX Live 2026; a private reference-logo injection reproduced the upstream eight-page document and title-page design. Maintainer Elia Innocenti successfully compiled main.tex from the exact v0.2.0 CI candidate ZIP on Overleaf with pdfLaTeX on 2026-07-18 (source commit 815b88c0e482e9895eb4706b408910bf4c6e632d; ZIP sha256 852970798ec775045b235022bf4544416aed5a31cbf0a45114c99ca19d8c4be7). The licensing, documentation, isolated-artifact, and Overleaf gates passed for promotion to beta in v0.2.0.",
       "created": "2026-06-12",
       "updated": "2026-07-18"
     },
@@ -378,7 +378,7 @@
           "github": "eliainnocenti"
         }
       ],
-      "readiness_notes": "The v0.1.0 beta gates passed on 2026-07-12: the packed starter and showcase compiled in isolation with TeX Live 2026 and from the exact uploaded ZIP on Overleaf pdfLaTeX with TeX Live 2025. The current source revision restores Mattia Ippoliti's original teaching showcase in one file, retains legal-safe fallbacks, and passed isolated TeX Live 2026 source/artifact gates on 2026-07-18; repeat the exact-ZIP Overleaf test before the next release.",
+      "readiness_notes": "The v0.1.0 beta gates passed on 2026-07-12: the packed starter and showcase compiled in isolation with TeX Live 2026 and from the exact uploaded ZIP on Overleaf pdfLaTeX with TeX Live 2025. The current source revision restores Mattia Ippoliti's original teaching showcase in one file and retains legal-safe fallbacks. Maintainer Elia Innocenti successfully compiled main.tex and showcase.tex from the exact v0.2.0 CI candidate ZIP on Overleaf with pdfLaTeX on 2026-07-18 (source commit 815b88c0e482e9895eb4706b408910bf4c6e632d; ZIP sha256 2edd4183665f7bba34496a38f095088c2efd9eee093a37112dfb5acfb9c2a8ff). The isolated TeX Live 2026 source/artifact and Overleaf gates passed for v0.2.0.",
       "created": "2026-06-12",
       "updated": "2026-07-18"
     },

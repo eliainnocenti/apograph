@@ -42,7 +42,7 @@ The first public prerelease is `v0.1.0`.
 - [x] Select `v0.2.0` as the next collection version and include the two verified
   PoliTo beta templates.
 - [x] Promote the PoliTo thesis to beta and write the versioned release notes.
-- [ ] Verify both exact, CI-built `v0.2.0` ZIPs on Overleaf before creating the
+- [x] Verify both exact, CI-built `v0.2.0` ZIPs on Overleaf before creating the
   protected release tag.
 
 The PoliTo thesis is promoted in `v0.2.0`; generated links now target that new
@@ -66,12 +66,18 @@ independently useful Typst design exists; format symmetry is not a goal.
 
 ## Current product milestone — Apograph CLI
 
-- Implement a dependency-free Python command-line application with `list`,
+- [x] Implement a dependency-free Python command-line application with `list`,
   `info`, and `new` commands.
-- Resolve only published GitHub Release assets through `release-index.json`.
-- Verify SHA-256 checksums and extract through a safe, atomic destination flow.
-- Keep the shell entry point as a thin convenience launcher.
-- Exercise the CLI from its source tree before deciding on PyPI publication.
+- [x] Resolve only published GitHub Release assets through
+  `release-index.json`.
+- [x] Verify SHA-256 checksums and extract through a safe, atomic destination
+  flow.
+- [x] Keep the shell entry point as a thin convenience launcher.
+- [x] Test the source client, wheel, and source distribution in isolation.
+- [x] Configure the protected `pypi` GitHub environment and the PyPI Trusted
+  Publisher for `apograph-templates`.
+- [ ] Publish CLI version `0.1.0` after the `v0.2.0` collection release is
+  available for its default end-to-end resolution path.
 
 ## Later product milestones
 
