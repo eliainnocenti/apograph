@@ -125,29 +125,37 @@ class CatalogValidationTests(unittest.TestCase):
         self.assertTrue(any("shared_deps[0]" in error for error in errors), errors)
         self.assertTrue(any("tags[0]" in error for error in errors), errors)
 
-    def test_public_listing_separates_beta_from_drafts(self):
+    def test_public_listing_excludes_drafts(self):
         rendered = catalog_module.render_public_listing(self.catalog)
 
         self.assertIn("PoliTo Beamer Presentation", rendered)
         self.assertIn("| beta | `presentation-beamer-polito-latex` |", rendered)
+        self.assertIn("| beta | `thesis-polito-latex` |", rendered)
         self.assertIn(
-            "/releases/download/v0.1.0/presentation-beamer-polito-latex.zip",
+            "/releases/download/v0.2.0/presentation-beamer-polito-latex.zip",
             rendered,
         )
         self.assertIn("https://www.overleaf.com/docs?snip_uri=", rendered)
-        self.assertIn("Draft inventory", rendered)
+        self.assertNotIn("Draft inventory", rendered)
+        self.assertNotIn("Academic Beamer Presentation", rendered)
+        self.assertNotIn("UniFi Bachelor's Thesis", rendered)
         public_ids = [item["id"] for item in catalog_module.public_templates(self.catalog)]
-        self.assertEqual(public_ids, ["presentation-beamer-polito-latex"])
-        self.assertNotIn("thesis-polito-latex", public_ids)
+        self.assertEqual(
+            public_ids,
+            ["presentation-beamer-polito-latex", "thesis-polito-latex"],
+        )
 
     def test_release_urls_are_versioned_and_catalog_backed(self):
-        template = catalog_module.public_templates(self.catalog)[0]
+        template = next(
+            item for item in catalog_module.public_templates(self.catalog)
+            if item["id"] == "presentation-beamer-polito-latex"
+        )
         urls = catalog_module.template_release_urls(self.catalog, template)
 
-        self.assertEqual(catalog_module.release_tag(self.catalog), "v0.1.0")
+        self.assertEqual(catalog_module.release_tag(self.catalog), "v0.2.0")
         self.assertEqual(
             urls["download"],
-            "https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/"
+            "https://github.com/eliainnocenti/apograph/releases/download/v0.2.0/"
             "presentation-beamer-polito-latex.zip",
         )
         self.assertIn("snip_uri=https%3A%2F%2Fgithub.com%2F", urls["overleaf"])
@@ -162,13 +170,12 @@ class CatalogValidationTests(unittest.TestCase):
             [
                 "presentation-beamer-polito-latex--starter",
                 "presentation-beamer-polito-latex--showcase",
+                "thesis-polito-latex--starter",
             ],
         )
-        self.assertTrue(
-            all(
-                entry["template_id"] == "presentation-beamer-polito-latex"
-                for entry in latex_entries
-            )
+        self.assertEqual(
+            {entry["template_id"] for entry in latex_entries},
+            {"presentation-beamer-polito-latex", "thesis-polito-latex"},
         )
         self.assertTrue(
             all(entry["source_dir"].endswith("-latex") for entry in latex_entries)

@@ -14,24 +14,26 @@ class ReleaseMetadataTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.catalog = catalog_module.load_catalog()
-        cls.template = catalog_module.public_templates(cls.catalog)[0]
+        cls.templates = catalog_module.public_templates(cls.catalog)
+        cls.template = cls.templates[0]
         cls.source_commit = "a" * 40
 
     def test_release_tag_must_match_catalog_and_release_notes(self):
         catalog = copy.deepcopy(self.catalog)
 
+        tag = f"v{catalog['release_version']}"
         version = release_module.validate_release_tag(
-            catalog, "v0.1.0", "# Apograph v0.1.0 — first public beta\n"
+            catalog, tag, f"# Apograph {tag} — fixture\n"
         )
 
-        self.assertEqual(version, "0.1.0")
+        self.assertEqual(version, catalog["release_version"])
         with self.assertRaisesRegex(release_module.ReleaseError, "does not match"):
             release_module.validate_release_tag(
-                catalog, "v0.2.0", "# Apograph v0.1.0\n"
+                catalog, "v9.9.9", f"# Apograph {tag}\n"
             )
         with self.assertRaisesRegex(release_module.ReleaseError, "has no"):
             release_module.validate_release_tag(
-                catalog, "v0.1.0", "# Apograph v0.2.0\n"
+                catalog, tag, "# Apograph v9.9.9\n"
             )
 
     def test_development_version_cannot_be_published(self):
@@ -65,36 +67,43 @@ class ReleaseMetadataTests(unittest.TestCase):
             line.split("=", 1)
             for line in release_module.render_github_outputs(self.catalog).splitlines()
         )
-        self.assertEqual(values["release_tag"], "v0.1.0")
+        self.assertEqual(values["release_tag"], "v0.2.0")
         self.assertEqual(values["prerelease"], "true")
-        self.assertEqual(values["release_notes_path"], "docs/releases/v0.1.0.md")
+        self.assertEqual(values["release_notes_path"], "docs/releases/v0.2.0.md")
 
     def write_candidate(self, build_dir: Path, *, mode: str = "release") -> None:
-        template_id = self.template["id"]
-        zip_name = f"{template_id}.zip"
-        preview_name = f"{template_id}.preview.pdf"
-        zip_bytes = b"deterministic zip fixture"
-        preview_bytes = b"preview fixture"
-        zip_sha256 = hashlib.sha256(zip_bytes).hexdigest()
-        preview_sha256 = hashlib.sha256(preview_bytes).hexdigest()
-        (build_dir / zip_name).write_bytes(zip_bytes)
-        (build_dir / preview_name).write_bytes(preview_bytes)
-        (build_dir / f"{zip_name}.sha256").write_text(
-            f"{zip_sha256}  {zip_name}\n", encoding="utf-8"
-        )
-        report = {
-            "template_id": template_id,
-            "status": self.template["status"],
-            "mode": mode,
-            "release_version": self.catalog["release_version"],
-            "source_commit": self.source_commit,
-            "source_date_epoch": 315532800,
-            "artifact": {"path": zip_name, "sha256": zip_sha256},
-            "preview": {"path": preview_name, "sha256": preview_sha256},
-        }
-        (build_dir / f"{template_id}.build.json").write_text(
-            json.dumps(report), encoding="utf-8"
-        )
+        for template in self.templates:
+            template_id = template["id"]
+            zip_name = f"{template_id}.zip"
+            zip_bytes = f"deterministic ZIP fixture for {template_id}".encode()
+            zip_sha256 = hashlib.sha256(zip_bytes).hexdigest()
+            (build_dir / zip_name).write_bytes(zip_bytes)
+            (build_dir / f"{zip_name}.sha256").write_text(
+                f"{zip_sha256}  {zip_name}\n", encoding="utf-8"
+            )
+            preview = None
+            if any(
+                entrypoint.get("include_in_artifact") and entrypoint.get("preview")
+                for entrypoint in template["entrypoints"]
+            ):
+                preview_name = f"{template_id}.preview.pdf"
+                preview_bytes = f"preview fixture for {template_id}".encode()
+                preview_sha256 = hashlib.sha256(preview_bytes).hexdigest()
+                (build_dir / preview_name).write_bytes(preview_bytes)
+                preview = {"path": preview_name, "sha256": preview_sha256}
+            report = {
+                "template_id": template_id,
+                "status": template["status"],
+                "mode": mode,
+                "release_version": self.catalog["release_version"],
+                "source_commit": self.source_commit,
+                "source_date_epoch": 315532800,
+                "artifact": {"path": zip_name, "sha256": zip_sha256},
+                "preview": preview,
+            }
+            (build_dir / f"{template_id}.build.json").write_text(
+                json.dumps(report), encoding="utf-8"
+            )
 
     def test_assemble_verifies_and_indexes_release_outputs(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -109,7 +118,7 @@ class ReleaseMetadataTests(unittest.TestCase):
             self.assertEqual(index["release_channel"], "prerelease")
             self.assertEqual(
                 [template["id"] for template in index["templates"]],
-                [self.template["id"]],
+                [template["id"] for template in self.templates],
             )
             self.assertTrue((build_dir / "CATALOG.json").is_file())
             self.assertTrue((build_dir / "release-index.json").is_file())
@@ -148,10 +157,10 @@ class ReleaseMetadataTests(unittest.TestCase):
             )
         ]
         payload = {
-            "tag_name": "v0.1.0",
+            "tag_name": "v0.2.0",
             "draft": False,
             "prerelease": True,
-            "html_url": "https://github.com/eliainnocenti/apograph/releases/tag/v0.1.0",
+            "html_url": "https://github.com/eliainnocenti/apograph/releases/tag/v0.2.0",
             "assets": assets,
         }
 
@@ -159,7 +168,7 @@ class ReleaseMetadataTests(unittest.TestCase):
         response.__enter__.return_value.read.return_value = json.dumps(payload).encode()
         with mock.patch("scripts.release.urlopen", return_value=response):
             url = release_module.verify_published_release(
-                self.catalog, "v0.1.0", token="fixture-token"
+                self.catalog, "v0.2.0", token="fixture-token"
             )
 
         self.assertEqual(url, payload["html_url"])

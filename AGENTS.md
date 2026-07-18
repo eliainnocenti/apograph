@@ -43,7 +43,7 @@ Before handing off catalog or governance work, run:
 python3 scripts/catalog.py validate
 python3 scripts/catalog.py generate-readme --check
 python3 -m unittest discover -s tests -v
-python3 -m py_compile scripts/*.py
+python3 -m compileall -q scripts src
 git diff --check
 ```
 

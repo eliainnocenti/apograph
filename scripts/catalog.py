@@ -646,10 +646,6 @@ def _escape_table(value: Any) -> str:
 
 def render_public_listing(catalog: dict[str, Any]) -> str:
     public = public_templates(catalog)
-    drafts = sorted(
-        (template for template in catalog.get("templates", []) if template.get("status") == "draft"),
-        key=lambda template: (template.get("purpose", ""), template.get("name", "")),
-    )
     lines = [PUBLIC_START, ""]
     if public:
         lines.extend([
@@ -684,26 +680,6 @@ def render_public_listing(catalog: dict[str, Any]) -> str:
             "documentation, and compatibility gates pass.",
         ])
 
-    if drafts:
-        lines.extend([
-            "",
-            "<details>",
-            "<summary>Draft inventory (not release-ready)</summary>",
-            "",
-            "| Draft | Purpose | Institution | Format | ID |",
-            "|---|---|---|---|---|",
-        ])
-        for template in drafts:
-            lines.append(
-                "| {name} | {purpose} | {institution} | {format} | `{id}` |".format(
-                    name=_escape_table(template["name"]),
-                    purpose=_escape_table(template["purpose"]),
-                    institution=_escape_table(template["institution"]["name"]),
-                    format=_escape_table(template["format"]),
-                    id=_escape_table(template["id"]),
-                )
-            )
-        lines.extend(["", "</details>"])
     lines.extend(["", PUBLIC_END])
     return "\n".join(lines)
 

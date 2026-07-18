@@ -50,25 +50,27 @@ collapsed into a guessed single license.
 
 ### PoliTo thesis
 
-The draft `thesis-polito-latex` adapts Luigi De Russis's “Politecnico di Torino
+The `thesis-polito-latex` candidate adapts Luigi De Russis's “Politecnico di Torino
 Thesis Template” on Overleaf, whose project page identifies Luigi De Russis and
 CC BY 4.0. The source was reviewed as a template for both Bachelor's and
-Master's theses using `toptesi` and a custom title page.
+Master's theses using `toptesi` and its own 2023 title page.
 
 Apograph records the adapted thesis/title-page files as CC-BY-4.0 and the
 separately vendored shared modules as MIT. Its `NOTICE` identifies the upstream,
 the 2026 modifications by Elia Innocenti, published guidance used as design
-evidence, and the non-endorsement boundary. The catalog status remains
-`declared` and the template remains draft until final human review and an
-exact-ZIP Overleaf test; neither published guidance nor the upstream project
+evidence, and the non-endorsement boundary. Maintainer Elia Innocenti reviewed
+and accepted the `CC-BY-4.0 AND MIT` component boundary, shipped notices, and
+non-endorsement statement on 2026-07-18, so the catalog records the template
+license as `verified`. Neither published guidance nor the upstream project
 establishes official endorsement. Both degree modes pass isolated packed-
-artifact compilation in TeX Live 2026.
+artifact compilation in TeX Live 2026, and a packed ZIP of the promoted source
+revision was successfully compiled on Overleaf with pdfLaTeX on 2026-07-18.
 
-For the current portable baseline, maintainer Elia Innocenti accepted Carlito
-with pdfLaTeX on 2026-07-18. Carlito is documented as a portable sans-serif
-fallback rather than an exact substitute for the Visual Identity Manual's
-Poppins typeface. Optional Poppins support may be added later with its own font
-license record and LuaLaTeX/XeLaTeX compatibility gates.
+The current fidelity baseline preserves the upstream pdfLaTeX-compatible Latin
+Modern typography; it does not substitute Carlito or claim to implement the
+Visual Identity Manual's Poppins typography. Optional Poppins support may be
+added later as a separate profile with its own font-license record and
+LuaLaTeX/XeLaTeX compatibility gates.
 
 ### Institution assets
 

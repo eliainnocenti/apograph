@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "apograph-templates"
+description = "Install verified Apograph LaTeX and Typst template artifacts."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+dynamic = ["version"]
+authors = [
+  { name = "Elia Innocenti" },
+]
+dependencies = []
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Text Processing :: Markup :: LaTeX",
+]
+
+[project.urls]
+Homepage = "https://github.com/eliainnocenti/apograph"
+Repository = "https://github.com/eliainnocenti/apograph"
+Issues = "https://github.com/eliainnocenti/apograph/issues"
+
+[project.scripts]
+apograph = "apograph_templates.cli:entrypoint"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["apograph_templates*"]
+
+[tool.setuptools.dynamic]
+version = { attr = "apograph_templates.__version__" }

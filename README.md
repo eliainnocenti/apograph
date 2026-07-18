@@ -8,10 +8,11 @@
 
 ## Current release
 
-Apograph v0.1.0 is the first public beta. It contains one tested product: the
-**unofficial PoliTo Beamer presentation** starter and showcase. It is not
-endorsed by Politecnico di Torino, and institution logos/backgrounds are not
-redistributed. The remaining template ideas are drafts, not downloads.
+Apograph v0.2.0 contains two tested, unofficial PoliTo beta templates: a Beamer
+presentation starter/showcase and a Bachelor's/Master's thesis starter. Neither
+is endorsed by Politecnico di Torino, and institution logos/backgrounds are not
+redistributed. Other template ideas remain private inventory until they pass the
+same publication gates.
 
 Use the actions in the catalog below rather than copying a source directory from
 the repository. Each release ZIP is self-contained and is the exact artifact
@@ -23,20 +24,8 @@ compiled by CI.
 
 | Template | Purpose | Institution | Format | Status | ID | Actions |
 |---|---|---|---|---|---|---|
-| PoliTo Beamer Presentation | presentation | Politecnico di Torino (unofficial) | latex | beta | `presentation-beamer-polito-latex` | [Preview](https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/presentation-beamer-polito-latex.preview.pdf) · [Download ZIP](https://github.com/eliainnocenti/apograph/releases/download/v0.1.0/presentation-beamer-polito-latex.zip) · [Open in Overleaf](https://www.overleaf.com/docs?snip_uri=https%3A%2F%2Fgithub.com%2Feliainnocenti%2Fapograph%2Freleases%2Fdownload%2Fv0.1.0%2Fpresentation-beamer-polito-latex.zip) |
-
-<details>
-<summary>Draft inventory (not release-ready)</summary>
-
-| Draft | Purpose | Institution | Format | ID |
-|---|---|---|---|---|
-| Academic Beamer Presentation | presentation | Generic / Unaffiliated | latex | `presentation-beamer-academic-latex` |
-| Academic Report | report | Generic / Unaffiliated | latex | `report-academic-latex` |
-| Course Project Report | report | Generic / Unaffiliated | latex | `report-course-project-latex` |
-| PoliTo Thesis | thesis | Politecnico di Torino | latex | `thesis-polito-latex` |
-| UniFi Bachelor's Thesis | thesis | Università degli Studi di Firenze | latex | `thesis-unifi-bsc-latex` |
-
-</details>
+| PoliTo Beamer Presentation | presentation | Politecnico di Torino (unofficial) | latex | beta | `presentation-beamer-polito-latex` | [Preview](https://github.com/eliainnocenti/apograph/releases/download/v0.2.0/presentation-beamer-polito-latex.preview.pdf) · [Download ZIP](https://github.com/eliainnocenti/apograph/releases/download/v0.2.0/presentation-beamer-polito-latex.zip) · [Open in Overleaf](https://www.overleaf.com/docs?snip_uri=https%3A%2F%2Fgithub.com%2Feliainnocenti%2Fapograph%2Freleases%2Fdownload%2Fv0.2.0%2Fpresentation-beamer-polito-latex.zip) |
+| PoliTo Thesis | thesis | Politecnico di Torino (unofficial) | latex | beta | `thesis-polito-latex` | [Download ZIP](https://github.com/eliainnocenti/apograph/releases/download/v0.2.0/thesis-polito-latex.zip) · [Open in Overleaf](https://www.overleaf.com/docs?snip_uri=https%3A%2F%2Fgithub.com%2Feliainnocenti%2Fapograph%2Freleases%2Fdownload%2Fv0.2.0%2Fthesis-polito-latex.zip) |
 
 <!-- END GENERATED:PUBLIC_TEMPLATES -->
 
@@ -57,8 +46,9 @@ Choose one of the actions in the public catalog:
 - **Open in Overleaf** imports that same versioned ZIP into a new Overleaf
   project; sign-in may be required.
 
-For a local start, extract the ZIP, edit `config.tex` and
-`content/slides.tex`, then run:
+For a local start, extract the ZIP and read its included README. User-facing
+metadata lives in `config.tex`; document content lives under `content/` (for
+example `content/slides.tex` in the presentation). Then run:
 
 ```bash
 latexmk -pdf main.tex
@@ -66,20 +56,58 @@ latexmk -pdf main.tex
 
 In VS Code, open the extracted folder and accept the recommended LaTeX Workshop
 extension. The artifact supplies a build recipe and keeps generated files under
-`out/`. In Overleaf, keep `main.tex` selected as the main document. No repository
-checkout, Python package, CLI installation, custom `TEXINPUTS`, or asset download
-is required.
+`out/`. In Overleaf, keep `main.tex` selected as the main document. The browser
+workflow requires no repository checkout, CLI installation, custom `TEXINPUTS`,
+or asset download.
 
-To verify a local download:
+To verify a local download using its matching sidecar:
 
 ```bash
-shasum -a 256 -c presentation-beamer-polito-latex.zip.sha256
+shasum -a 256 -c <template-id>.zip.sha256
 ```
 
-The first beta is tested with pdfLaTeX in TeX Live 2025 on Overleaf and TeX Live
-2026 in CI. See the [v0.1.0 release notes](docs/releases/v0.1.0.md) for known
-limitations. Report reproducible problems through
+The public templates are tested with pdfLaTeX in TeX Live 2026 and on Overleaf;
+the Beamer template also retains its TeX Live 2025 compatibility record. See the
+[v0.2.0 release notes](docs/releases/v0.2.0.md) for known limitations. Report
+reproducible problems through
 [GitHub Issues](https://github.com/eliainnocenti/apograph/issues).
+
+## Command-line setup
+
+The optional `apograph` client discovers only published releases and installs
+the exact catalog-backed ZIP after verifying its SHA-256 digest. In v0.2.0 it is
+distributed from the protected, versioned source tag rather than PyPI:
+
+```bash
+pipx install "git+https://github.com/eliainnocenti/apograph.git@v0.2.0"
+```
+
+Then list, inspect, or create a project:
+
+```bash
+apograph list
+apograph info thesis-polito-latex
+apograph new thesis-polito-latex my-thesis
+apograph new presentation-beamer-polito-latex my-slides --version v0.2.0
+```
+
+The default is the newest published Apograph release, including prereleases.
+Pass `--version` to pin one immutable collection. `apograph new` refuses any
+destination that already exists and never rewrites template source. Anonymous
+GitHub access is sufficient; `GITHUB_TOKEN` is accepted when users need a higher
+API allowance.
+
+On macOS/Linux, the thin launcher can run an installed client, the current
+checkout, or an isolated `pipx run` client:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/eliainnocenti/apograph/v0.2.0/scripts/use.sh \
+  | bash -s -- thesis-polito-latex my-thesis
+```
+
+The PyPI distribution name `apograph` belongs to an unrelated project. If this
+client is later published there, its distribution name will be
+`apograph-templates`; its executable will remain `apograph`.
 
 ## Architecture
 
