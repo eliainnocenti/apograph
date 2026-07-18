@@ -1,0 +1,8 @@
+This marker documents the optional user-provided asset expected at:
+
+  theme/assets/polito-logo.jpg
+
+The file is intentionally absent from Apograph artifacts. Use an authorized
+horizontal PoliTo logo matching the upstream template's aspect ratio. When the
+file is absent, the title page renders a compiling placeholder with the same
+nominal 110 mm by 42.5 mm footprint.

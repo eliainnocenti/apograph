@@ -1,20 +1,47 @@
 % config.tex — primary customization surface
-%
+% SPDX-License-Identifier: CC-BY-4.0
+
 % Leave this false for a Master's thesis. Replace `false` with `true` for a
-% Bachelor's thesis; this also selects the matching toptesi class module.
+% Bachelor's thesis; this selects the matching toptesi module.
 \newif\ifapographBachelorThesis
 \apographBachelorThesisfalse
 
-% `english` and `italian` are supported by the starter.
-\newcommand{\apographDocumentLanguage}{english}
+% The upstream template defaults to Italian. `english` is also supported.
+\newcommand{\apographDocumentLanguage}{italian}
 
-\newcommand{\apographThesisTitle}{A Clear and Descriptive Thesis Title}
-\newcommand{\apographThesisSubtitle}{Optional subtitle}
-\newcommand{\apographDegreeProgramme}{Computer Engineering}
-\newcommand{\apographAcademicYear}{2026--2027}
-\newcommand{\apographGraduationSession}{October 2027}
+% Title-page metadata. These defaults intentionally match Luigi De Russis's
+% original teaching template so its appearance is easy to compare.
+\newcommand{\apographUniversity}{Politecnico di Torino}
+\newcommand{\apographDegreeProgramme}{Corso di Laurea}
+\newcommand{\apographAcademicYear}{A.a. 202x/202x}
+\newcommand{\apographGraduationSession}{Mese Anno}
+\newcommand{\apographThesisTitle}{Titolo della tesi}
+\newcommand{\apographThesisSubtitle}{Eventuale sottotitolo}
 
-% Separate multiple people with `\\`.
-\newcommand{\apographCandidates}{Elia Innocenti}
-\newcommand{\apographSupervisors}{Prof. Supervisor Name}
+% Add one \apographPerson{...} line for each person. The theme turns these
+% entries into title-page rows while preserving the original layout.
+\newcommand{\apographCandidates}{%
+  \apographPerson{Name Surname}%
+}
+\newcommand{\apographSupervisors}{%
+  \apographPerson{Name Surname}%
+  \apographPerson{Name Surname}%
+}
 \newcommand{\apographCosupervisors}{}
+
+% Labels can be customized independently of the selected document language.
+\newcommand{\apographCandidatesLabel}{Candidati}
+\newcommand{\apographSupervisorsLabel}{Relatori}
+\newcommand{\apographCosupervisorsLabel}{Correlatori}
+
+% Optional front matter. These defaults reproduce the upstream document flow.
+\newif\ifapographIncludeAbstract
+\apographIncludeAbstractfalse
+\newif\ifapographIncludeSummary
+\apographIncludeSummaryfalse
+\newif\ifapographIncludeAcknowledgements
+\apographIncludeAcknowledgementstrue
+\newif\ifapographIncludeListOfFigures
+\apographIncludeListOfFigurestrue
+\newif\ifapographIncludeGlossary
+\apographIncludeGlossaryfalse

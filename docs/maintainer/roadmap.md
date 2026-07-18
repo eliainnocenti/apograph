@@ -28,18 +28,26 @@ The first public prerelease is `v0.1.0`.
 - [x] Document precise, authorization-aware acquisition paths for PoliTo
   assets without redistributing them.
 - [x] Adapt one PoliTo thesis source for Bachelor and Master modes.
-- [x] Keep Carlito/pdfLaTeX as the portable thesis typography baseline and
-  defer optional Poppins support to a later compatibility profile.
+- [x] Restore Luigi De Russis's title-page, Latin Modern typography, document
+  flow, package features, and teaching content as the thesis baseline; defer
+  optional Poppins support to a separate compatibility profile.
 - [x] Consolidate maintainer documentation and remove duplicate release
   narratives.
 - [x] Pass catalog, documentation, Python, source compile, and packed-artifact
   validation for the complete refactor.
-- [ ] Upload the resulting PoliTo thesis ZIP to Overleaf before promotion.
-- [ ] Select the next release version and write its release notes after the
-  included template set is decided.
+- [x] Upload and compile the exact PoliTo thesis release-candidate ZIP on
+  Overleaf with pdfLaTeX.
+- [x] Complete the human licensing review and record the accepted component
+  boundary.
+- [x] Select `v0.2.0` as the next collection version and include the two verified
+  PoliTo beta templates.
+- [x] Promote the PoliTo thesis to beta and write the versioned release notes.
+- [ ] Verify both exact, CI-built `v0.2.0` ZIPs on Overleaf before creating the
+  protected release tag.
 
-The PoliTo thesis remains `draft` until its remaining gates are complete. The
-existing `v0.1.0` links and tag remain immutable.
+The PoliTo thesis is promoted in `v0.2.0`; generated links now target that new
+immutable collection rather than the older release. The existing `v0.1.0` links
+and tag remain immutable.
 
 ## Next milestone — Broaden the tested catalog
 
@@ -56,13 +64,19 @@ Likely candidates are the generic academic presentation, UniFi thesis, academic
 report, and course-project report. Typst entries should be added only where an
 independently useful Typst design exists; format symmetry is not a goal.
 
+## Current product milestone — Apograph CLI
+
+- Implement a dependency-free Python command-line application with `list`,
+  `info`, and `new` commands.
+- Resolve only published GitHub Release assets through `release-index.json`.
+- Verify SHA-256 checksums and extract through a safe, atomic destination flow.
+- Keep the shell entry point as a thin convenience launcher.
+- Exercise the CLI from its source tree before deciding on PyPI publication.
+
 ## Later product milestones
 
 - Generate a small GitHub Pages gallery from `CATALOG.json`, release previews,
   and versioned download/Overleaf links.
-- Reassess a CLI only after the artifact/gallery workflow reveals repeated
-  setup tasks that browser downloads cannot solve. A Python package is not a
-  prerequisite for using templates.
 - Add migration policy and compatibility promises before any template becomes
   `stable`.
 - Consider external contributions and a contribution guide only when the

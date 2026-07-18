@@ -1,8 +1,8 @@
-% main.tex — unofficial PoliTo Bachelor/Master thesis starter
+% main.tex — faithful Apograph packaging of Luigi De Russis's PoliTo thesis
 % SPDX-License-Identifier: CC-BY-4.0
 
-% Configuration is loaded first because the degree-level switch selects the
-% appropriate toptesi class module before \documentclass is evaluated.
+% Configuration is loaded first because the degree switch selects the toptesi
+% module before the document class is evaluated.
 \input{config}
 \ifapographBachelorThesis
   \PassOptionsToPackage{tipotesi=triennale}{toptesi}
@@ -10,41 +10,75 @@
   \PassOptionsToPackage{tipotesi=magistrale}{toptesi}
 \fi
 \PassOptionsToPackage{numerazioneromana,cucitura=7mm}{toptesi}
-\documentclass[a4paper,12pt,oneside,openright]{toptesi}
+\documentclass[
+  a4paper,
+  corpo=12pt,
+  oneside,
+  stile=standard,
+  openright
+]{toptesi}
 
-\usepackage[english,italian]{babel}
-\usepackage{lmodern}
-\usepackage{apograph-typography}
-\usepackage{apograph-math}
-\usepackage{apograph-polito}
+% The theme consolidates the upstream common/packages, package configuration,
+% font commands, helper commands, and front-page implementation.
 \usepackage{theme/apograph-polito-thesis}
-\usepackage{csquotes}
-\usepackage[
-  backend=biber,
-  style=numeric,
-  sorting=none,
-  maxbibnames=9,
-  maxcitenames=2
-]{biblatex}
 \addbibresource{bibliography.bib}
-\usepackage[hidelinks]{hyperref}
+
+\ifapographIncludeGlossary
+  \input{glossaries}
+  \makeglossaries
+\fi
 
 \begin{document}
 \selectlanguage{\apographDocumentLanguage}
+\overfullrule=0.00001pt
 
 \apographPoliToTitlePage
 
 \frontmatter
-\chapter*{\apographAbstractHeading}
-\addcontentsline{toc}{chapter}{\apographAbstractHeading}
-\input{content/abstract}
 
+\ifapographIncludeAbstract
+  \begin{abstract}
+    \input{content/abstract}
+  \end{abstract}
+\fi
+
+\paginavuota
+
+\ifapographIncludeSummary
+  \sommario
+  \input{content/summary}
+\fi
+
+\ifapographIncludeAcknowledgements
+  \ringraziamenti
+  \input{content/acknowledgements}
+\fi
+
+\paginavuota
 \tableofcontents
+
+\ifapographIncludeListOfFigures
+  \listoffigures
+\fi
+
+\ifapographIncludeGlossary
+  \printunsrtglossary[
+    style=altlist,
+    title=Glossario,
+    type=\glsxtrabbrvtype
+  ]
+  \glsresetall
+\fi
 
 \mainmatter
 \input{content/chapters/introduction}
 
-\backmatter
+% Add further chapters above. Uncomment these lines when appendices are needed.
+% \appendix
+% \input{content/appendix}
+
+\phantom{0}
+\cleardoublepage
 \printbibliography[heading=bibintoc]
 
 \end{document}

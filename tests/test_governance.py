@@ -46,6 +46,22 @@ class GovernanceDocumentationTests(unittest.TestCase):
         )
         self.assertTrue(notes_path.is_file())
 
+    def test_cli_package_exposes_dependency_free_apograph_command(self):
+        pyproject = (catalog_module.REPO_ROOT / "pyproject.toml").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn('name = "apograph-templates"', pyproject)
+        self.assertIn('dependencies = []', pyproject)
+        self.assertIn('dynamic = ["version"]', pyproject)
+        self.assertIn(
+            'apograph = "apograph_templates.cli:entrypoint"', pyproject
+        )
+        self.assertEqual(
+            (catalog_module.REPO_ROOT / "MANIFEST.in").read_text(encoding="utf-8"),
+            "prune tests\n",
+        )
+
     def test_compile_workflow_uses_tested_catalog_matrix_command(self):
         workflow = (
             catalog_module.REPO_ROOT / ".github" / "workflows" / "compile.yml"
@@ -60,11 +76,13 @@ class GovernanceDocumentationTests(unittest.TestCase):
         workflow_dir = catalog_module.REPO_ROOT / ".github" / "workflows"
         compile_workflow = (workflow_dir / "compile.yml").read_text(encoding="utf-8")
         release_workflow = (workflow_dir / "release.yml").read_text(encoding="utf-8")
+        cli_workflow = (workflow_dir / "publish-cli.yml").read_text(encoding="utf-8")
 
         action_ref = re.compile(r"^\s*-?\s*uses:\s*[^@\s]+@([0-9a-f]{40})(?:\s|$)", re.MULTILINE)
         for name, workflow in (
             ("compile.yml", compile_workflow),
             ("release.yml", release_workflow),
+            ("publish-cli.yml", cli_workflow),
         ):
             uses_lines = [line for line in workflow.splitlines() if "uses:" in line]
             pinned_lines = action_ref.findall(workflow)
@@ -72,6 +90,7 @@ class GovernanceDocumentationTests(unittest.TestCase):
             self.assertNotIn("|| true", workflow, name)
 
         self.assertIn("xu-cheng/texlive-action@", compile_workflow)
+        self.assertIn("python3 -m pip wheel . --no-deps", compile_workflow)
         self.assertIn("scripts/pack.py --all --mode release", compile_workflow)
         self.assertIn("scripts/release.py assemble", compile_workflow)
         self.assertIn("Upload exact tested release candidate", compile_workflow)
@@ -97,6 +116,11 @@ class GovernanceDocumentationTests(unittest.TestCase):
         self.assertIn("Publish verified tag artifacts", release_workflow)
         self.assertIn("body_path: ${{ steps.release-metadata.outputs.release_notes_path }}", release_workflow)
         self.assertNotIn("generate_release_notes:", release_workflow)
+        self.assertIn("environment:", cli_workflow)
+        self.assertIn("name: pypi", cli_workflow)
+        self.assertIn("id-token: write", cli_workflow)
+        self.assertNotIn("PYPI_TOKEN", cli_workflow)
+        self.assertIn("gh-action-pypi-publish@", cli_workflow)
         self.assertEqual(
             [
                 line.strip()

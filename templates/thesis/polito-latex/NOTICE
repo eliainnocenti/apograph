@@ -25,15 +25,14 @@ Apograph modifications
 Elia Innocenti adapted and repackaged the source in 2026. Changes include:
 
 - one configuration switch for Bachelor's or Master's toptesi mode;
-- a small config/main/content/theme project structure;
-- line-separated candidate, supervisor, and co-supervisor fields;
-- a custom bilingual title page exposing every field named by published
-  guidance;
-- a compiling text fallback for the absent institution logo;
-- a portable Carlito/pdfLaTeX title-page fallback instead of redistributing
-  Poppins in the current baseline;
-- reduced packages and example content;
-- self-contained Apograph artifact and VS Code integration.
+- a small config/main/content/theme project structure that consolidates the
+  upstream common files without redesigning the document;
+- extensible candidate and supervisor rows plus an optional co-supervisor
+  block;
+- preservation of the upstream Latin Modern typography, title-page geometry,
+  package feature set, document flow, and teaching content;
+- a compiling, same-footprint text fallback for the absent institution logo;
+- self-contained Apograph artifacts with root-vendored shared modules.
 
 The adapted thesis files are distributed under CC-BY-4.0. The complete text is
 in LICENSES/CC-BY-4.0.txt. Apograph shared modules vendored into an artifact are
@@ -52,9 +51,12 @@ Institution asset
 -----------------
 
 The PoliTo logo is not included. It is cataloged as an optional user-provided
-file at theme/assets/polito-logo.pdf. PoliTo's student guidance says enrolled
-users can obtain the title-page template and logo from the private Teaching
-Portal and may use the logo for academic purposes. The public corporate-image
-policy separately states that third-party logo use requires authorization.
+file at theme/assets/polito-logo.jpg. To reproduce the upstream title page, the
+expected source is its horizontal blue 2021 JPEG logo (the upstream reference
+file is named polito_logo_2021_blu-2-2.jpg). PoliTo's student guidance says
+enrolled users can obtain the title-page template and logo from the private
+Teaching Portal and may use the logo for academic purposes. The public
+corporate-image policy separately states that third-party logo use requires
+authorization.
 Supplying a file locally does not imply permission to redistribute or use it in
 another context.

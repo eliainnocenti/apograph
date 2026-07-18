@@ -5,7 +5,7 @@
 # Run `make help` to see all available targets.
 # =============================================================================
 
-.PHONY: help validate docs docs-check test check pack pack-all preview preview-one clean list
+.PHONY: help validate docs docs-check test check pack pack-all preview preview-one clean list cli
 
 # Default target
 help: ## Show this help message
@@ -100,6 +100,9 @@ clean-assets: ## Remove downloaded assets (preserves manual ones)
 
 list: ## List all catalog entries and maturity statuses
 	@python3 scripts/catalog.py list
+
+cli: ## Run the user CLI from source (optional ARGS="list")
+	@PYTHONPATH=src python3 -m apograph_templates $(if $(ARGS),$(ARGS),--help)
 
 clean: ## Remove build artifacts (build/, *.zip, out/ dirs, LaTeX aux files)
 	@echo "Cleaning build artifacts..."

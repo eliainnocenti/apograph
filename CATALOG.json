@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": "1.1.0",
-  "release_version": "0.1.0",
+  "release_version": "0.2.0",
   "release_channel": "prerelease",
   "repository": {
     "name": "apograph",
@@ -14,11 +14,11 @@
     {
       "id": "thesis-polito-latex",
       "name": "PoliTo Thesis",
-      "description": "Unofficial Bachelor's and Master's thesis starter aligned with published Politecnico di Torino guidance.",
+      "description": "Faithful, unofficial packaging of Luigi De Russis's Bachelor's and Master's PoliTo thesis template.",
       "purpose": "thesis",
       "variant": "polito",
       "format": "latex",
-      "status": "draft",
+      "status": "beta",
       "institution": {
         "id": "polito",
         "name": "Politecnico di Torino",
@@ -29,7 +29,7 @@
       "compiler": "pdflatex",
       "compatibility": {
         "texlive": ["2026"],
-        "overleaf": "untested"
+        "overleaf": "compatible"
       },
       "source_dir": "templates/thesis/polito-latex",
       "entrypoints": [
@@ -43,13 +43,12 @@
       "shared_deps": [
         "shared/latex/apograph-math.sty",
         "shared/latex/apograph-typography.sty",
-        "shared/latex/apograph-colors.sty",
-        "shared/latex/apograph-polito.sty"
+        "shared/latex/apograph-colors.sty"
       ],
       "license": {
         "expression": "CC-BY-4.0 AND MIT",
-        "status": "declared",
-        "notes": "The adapted thesis starter and title-page implementation retain the upstream CC BY 4.0 terms; Apograph shared modules remain MIT. The template stays draft until final human review and Overleaf verification."
+        "status": "verified",
+        "notes": "The adapted thesis starter and title-page implementation retain the upstream CC BY 4.0 terms; Apograph shared modules remain MIT. Maintainer Elia Innocenti reviewed and accepted this component boundary, the shipped notices, and the non-endorsement statement on 2026-07-18."
       },
       "upstream": {
         "kind": "adapted",
@@ -62,18 +61,18 @@
             "license": "CC-BY-4.0"
           }
         ],
-        "notes": "Apograph adapts the upstream toptesi project into a smaller starter with isolated configuration, a Bachelor/Master metadata switch, optional user-provided logo fallback, and self-contained release packaging. Published PoliTo guidance is a formatting reference, not endorsement."
+        "notes": "Apograph preserves the upstream toptesi document flow, package configuration, Latin Modern typography, teaching content, and title-page layout while consolidating implementation details behind a small config/main/content/theme structure. Additions are a Bachelor/Master switch, extensible person rows, an optional user-provided logo fallback, and self-contained release packaging. Published PoliTo guidance is a formatting reference, not endorsement."
       },
       "assets": [
         {
           "id": "polito-logo",
           "description": "Politecnico di Torino logo",
-          "local_path": "theme/assets/polito-logo.pdf",
+          "local_path": "theme/assets/polito-logo.jpg",
           "mode": "user-provided",
           "required": false,
           "source_url": null,
           "sha256": null,
-          "fallback": "latex-text-placeholder",
+          "fallback": "same-footprint-latex-placeholder",
           "license": {
             "expression": null,
             "status": "review-required",
@@ -88,7 +87,7 @@
           "github": "eliainnocenti"
         }
       ],
-      "readiness_notes": "Implemented as one configurable Bachelor/Master starter and compared with published thesis guidance. Both modes compile from the isolated packed artifact without a logo in TeX Live 2026. It remains draft pending final licensing review and an exact-ZIP Overleaf test.",
+      "readiness_notes": "Reworked as a faithful packaging of Luigi De Russis's upstream template rather than a visual reinterpretation. Master and Bachelor modes compile from the isolated artifact without a logo in TeX Live 2026; a private reference-logo injection reproduced the upstream eight-page document and title-page design. Maintainer Elia Innocenti successfully compiled a packed ZIP of this source revision on Overleaf with pdfLaTeX on 2026-07-18. The licensing, documentation, isolated-artifact, and Overleaf gates passed for promotion to beta in v0.2.0.",
       "created": "2026-06-12",
       "updated": "2026-07-18"
     },

@@ -314,15 +314,42 @@ class PoliToThesisArtifactIntegrationTests(unittest.TestCase):
             with zipfile.ZipFile(result.zip_path) as archive:
                 names = set(archive.namelist())
                 archive.extractall(extracted)
-            self.assertIn("apograph-polito.sty", names)
+            self.assertIn("apograph-math.sty", names)
+            self.assertIn("apograph-typography.sty", names)
+            self.assertIn("apograph-colors.sty", names)
+            self.assertNotIn("apograph-polito.sty", names)
             self.assertIn("theme/apograph-polito-thesis.sty", names)
             self.assertIn("NOTICE", names)
-            self.assertNotIn("theme/assets/polito-logo.pdf", names)
+            self.assertIn("content/acknowledgements.tex", names)
+            self.assertIn("content/summary.tex", names)
+            self.assertIn("content/appendix.tex", names)
+            self.assertIn("glossaries.tex", names)
+            self.assertNotIn("theme/assets/polito-logo.jpg", names)
+
+            theme_text = (extracted / "theme/apograph-polito-thesis.sty").read_text(
+                encoding="utf-8"
+            )
+            self.assertIn(
+                "\\newgeometry{top=4cm,left=3cm,right=3cm,bottom=4cm,heightrounded}",
+                theme_text,
+            )
+            self.assertIn("\\includegraphics[width=110mm]", theme_text)
+            self.assertIn("\\vspace{\\stretch{4}}", theme_text)
+            self.assertIn("height 14pt depth 6pt", theme_text)
+            self.assertNotIn("carlito", theme_text.lower())
+
+            config_text = (extracted / "config.tex").read_text(encoding="utf-8")
+            self.assertIn("{italian}", config_text)
+            self.assertIn("{Titolo della tesi}", config_text)
+            self.assertIn("\\apographPerson{Name Surname}", config_text)
+
+            main_text = (extracted / "main.tex").read_text(encoding="utf-8")
+            self.assertIn("\\PassOptionsToPackage{tipotesi=", main_text)
+            self.assertNotIn("\\PassOptionsToClass", main_text)
 
             config_path = extracted / "config.tex"
-            config = config_path.read_text(encoding="utf-8")
             config_path.write_text(
-                config.replace(
+                config_text.replace(
                     "\\apographBachelorThesisfalse",
                     "\\apographBachelorThesistrue",
                     1,

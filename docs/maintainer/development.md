@@ -199,6 +199,35 @@ Never suppress a validation, compilation, or preview failure to make the
 pipeline green. Preserve compiler output for diagnosis and keep generated files
 under ignored `out/`, `build/`, or temporary directories.
 
+## User command-line client
+
+The package declared by `pyproject.toml` is separate from the maintainer scripts
+under `scripts/`. Its distribution name is `apograph-templates`, its import
+package is `apograph_templates`, and its console command is `apograph`.
+
+Run it from a checkout without installing it:
+
+```bash
+PYTHONPATH=src python3 -m apograph_templates list
+```
+
+The client consumes only published GitHub Release metadata. It selects an exact
+release, verifies `release-index.json` and its catalog snapshot, verifies the
+chosen ZIP digest, rejects unsafe archive members, and atomically publishes a
+new destination. It must never fall back to a source directory or unverified
+raw-branch archive. Network behavior is tested through injected local fixtures;
+tests must not depend on the current contents of GitHub.
+
+`scripts/use.sh` is only a launcher for this implementation. Do not duplicate
+catalog resolution, checksum, or extraction logic in shell.
+
+The CLI uses an independent semantic version in
+`src/apograph_templates/__init__.py`; collection versions in `CATALOG.json` do
+not force a CLI publication. `pyproject.toml` reads that version dynamically.
+The manual `publish-cli.yml` workflow accepts the exact requested CLI version,
+retests it, builds both distributions, and publishes through the protected
+`pypi` environment. Never add a long-lived PyPI token to repository secrets.
+
 ## Release process
 
 `CATALOG.json` owns `release_version` and `release_channel`. The only authored
